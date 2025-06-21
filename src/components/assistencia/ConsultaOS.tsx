@@ -43,14 +43,43 @@ const ConsultaOS = () => {
   const [filtros, setFiltros] = useState({
     busca: '',
     status: '',
-    dataInicio: '',
-    dataFim: ''
+    mes: '',
+    ano: '',
+    dataEspecifica: ''
   });
 
   const statusOptions = [
-    'Em análise', 'Aguardando peça', 'Aguardando autorização', 
-    'Em conserto', 'Finalizado', 'Entregue'
+    'Em análise', 
+    'Aguardando peça', 
+    'Aguardando autorização', 
+    'Em conserto', 
+    'Finalizado', 
+    'Entregue'
   ];
+
+  const meses = [
+    { value: '01', label: 'Janeiro' },
+    { value: '02', label: 'Fevereiro' },
+    { value: '03', label: 'Março' },
+    { value: '04', label: 'Abril' },
+    { value: '05', label: 'Maio' },
+    { value: '06', label: 'Junho' },
+    { value: '07', label: 'Julho' },
+    { value: '08', label: 'Agosto' },
+    { value: '09', label: 'Setembro' },
+    { value: '10', label: 'Outubro' },
+    { value: '11', label: 'Novembro' },
+    { value: '12', label: 'Dezembro' }
+  ];
+
+  const anosDisponiveis = () => {
+    const anoAtual = new Date().getFullYear();
+    const anos = [];
+    for (let i = anoAtual; i >= anoAtual - 5; i--) {
+      anos.push(i.toString());
+    }
+    return anos;
+  };
 
   const statusColors: Record<string, string> = {
     'Em análise': 'bg-yellow-100 text-yellow-800',
@@ -71,19 +100,34 @@ const ConsultaOS = () => {
 
       // Aplicar filtros
       if (filtros.busca) {
-        query = query.or(`cliente_nome.ilike.%${filtros.busca}%,cliente_telefone.ilike.%${filtros.busca}%,numero_os.eq.${parseInt(filtros.busca) || 0}`);
+        const numeroOS = parseInt(filtros.busca);
+        if (!isNaN(numeroOS)) {
+          query = query.eq('numero_os', numeroOS);
+        } else {
+          query = query.or(`cliente_nome.ilike.%${filtros.busca}%,cliente_telefone.ilike.%${filtros.busca}%`);
+        }
       }
 
       if (filtros.status) {
         query = query.eq('status', filtros.status);
       }
 
-      if (filtros.dataInicio) {
-        query = query.gte('data_entrada', filtros.dataInicio);
+      // Filtro por data específica
+      if (filtros.dataEspecifica) {
+        query = query.gte('data_entrada', filtros.dataEspecifica + 'T00:00:00')
+                   .lte('data_entrada', filtros.dataEspecifica + 'T23:59:59');
       }
-
-      if (filtros.dataFim) {
-        query = query.lte('data_entrada', filtros.dataFim + 'T23:59:59');
+      // Filtro por mês e ano
+      else if (filtros.mes && filtros.ano) {
+        const dataInicio = `${filtros.ano}-${filtros.mes}-01T00:00:00`;
+        const ultimoDia = new Date(parseInt(filtros.ano), parseInt(filtros.mes), 0).getDate();
+        const dataFim = `${filtros.ano}-${filtros.mes}-${ultimoDia.toString().padStart(2, '0')}T23:59:59`;
+        query = query.gte('data_entrada', dataInicio).lte('data_entrada', dataFim);
+      }
+      // Filtro só por ano
+      else if (filtros.ano) {
+        query = query.gte('data_entrada', `${filtros.ano}-01-01T00:00:00`)
+                   .lte('data_entrada', `${filtros.ano}-12-31T23:59:59`);
       }
 
       const { data, error } = await query;
@@ -116,6 +160,16 @@ const ConsultaOS = () => {
     window.open(url, '_blank');
   };
 
+  const limparFiltros = () => {
+    setFiltros({
+      busca: '',
+      status: '',
+      mes: '',
+      ano: '',
+      dataEspecifica: ''
+    });
+  };
+
   useEffect(() => {
     buscarOrdens();
   }, []);
@@ -135,8 +189,8 @@ const ConsultaOS = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-3">
               <Label htmlFor="busca">Buscar por nome, telefone ou nº OS</Label>
               <Input
                 id="busca"
@@ -153,7 +207,7 @@ const ConsultaOS = () => {
                   <SelectValue placeholder="Todos os status" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Todos os status</SelectItem>
+                  <SelectItem value="todos">Todos os status</SelectItem>
                   {statusOptions.map(status => (
                     <SelectItem key={status} value={status}>{status}</SelectItem>
                   ))}
@@ -162,27 +216,52 @@ const ConsultaOS = () => {
             </div>
 
             <div>
-              <Label htmlFor="dataInicio">Data Início</Label>
-              <Input
-                id="dataInicio"
-                type="date"
-                value={filtros.dataInicio}
-                onChange={(e) => handleFiltroChange('dataInicio', e.target.value)}
-              />
+              <Label htmlFor="ano">Ano</Label>
+              <Select value={filtros.ano} onValueChange={(value) => handleFiltroChange('ano', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o ano" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="todos">Todos os anos</SelectItem>
+                  {anosDisponiveis().map(ano => (
+                    <SelectItem key={ano} value={ano}>{ano}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
-              <Label htmlFor="dataFim">Data Fim</Label>
+              <Label htmlFor="mes">Mês</Label>
+              <Select value={filtros.mes} onValueChange={(value) => handleFiltroChange('mes', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecione o mês" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="todos">Todos os meses</SelectItem>
+                  {meses.map(mes => (
+                    <SelectItem key={mes.value} value={mes.value}>{mes.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <div>
+              <Label htmlFor="dataEspecifica">Ou buscar por data específica</Label>
               <Input
-                id="dataFim"
+                id="dataEspecifica"
                 type="date"
-                value={filtros.dataFim}
-                onChange={(e) => handleFiltroChange('dataFim', e.target.value)}
+                value={filtros.dataEspecifica}
+                onChange={(e) => handleFiltroChange('dataEspecifica', e.target.value)}
               />
             </div>
           </div>
 
-          <div className="flex justify-end mt-4">
+          <div className="flex justify-between mt-4">
+            <Button variant="outline" onClick={limparFiltros}>
+              Limpar Filtros
+            </Button>
             <Button onClick={buscarOrdens} disabled={loading}>
               <Search className="w-4 h-4 mr-2" />
               {loading ? 'Buscando...' : 'Buscar'}
@@ -203,6 +282,7 @@ const ConsultaOS = () => {
             <div className="text-center py-8 text-gray-500">
               <Search className="w-12 h-12 mx-auto mb-4 opacity-50" />
               <p>Nenhuma ordem de serviço encontrada.</p>
+              <p className="text-sm mt-2">Tente ajustar os filtros de busca.</p>
             </div>
           ) : (
             <div className="overflow-x-auto">
