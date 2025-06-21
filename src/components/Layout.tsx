@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   BarChart3, 
@@ -51,20 +50,16 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         <div className="flex flex-col h-full">
-          {/* Header */}
+          {/* Header with image */}
           <div className="flex items-center justify-between p-4 border-b border-blue-700">
-            <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-felmak-orange rounded-lg flex items-center justify-center">
-                <Wrench className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h1 className="text-white font-bold text-lg">FELMAK</h1>
-                <p className="text-blue-200 text-xs">Ferramentas Elétricas</p>
-              </div>
-            </div>
+            <img 
+              src="/lovable-uploads/8949edcd-ed6b-4317-b3ff-d6a907db5182.png" 
+              alt="Ferramentas Elétricas" 
+              className="w-full h-auto max-h-16 object-contain"
+            />
             <button 
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden text-white hover:bg-blue-700 p-1 rounded"
+              className="lg:hidden text-white hover:bg-blue-700 p-1 rounded ml-2 flex-shrink-0"
             >
               <X className="w-5 h-5" />
             </button>
