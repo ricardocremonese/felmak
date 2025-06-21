@@ -16,6 +16,7 @@ export type Database = {
           cliente_bairro: string | null
           cliente_cep: string | null
           cliente_cidade: string | null
+          cliente_complemento: string | null
           cliente_cpf_cnpj: string | null
           cliente_email: string | null
           cliente_endereco: string | null
@@ -54,6 +55,7 @@ export type Database = {
           cliente_bairro?: string | null
           cliente_cep?: string | null
           cliente_cidade?: string | null
+          cliente_complemento?: string | null
           cliente_cpf_cnpj?: string | null
           cliente_email?: string | null
           cliente_endereco?: string | null
@@ -92,6 +94,7 @@ export type Database = {
           cliente_bairro?: string | null
           cliente_cep?: string | null
           cliente_cidade?: string | null
+          cliente_complemento?: string | null
           cliente_cpf_cnpj?: string | null
           cliente_email?: string | null
           cliente_endereco?: string | null

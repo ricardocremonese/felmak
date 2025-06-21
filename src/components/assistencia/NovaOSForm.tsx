@@ -164,23 +164,56 @@ const NovaOSForm = () => {
     try {
       const valorPecas = pecas.reduce((total, peca) => total + (peca.quantidade * peca.preco_unitario), 0);
       
-      // Preparar dados para inserção
+      // Preparar dados para inserção - converter campos vazios para null conforme necessário
       const osData: NovaOrdemServico = {
-        ...formData,
+        cliente_nome: formData.cliente_nome,
+        cliente_telefone: formData.cliente_telefone,
+        cliente_email: formData.cliente_email || null,
+        cliente_cep: formData.cliente_cep || null,
+        cliente_endereco: formData.cliente_endereco || null,
+        cliente_numero: formData.cliente_numero || null,
+        cliente_complemento: formData.cliente_complemento || null,
+        cliente_bairro: formData.cliente_bairro || null,
+        cliente_cidade: formData.cliente_cidade || null,
+        cliente_estado: formData.cliente_estado || null,
+        cliente_cpf_cnpj: formData.cliente_cpf_cnpj || null,
+        equipamento_tipo: formData.equipamento_tipo,
+        equipamento_marca: formData.equipamento_marca,
+        equipamento_modelo: formData.equipamento_modelo || null,
+        equipamento_serie: formData.equipamento_serie || null,
+        equipamento_cor: formData.equipamento_cor || null,
+        acessorios_entregues: formData.acessorios_entregues || null,
+        estado_fisico_entrega: formData.estado_fisico_entrega || null,
+        defeito_relatado: formData.defeito_relatado,
+        observacoes_tecnico: formData.observacoes_tecnico || null,
+        testes_realizados: formData.testes_realizados || null,
+        urgencia: formData.urgencia,
+        valor_mao_obra: formData.valor_mao_obra,
         valor_pecas: valorPecas,
-        valor_total: valorPecas + formData.valor_mao_obra
+        valor_total: valorPecas + formData.valor_mao_obra,
+        data_prevista: formData.data_prevista || null,
+        tecnico_responsavel: formData.tecnico_responsavel || null,
+        status: formData.status,
+        prazo_garantia_dias: formData.prazo_garantia_dias
       };
 
-      // Inserir OS - o número será gerado automaticamente pelo trigger
+      console.log('Dados sendo enviados para inserção:', osData);
+
+      // Inserir OS - o número será gerado automaticamente
       const { data: osResult, error: osError } = await supabase
         .from('ordens_servico')
         .insert([osData])
         .select()
         .single();
 
-      if (osError) throw osError;
+      if (osError) {
+        console.error('Erro ao inserir OS:', osError);
+        throw osError;
+      }
 
-      // Gerar número da OS formatado para mostrar na mensagem de sucesso
+      console.log('OS criada com sucesso:', osResult);
+
+      // Formatar número da OS para mostrar na mensagem de sucesso
       const anoAtual = new Date().getFullYear();
       const ano2Digitos = anoAtual.toString().slice(-2);
       const numeroOSFormatado = `OS${ano2Digitos}-${osResult.numero_os.toString().padStart(4, '0')}`;
@@ -195,11 +228,16 @@ const NovaOSForm = () => {
           preco_total: peca.quantidade * peca.preco_unitario
         }));
 
+        console.log('Inserindo peças:', pecasData);
+
         const { error: pecasError } = await supabase
           .from('os_pecas')
           .insert(pecasData);
 
-        if (pecasError) throw pecasError;
+        if (pecasError) {
+          console.error('Erro ao inserir peças:', pecasError);
+          throw pecasError;
+        }
       }
 
       toast({
@@ -243,7 +281,7 @@ const NovaOSForm = () => {
       console.error('Erro ao criar OS:', error);
       toast({
         title: "Erro ao criar OS",
-        description: "Ocorreu um erro ao criar a ordem de serviço.",
+        description: "Ocorreu um erro ao criar a ordem de serviço. Verifique o console para mais detalhes.",
         variant: "destructive"
       });
     } finally {
