@@ -160,6 +160,7 @@ const NovaOSForm = () => {
     try {
       const valorPecas = pecas.reduce((total, peca) => total + (peca.quantidade * peca.preco_unitario), 0);
       
+      // Inserir OS sem especificar numero_os_gerado - será gerado automaticamente pelo trigger
       const { data: osData, error: osError } = await supabase
         .from('ordens_servico')
         .insert([{
@@ -191,7 +192,7 @@ const NovaOSForm = () => {
 
       toast({
         title: "OS criada com sucesso!",
-        description: `Ordem de Serviço #${osData.numero_os} foi criada.`
+        description: `Ordem de Serviço ${osData.numero_os_gerado} foi criada.`
       });
 
       // Limpar formulário

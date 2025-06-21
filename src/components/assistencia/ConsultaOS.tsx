@@ -23,7 +23,7 @@ import jsPDF from 'jspdf';
 
 interface OrdemServico {
   id: string;
-  numero_os: number;
+  numero_os_gerado: string;
   cliente_nome: string;
   cliente_telefone: string;
   equipamento_tipo: string;
@@ -111,10 +111,11 @@ const ConsultaOS = () => {
 
       // Aplicar filtros
       if (filtros.busca) {
-        const numeroOS = parseInt(filtros.busca);
-        if (!isNaN(numeroOS)) {
-          query = query.eq('numero_os', numeroOS);
+        // Tentar buscar por número da OS primeiro
+        if (filtros.busca.startsWith('OS')) {
+          query = query.eq('numero_os_gerado', filtros.busca.toUpperCase());
         } else {
+          // Buscar por nome ou telefone
           query = query.or(`cliente_nome.ilike.%${filtros.busca}%,cliente_telefone.ilike.%${filtros.busca}%`);
         }
       }
@@ -166,7 +167,7 @@ const ConsultaOS = () => {
       doc.setFontSize(20);
       doc.text('FELMAK Ferramentas Elétricas', 20, 20);
       doc.setFontSize(16);
-      doc.text(`Ordem de Serviço #${ordem.numero_os}`, 20, 30);
+      doc.text(`Ordem de Serviço ${ordem.numero_os_gerado}`, 20, 30);
       
       // Linha divisória
       doc.line(20, 35, 190, 35);
@@ -317,7 +318,7 @@ const ConsultaOS = () => {
       
       toast({
         title: "Imprimindo OS",
-        description: `A OS #${ordem.numero_os} está sendo impressa.`
+        description: `A OS ${ordem.numero_os_gerado} está sendo impressa.`
       });
     }
   };
@@ -325,17 +326,17 @@ const ConsultaOS = () => {
   const salvarPDF = (ordem: OrdemServico) => {
     const doc = gerarPDF(ordem);
     if (doc) {
-      doc.save(`OS_${ordem.numero_os}_${ordem.cliente_nome.replace(/\s+/g, '_')}.pdf`);
+      doc.save(`${ordem.numero_os_gerado}_${ordem.cliente_nome.replace(/\s+/g, '_')}.pdf`);
       toast({
         title: "PDF salvo",
-        description: `A OS #${ordem.numero_os} foi salva como PDF.`
+        description: `A OS ${ordem.numero_os_gerado} foi salva como PDF.`
       });
     }
   };
 
   const gerarMensagemWhatsApp = (ordem: OrdemServico) => {
     const dataEntrada = new Date(ordem.data_entrada).toLocaleDateString('pt-BR');
-    const mensagem = `Olá ${ordem.cliente_nome}, sua Ordem de Serviço #${ordem.numero_os} está com status: ${ordem.status}.
+    const mensagem = `Olá ${ordem.cliente_nome}, sua Ordem de Serviço ${ordem.numero_os_gerado} está com status: ${ordem.status}.
 📅 Entrada: ${dataEntrada}
 🛠️ Equipamento: ${ordem.equipamento_marca} ${ordem.equipamento_modelo}
 💰 Valor: R$ ${ordem.valor_total.toFixed(2).replace('.', ',')}
@@ -377,7 +378,7 @@ const ConsultaOS = () => {
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="md:col-span-3">
-              <Label htmlFor="busca">Buscar por nome, telefone ou nº OS</Label>
+              <Label htmlFor="busca">Buscar por nome, telefone ou nº OS (ex: OS25-0001)</Label>
               <Input
                 id="busca"
                 value={filtros.busca}
@@ -488,7 +489,7 @@ const ConsultaOS = () => {
                 <TableBody>
                   {ordens.map((ordem) => (
                     <TableRow key={ordem.id}>
-                      <TableCell className="font-medium">#{ordem.numero_os}</TableCell>
+                      <TableCell className="font-medium">{ordem.numero_os_gerado}</TableCell>
                       <TableCell>{ordem.cliente_nome}</TableCell>
                       <TableCell>{formatarTelefone(ordem.cliente_telefone)}</TableCell>
                       <TableCell>
