@@ -59,35 +59,6 @@ const NovaOSForm = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [pecas, setPecas] = useState<Array<{id: string, nome: string, quantidade: number, preco_unitario: number}>>([]);
-  const [formData, setFormData] = useState<FormData>({
-    cliente_nome: '',
-    cliente_telefone: '',
-    cliente_email: '',
-    cliente_cep: '',
-    cliente_endereco: '',
-    cliente_numero: '',
-    cliente_complemento: '',
-    cliente_bairro: '',
-    cliente_cidade: '',
-    cliente_estado: '',
-    cliente_cpf_cnpj: '',
-    equipamento_tipo: '',
-    equipamento_marca: '',
-    equipamento_modelo: '',
-    equipamento_serie: '',
-    equipamento_cor: '',
-    acessorios_entregues: '',
-    estado_fisico_entrega: '',
-    defeito_relatado: '',
-    observacoes_tecnico: '',
-    testes_realizados: '',
-    urgencia: false,
-    valor_mao_obra: 0,
-    data_prevista: '',
-    tecnico_responsavel: '',
-    status: 'Em análise',
-    prazo_garantia_dias: 90
-  });
 
   const equipamentoTipos = [
     'Britadeira', 
@@ -162,9 +133,11 @@ const NovaOSForm = () => {
     setLoading(true);
 
     try {
+      console.log('Iniciando criação da OS...');
+      
       const valorPecas = pecas.reduce((total, peca) => total + (peca.quantidade * peca.preco_unitario), 0);
       
-      // Preparar dados para inserção - converter campos vazios para null conforme necessário
+      // Preparar dados para inserção - remover numero_os para ser gerado automaticamente
       const osData: NovaOrdemServico = {
         cliente_nome: formData.cliente_nome,
         cliente_telefone: formData.cliente_telefone,
@@ -199,7 +172,7 @@ const NovaOSForm = () => {
 
       console.log('Dados sendo enviados para inserção:', osData);
 
-      // Inserir OS - o número será gerado automaticamente
+      // Inserir OS - o número será gerado automaticamente pelo SERIAL
       const { data: osResult, error: osError } = await supabase
         .from('ordens_servico')
         .insert([osData])
@@ -213,12 +186,12 @@ const NovaOSForm = () => {
 
       console.log('OS criada com sucesso:', osResult);
 
-      // Formatar número da OS para mostrar na mensagem de sucesso
+      // Gerar número formatado da OS para mostrar na mensagem
       const anoAtual = new Date().getFullYear();
       const ano2Digitos = anoAtual.toString().slice(-2);
       const numeroOSFormatado = `OS${ano2Digitos}-${osResult.numero_os.toString().padStart(4, '0')}`;
 
-      // Inserir peças
+      // Inserir peças se houver
       if (pecas.length > 0) {
         const pecasData = pecas.map(peca => ({
           os_id: osResult.id,
@@ -245,7 +218,7 @@ const NovaOSForm = () => {
         description: `Ordem de Serviço ${numeroOSFormatado} foi salva.`
       });
 
-      // Limpar formulário
+      // Limpar formulário após sucesso
       setFormData({
         cliente_nome: '',
         cliente_telefone: '',
@@ -281,7 +254,7 @@ const NovaOSForm = () => {
       console.error('Erro ao criar OS:', error);
       toast({
         title: "Erro ao criar OS",
-        description: "Ocorreu um erro ao criar a ordem de serviço. Verifique o console para mais detalhes.",
+        description: `Erro: ${error.message || 'Erro desconhecido'}`,
         variant: "destructive"
       });
     } finally {
