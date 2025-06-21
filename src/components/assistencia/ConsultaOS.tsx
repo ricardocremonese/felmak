@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -163,10 +164,10 @@ const ConsultaOS = () => {
       // Cabeçalho simples com logo e número da OS
       let yPosition = 20;
       
-      // Adicionar logo da empresa (lado esquerdo)
+      // Adicionar logo da empresa (lado esquerdo) - usando o novo logo
       try {
-        const logoUrl = '/lovable-uploads/fa7abf6f-1bfe-434f-9ea1-28c3490b61d9.png';
-        doc.addImage(logoUrl, 'PNG', 20, yPosition, 40, 20);
+        const logoUrl = '/lovable-uploads/9428a948-19d8-4c0c-abbb-048b4717f2cc.png';
+        doc.addImage(logoUrl, 'PNG', 20, yPosition, 60, 20); // Aumentei um pouco o tamanho para melhor visualização
       } catch (error) {
         console.log('Logo não encontrado, continuando sem logo');
       }
