@@ -538,7 +538,6 @@ const NovaOSForm = () => {
         setPecas={setPecas}
         valorMaoObra={formData.valor_mao_obra}
         setValorMaoObra={(valor) => handleInputChange('valor_mao_obra', valor)}
-        showInitialValue={false}
       />
 
       {/* Prazo e Status */}
