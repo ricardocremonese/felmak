@@ -15,11 +15,13 @@ import {
   Printer, 
   MessageCircle,
   Filter,
-  Calendar
+  Calendar,
+  FilePdf
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { formatarTelefone } from '@/utils/helpers';
+import jsPDF from 'jspdf';
 
 interface OrdemServico {
   id: string;
@@ -34,6 +36,17 @@ interface OrdemServico {
   data_prevista: string;
   valor_total: number;
   tecnico_responsavel: string;
+  cliente_email?: string;
+  cliente_endereco?: string;
+  cliente_bairro?: string;
+  cliente_cidade?: string;
+  cliente_estado?: string;
+  equipamento_serie?: string;
+  defeito_relatado?: string;
+  observacoes_tecnico?: string;
+  prazo_garantia_dias?: number;
+  valor_mao_obra?: number;
+  valor_pecas?: number;
 }
 
 const ConsultaOS = () => {
@@ -144,6 +157,181 @@ const ConsultaOS = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const gerarPDF = (ordem: OrdemServico) => {
+    try {
+      const doc = new jsPDF();
+      
+      // Cabeçalho
+      doc.setFontSize(20);
+      doc.text('FELMAK Ferramentas Elétricas', 20, 20);
+      doc.setFontSize(16);
+      doc.text(`Ordem de Serviço #${ordem.numero_os}`, 20, 30);
+      
+      // Linha divisória
+      doc.line(20, 35, 190, 35);
+      
+      let yPosition = 45;
+      
+      // Dados do Cliente
+      doc.setFontSize(14);
+      doc.text('DADOS DO CLIENTE', 20, yPosition);
+      yPosition += 10;
+      
+      doc.setFontSize(10);
+      doc.text(`Nome: ${ordem.cliente_nome}`, 20, yPosition);
+      yPosition += 7;
+      doc.text(`Telefone: ${formatarTelefone(ordem.cliente_telefone)}`, 20, yPosition);
+      yPosition += 7;
+      if (ordem.cliente_email) {
+        doc.text(`E-mail: ${ordem.cliente_email}`, 20, yPosition);
+        yPosition += 7;
+      }
+      if (ordem.cliente_endereco) {
+        doc.text(`Endereço: ${ordem.cliente_endereco}, ${ordem.cliente_bairro}`, 20, yPosition);
+        yPosition += 7;
+        doc.text(`Cidade: ${ordem.cliente_cidade} - ${ordem.cliente_estado}`, 20, yPosition);
+        yPosition += 7;
+      }
+      
+      yPosition += 5;
+      
+      // Dados do Equipamento
+      doc.setFontSize(14);
+      doc.text('DADOS DO EQUIPAMENTO', 20, yPosition);
+      yPosition += 10;
+      
+      doc.setFontSize(10);
+      doc.text(`Tipo: ${ordem.equipamento_tipo}`, 20, yPosition);
+      yPosition += 7;
+      doc.text(`Marca: ${ordem.equipamento_marca}`, 20, yPosition);
+      yPosition += 7;
+      doc.text(`Modelo: ${ordem.equipamento_modelo || 'N/A'}`, 20, yPosition);
+      yPosition += 7;
+      if (ordem.equipamento_serie) {
+        doc.text(`Série: ${ordem.equipamento_serie}`, 20, yPosition);
+        yPosition += 7;
+      }
+      
+      yPosition += 5;
+      
+      // Defeito e Observações
+      if (ordem.defeito_relatado) {
+        doc.setFontSize(14);
+        doc.text('DEFEITO RELATADO', 20, yPosition);
+        yPosition += 10;
+        
+        doc.setFontSize(10);
+        const defeitoLines = doc.splitTextToSize(ordem.defeito_relatado, 170);
+        doc.text(defeitoLines, 20, yPosition);
+        yPosition += defeitoLines.length * 7 + 5;
+      }
+      
+      if (ordem.observacoes_tecnico) {
+        doc.setFontSize(14);
+        doc.text('OBSERVAÇÕES TÉCNICAS', 20, yPosition);
+        yPosition += 10;
+        
+        doc.setFontSize(10);
+        const obsLines = doc.splitTextToSize(ordem.observacoes_tecnico, 170);
+        doc.text(obsLines, 20, yPosition);
+        yPosition += obsLines.length * 7 + 5;
+      }
+      
+      // Valores
+      doc.setFontSize(14);
+      doc.text('VALORES', 20, yPosition);
+      yPosition += 10;
+      
+      doc.setFontSize(10);
+      if (ordem.valor_pecas) {
+        doc.text(`Valor Peças: R$ ${ordem.valor_pecas.toFixed(2).replace('.', ',')}`, 20, yPosition);
+        yPosition += 7;
+      }
+      if (ordem.valor_mao_obra) {
+        doc.text(`Mão de Obra: R$ ${ordem.valor_mao_obra.toFixed(2).replace('.', ',')}`, 20, yPosition);
+        yPosition += 7;
+      }
+      doc.setFontSize(12);
+      doc.text(`TOTAL: R$ ${ordem.valor_total.toFixed(2).replace('.', ',')}`, 20, yPosition);
+      yPosition += 10;
+      
+      // Status e Datas
+      doc.setFontSize(14);
+      doc.text('STATUS E PRAZOS', 20, yPosition);
+      yPosition += 10;
+      
+      doc.setFontSize(10);
+      doc.text(`Status: ${ordem.status}`, 20, yPosition);
+      yPosition += 7;
+      doc.text(`Data Entrada: ${new Date(ordem.data_entrada).toLocaleDateString('pt-BR')}`, 20, yPosition);
+      yPosition += 7;
+      if (ordem.data_prevista) {
+        doc.text(`Data Prevista: ${new Date(ordem.data_prevista).toLocaleDateString('pt-BR')}`, 20, yPosition);
+        yPosition += 7;
+      }
+      if (ordem.tecnico_responsavel) {
+        doc.text(`Técnico: ${ordem.tecnico_responsavel}`, 20, yPosition);
+        yPosition += 7;
+      }
+      if (ordem.prazo_garantia_dias) {
+        doc.text(`Garantia: ${ordem.prazo_garantia_dias} dias`, 20, yPosition);
+        yPosition += 7;
+      }
+      
+      // Rodapé
+      doc.setFontSize(8);
+      doc.text('FELMAK Ferramentas Elétricas - São Bernardo do Campo', 20, 280);
+      doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 20, 285);
+      
+      return doc;
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
+      toast({
+        title: "Erro ao gerar PDF",
+        description: "Ocorreu um erro ao gerar o arquivo PDF.",
+        variant: "destructive"
+      });
+      return null;
+    }
+  };
+
+  const imprimirOS = (ordem: OrdemServico) => {
+    const doc = gerarPDF(ordem);
+    if (doc) {
+      doc.autoPrint();
+      const blob = doc.output('blob');
+      const url = URL.createObjectURL(blob);
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = url;
+      document.body.appendChild(iframe);
+      
+      iframe.onload = () => {
+        iframe.contentWindow?.print();
+        setTimeout(() => {
+          document.body.removeChild(iframe);
+          URL.revokeObjectURL(url);
+        }, 100);
+      };
+      
+      toast({
+        title: "Imprimindo OS",
+        description: `A OS #${ordem.numero_os} está sendo impressa.`
+      });
+    }
+  };
+
+  const salvarPDF = (ordem: OrdemServico) => {
+    const doc = gerarPDF(ordem);
+    if (doc) {
+      doc.save(`OS_${ordem.numero_os}_${ordem.cliente_nome.replace(/\s+/g, '_')}.pdf`);
+      toast({
+        title: "PDF salvo",
+        description: `A OS #${ordem.numero_os} foi salva como PDF.`
+      });
     }
   };
 
@@ -330,11 +518,24 @@ const ConsultaOS = () => {
                           <Button size="sm" variant="outline" title="Visualizar">
                             <Eye className="w-4 h-4" />
                           </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            title="Imprimir"
+                            onClick={() => imprimirOS(ordem)}
+                          >
+                            <Printer className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            title="Salvar em PDF"
+                            onClick={() => salvarPDF(ordem)}
+                          >
+                            <FilePdf className="w-4 h-4" />
+                          </Button>
                           <Button size="sm" variant="outline" title="Editar">
                             <Edit className="w-4 h-4" />
-                          </Button>
-                          <Button size="sm" variant="outline" title="Imprimir">
-                            <Printer className="w-4 h-4" />
                           </Button>
                           <Button 
                             size="sm" 
