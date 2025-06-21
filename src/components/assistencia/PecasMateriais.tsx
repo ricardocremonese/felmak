@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Plus, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { formatCurrencyInput, parseCurrencyValue } from '@/utils/helpers';
 
 interface Peca {
   id: string;
@@ -34,6 +35,8 @@ const PecasMateriais: React.FC<PecasMateriaisProps> = ({
     quantidade: 1,
     preco_unitario: 0
   });
+  const [precoInput, setPrecoInput] = useState('');
+  const [maoObraInput, setMaoObraInput] = useState('');
 
   const adicionarPeca = () => {
     if (!novaPeca.nome.trim()) {
@@ -63,6 +66,7 @@ const PecasMateriais: React.FC<PecasMateriaisProps> = ({
 
     setPecas(prev => [...prev, peca]);
     setNovaPeca({ nome: '', quantidade: 1, preco_unitario: 0 });
+    setPrecoInput('');
     
     toast({
       title: "Peça adicionada",
@@ -84,6 +88,18 @@ const PecasMateriais: React.FC<PecasMateriaisProps> = ({
 
   const calcularTotal = () => {
     return calcularSubtotalPecas() + valorMaoObra;
+  };
+
+  const handlePrecoInputChange = (value: string) => {
+    setPrecoInput(value);
+    const numericValue = parseCurrencyValue(value);
+    setNovaPeca(prev => ({ ...prev, preco_unitario: numericValue }));
+  };
+
+  const handleMaoObraInputChange = (value: string) => {
+    setMaoObraInput(value);
+    const numericValue = parseCurrencyValue(value);
+    setValorMaoObra(numericValue);
   };
 
   return (
@@ -121,11 +137,9 @@ const PecasMateriais: React.FC<PecasMateriaisProps> = ({
             <Label htmlFor="preco_peca">Preço Unitário</Label>
             <Input
               id="preco_peca"
-              type="number"
-              step="0.01"
-              value={novaPeca.preco_unitario}
-              onChange={(e) => setNovaPeca(prev => ({ ...prev, preco_unitario: parseFloat(e.target.value) || 0 }))}
-              placeholder="0,00"
+              value={precoInput}
+              onChange={(e) => handlePrecoInputChange(e.target.value)}
+              placeholder="R$ 0,00"
             />
           </div>
           
@@ -185,11 +199,9 @@ const PecasMateriais: React.FC<PecasMateriaisProps> = ({
             <Label htmlFor="valor_mao_obra">Valor da Mão de Obra</Label>
             <Input
               id="valor_mao_obra"
-              type="number"
-              step="0.01"
-              value={valorMaoObra}
-              onChange={(e) => setValorMaoObra(parseFloat(e.target.value) || 0)}
-              placeholder="0,00"
+              value={maoObraInput}
+              onChange={(e) => handleMaoObraInputChange(e.target.value)}
+              placeholder="R$ 0,00"
             />
           </div>
 
