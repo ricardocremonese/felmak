@@ -57,279 +57,243 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
         {children}
       </DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">
-            Ordem de Serviço {numeroOSFormatado}
-          </DialogTitle>
+        <DialogHeader className="text-center space-y-4">
+          {/* Logo e Número da OS */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <img 
+                src="/lovable-uploads/9428a948-19d8-4c0c-abbb-048b4717f2cc.png" 
+                alt="Logo FELMAK" 
+                className="h-12 w-auto"
+              />
+            </div>
+            <div className="text-right">
+              <DialogTitle className="text-2xl font-bold">
+                OS: {numeroOSFormatado}
+              </DialogTitle>
+            </div>
+          </div>
+          
+          {/* Dados de contato da empresa */}
+          <div className="text-sm text-gray-600 space-y-1">
+            <p>Tel: (11) 4368-7395 | (11) 2598-7894</p>
+            <p>Av. Senador Vergueiro, 2483 - São Bernardo do Campo</p>
+            <p>e-mail: felmak.assist@gmail.com</p>
+          </div>
+          
+          <h2 className="text-xl font-bold">ORDEM DE SERVIÇO</h2>
         </DialogHeader>
 
         <div className="space-y-6">
-          {/* Status e Informações Gerais */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-lg">
-                <FileText className="w-5 h-5 mr-2" />
-                Status e Informações Gerais
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Status Atual</label>
-                  <div className="mt-1">
-                    <Badge className={statusColors[ordem.status || 'Em análise'] || 'bg-gray-100 text-gray-800'}>
-                      {ordem.status || 'Em análise'}
-                    </Badge>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Urgência</label>
-                  <div className="mt-1">
-                    <Badge variant={ordem.urgencia ? "destructive" : "secondary"}>
-                      {ordem.urgencia ? 'Urgente' : 'Normal'}
-                    </Badge>
-                  </div>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Técnico Responsável</label>
-                  <p className="mt-1 text-sm">{ordem.tecnico_responsavel || 'Não atribuído'}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
           {/* Dados do Cliente */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-lg">
+            <CardHeader className="bg-gray-50">
+              <CardTitle className="flex items-center text-lg font-bold">
                 <User className="w-5 h-5 mr-2" />
-                Dados do Cliente
+                DADOS DO CLIENTE
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Nome</label>
-                  <p className="mt-1 font-medium">{ordem.cliente_nome}</p>
+                  <p><span className="font-medium">Nome:</span> {ordem.cliente_nome}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Telefone</label>
-                  <div className="flex items-center mt-1">
-                    <Phone className="w-4 h-4 mr-2 text-gray-500" />
-                    <p>{formatarTelefone(ordem.cliente_telefone)}</p>
-                  </div>
+                  <p><span className="font-medium">Telefone:</span> {formatarTelefone(ordem.cliente_telefone)}</p>
                 </div>
                 {ordem.cliente_email && (
                   <div>
-                    <label className="text-sm font-medium text-gray-600">E-mail</label>
-                    <div className="flex items-center mt-1">
-                      <Mail className="w-4 h-4 mr-2 text-gray-500" />
-                      <p className="text-sm">{ordem.cliente_email}</p>
-                    </div>
+                    <p><span className="font-medium">E-mail:</span> {ordem.cliente_email}</p>
                   </div>
                 )}
                 {ordem.cliente_cpf_cnpj && (
                   <div>
-                    <label className="text-sm font-medium text-gray-600">CPF/CNPJ</label>
-                    <p className="mt-1 text-sm">{ordem.cliente_cpf_cnpj}</p>
+                    <p><span className="font-medium">CPF/CNPJ:</span> {ordem.cliente_cpf_cnpj}</p>
                   </div>
                 )}
               </div>
 
-              {(ordem.cliente_endereco || ordem.cliente_cep) && (
-                <>
-                  <Separator />
-                  <div>
-                    <label className="text-sm font-medium text-gray-600 flex items-center">
-                      <MapPin className="w-4 h-4 mr-2" />
-                      Endereço
-                    </label>
-                    <div className="mt-2 text-sm space-y-1">
-                      {ordem.cliente_endereco && (
-                        <p>{ordem.cliente_endereco}, {ordem.cliente_numero || 'S/N'} {ordem.cliente_complemento && `- ${ordem.cliente_complemento}`}</p>
-                      )}
-                      {ordem.cliente_bairro && (
-                        <p>Bairro: {ordem.cliente_bairro}</p>
-                      )}
-                      {ordem.cliente_cidade && ordem.cliente_estado && (
-                        <p>{ordem.cliente_cidade} - {ordem.cliente_estado}</p>
-                      )}
-                      {ordem.cliente_cep && (
-                        <p>CEP: {ordem.cliente_cep}</p>
-                      )}
-                    </div>
-                  </div>
-                </>
+              {ordem.cliente_endereco && (
+                <div className="space-y-2">
+                  <p><span className="font-medium">Endereço:</span> {ordem.cliente_endereco}{ordem.cliente_numero ? `, ${ordem.cliente_numero}` : ''}</p>
+                  {ordem.cliente_bairro && (
+                    <p>{ordem.cliente_bairro} - {ordem.cliente_cidade || ''} - {ordem.cliente_estado || ''}</p>
+                  )}
+                  {ordem.cliente_cep && (
+                    <p><span className="font-medium">CEP:</span> {ordem.cliente_cep}</p>
+                  )}
+                </div>
               )}
             </CardContent>
           </Card>
 
           {/* Dados do Equipamento */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-lg">
+            <CardHeader className="bg-gray-50">
+              <CardTitle className="flex items-center text-lg font-bold">
                 <Wrench className="w-5 h-5 mr-2" />
-                Dados do Equipamento
+                DADOS DO EQUIPAMENTO
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 pt-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Tipo</label>
-                  <p className="mt-1 font-medium">{ordem.equipamento_tipo}</p>
+                  <p><span className="font-medium">Tipo:</span> {ordem.equipamento_tipo}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Marca</label>
-                  <p className="mt-1 font-medium">{ordem.equipamento_marca}</p>
+                  <p><span className="font-medium">Marca:</span> {ordem.equipamento_marca}</p>
                 </div>
                 {ordem.equipamento_modelo && (
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Modelo</label>
-                    <p className="mt-1">{ordem.equipamento_modelo}</p>
+                    <p><span className="font-medium">Modelo:</span> {ordem.equipamento_modelo}</p>
                   </div>
                 )}
                 {ordem.equipamento_serie && (
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Número de Série</label>
-                    <p className="mt-1">{ordem.equipamento_serie}</p>
+                    <p><span className="font-medium">Nº Série:</span> {ordem.equipamento_serie}</p>
                   </div>
                 )}
                 {ordem.equipamento_cor && (
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Cor</label>
-                    <p className="mt-1">{ordem.equipamento_cor}</p>
+                    <p><span className="font-medium">Cor:</span> {ordem.equipamento_cor}</p>
+                  </div>
+                )}
+                {ordem.acessorios_entregues && (
+                  <div>
+                    <p><span className="font-medium">Acessórios:</span> {ordem.acessorios_entregues}</p>
+                  </div>
+                )}
+                {ordem.estado_fisico_entrega && (
+                  <div>
+                    <p><span className="font-medium">Estado Físico:</span> {ordem.estado_fisico_entrega}</p>
                   </div>
                 )}
               </div>
-
-              {(ordem.acessorios_entregues || ordem.estado_fisico_entrega) && (
-                <>
-                  <Separator />
-                  {ordem.acessorios_entregues && (
-                    <div>
-                      <label className="text-sm font-medium text-gray-600">Acessórios Entregues</label>
-                      <p className="mt-1 text-sm">{ordem.acessorios_entregues}</p>
-                    </div>
-                  )}
-                  {ordem.estado_fisico_entrega && (
-                    <div>
-                      <label className="text-sm font-medium text-gray-600">Estado Físico na Entrega</label>
-                      <p className="mt-1 text-sm">{ordem.estado_fisico_entrega}</p>
-                    </div>
-                  )}
-                </>
-              )}
             </CardContent>
           </Card>
 
-          {/* Defeito e Observações */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-lg">
-                <FileText className="w-5 h-5 mr-2" />
-                Defeito e Observações
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <label className="text-sm font-medium text-gray-600">Defeito Relatado</label>
-                <p className="mt-1 text-sm p-3 bg-gray-50 rounded-md">{ordem.defeito_relatado}</p>
-              </div>
-              
-              {ordem.observacoes_tecnico && (
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Observações do Técnico</label>
-                  <p className="mt-1 text-sm p-3 bg-blue-50 rounded-md">{ordem.observacoes_tecnico}</p>
-                </div>
-              )}
+          {/* Defeito Relatado */}
+          {ordem.defeito_relatado && (
+            <Card>
+              <CardHeader className="bg-gray-50">
+                <CardTitle className="flex items-center text-lg font-bold">
+                  <FileText className="w-5 h-5 mr-2" />
+                  DEFEITO RELATADO
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-4">
+                <p className="text-sm leading-relaxed">{ordem.defeito_relatado}</p>
+              </CardContent>
+            </Card>
+          )}
 
-              {ordem.testes_realizados && (
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Testes Realizados</label>
-                  <p className="mt-1 text-sm p-3 bg-green-50 rounded-md">{ordem.testes_realizados}</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
+          {/* Observações Técnicas */}
+          {ordem.observacoes_tecnico && (
+            <Card>
+              <CardHeader className="bg-gray-50">
+                <CardTitle className="flex items-center text-lg font-bold">
+                  <FileText className="w-5 h-5 mr-2" />
+                  OBSERVAÇÕES TÉCNICAS
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-4">
+                <p className="text-sm leading-relaxed">{ordem.observacoes_tecnico}</p>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Testes Realizados */}
+          {ordem.testes_realizados && (
+            <Card>
+              <CardHeader className="bg-gray-50">
+                <CardTitle className="flex items-center text-lg font-bold">
+                  <FileText className="w-5 h-5 mr-2" />
+                  TESTES REALIZADOS
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-4">
+                <p className="text-sm leading-relaxed">{ordem.testes_realizados}</p>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Valores */}
           <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center text-lg">
+            <CardHeader className="bg-gray-50">
+              <CardTitle className="flex items-center text-lg font-bold">
                 <DollarSign className="w-5 h-5 mr-2" />
-                Valores
+                VALORES
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Valor das Peças</label>
-                  <p className="mt-1 text-lg font-medium">R$ {(ordem.valor_pecas || 0).toString().replace('.', ',')}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Mão de Obra</label>
-                  <p className="mt-1 text-lg font-medium">R$ {(ordem.valor_mao_obra || 0).toString().replace('.', ',')}</p>
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Valor Total</label>
-                  <p className="mt-1 text-xl font-bold text-green-600">R$ {(ordem.valor_total || 0).toString().replace('.', ',')}</p>
-                </div>
-              </div>
-
-              {ordem.autorizacao_orcamento && (
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Limite de Autorização</label>
-                  <p className="mt-1 text-lg">R$ {ordem.autorizacao_orcamento.toString().replace('.', ',')}</p>
-                </div>
+            <CardContent className="space-y-4 pt-4">
+              {ordem.valor_pecas && ordem.valor_pecas > 0 && (
+                <p><span className="font-medium">Valor Peças:</span> R$ {ordem.valor_pecas.toFixed(2).replace('.', ',')}</p>
+              )}
+              
+              {ordem.valor_mao_obra && ordem.valor_mao_obra > 0 && (
+                <p><span className="font-medium">Mão de Obra:</span> R$ {ordem.valor_mao_obra.toFixed(2).replace('.', ',')}</p>
+              )}
+              
+              <p className="text-lg font-bold">
+                <span className="font-bold">VALOR TOTAL:</span> R$ {(ordem.valor_total || 0).toFixed(2).replace('.', ',')}
+              </p>
+              
+              {ordem.autorizacao_orcamento && ordem.autorizacao_orcamento > 0 && (
+                <p><span className="font-medium">Limite Autorizado:</span> R$ {ordem.autorizacao_orcamento.toFixed(2).replace('.', ',')}</p>
               )}
             </CardContent>
           </Card>
 
-          {/* Prazos e Datas */}
+          {/* Informações de Data e Status */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center text-lg">
                 <Calendar className="w-5 h-5 mr-2" />
-                Prazos e Datas
+                Informações Adicionais
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {ordem.data_entrada && (
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Data de Entrada</label>
-                    <div className="flex items-center mt-1">
-                      <Clock className="w-4 h-4 mr-2 text-gray-500" />
-                      <p>{new Date(ordem.data_entrada).toLocaleDateString('pt-BR')}</p>
-                    </div>
+                    <p><span className="font-medium">Data Entrada:</span> {new Date(ordem.data_entrada).toLocaleDateString('pt-BR')}</p>
                   </div>
                 )}
                 {ordem.data_prevista && (
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Data Prevista</label>
-                    <div className="flex items-center mt-1">
-                      <Clock className="w-4 h-4 mr-2 text-blue-500" />
-                      <p>{new Date(ordem.data_prevista).toLocaleDateString('pt-BR')}</p>
-                    </div>
+                    <p><span className="font-medium">Data Prevista:</span> {new Date(ordem.data_prevista).toLocaleDateString('pt-BR')}</p>
                   </div>
                 )}
                 {ordem.data_entrega && (
                   <div>
-                    <label className="text-sm font-medium text-gray-600">Data de Entrega</label>
-                    <div className="flex items-center mt-1">
-                      <Clock className="w-4 h-4 mr-2 text-green-500" />
-                      <p>{new Date(ordem.data_entrega).toLocaleDateString('pt-BR')}</p>
-                    </div>
+                    <p><span className="font-medium">Data Entrega:</span> {new Date(ordem.data_entrega).toLocaleDateString('pt-BR')}</p>
+                  </div>
+                )}
+                {ordem.tecnico_responsavel && (
+                  <div>
+                    <p><span className="font-medium">Técnico Responsável:</span> {ordem.tecnico_responsavel}</p>
+                  </div>
+                )}
+                {ordem.prazo_garantia_dias && ordem.prazo_garantia_dias > 0 && (
+                  <div>
+                    <p><span className="font-medium">Garantia:</span> {ordem.prazo_garantia_dias} dias</p>
+                  </div>
+                )}
+                <div>
+                  <p><span className="font-medium">Status:</span> 
+                    <Badge className={`ml-2 ${statusColors[ordem.status || 'Em análise'] || 'bg-gray-100 text-gray-800'}`}>
+                      {ordem.status || 'Em análise'}
+                    </Badge>
+                  </p>
+                </div>
+                {ordem.urgencia && (
+                  <div>
+                    <p><span className="font-medium">Urgência:</span> 
+                      <Badge variant="destructive" className="ml-2">Urgente</Badge>
+                    </p>
                   </div>
                 )}
               </div>
-
-              {ordem.prazo_garantia_dias && (
-                <div>
-                  <label className="text-sm font-medium text-gray-600">Prazo de Garantia</label>
-                  <p className="mt-1">{ordem.prazo_garantia_dias} dias</p>
-                </div>
-              )}
             </CardContent>
           </Card>
         </div>
