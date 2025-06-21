@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,6 +21,7 @@ import { useToast } from '@/hooks/use-toast';
 import { formatarTelefone } from '@/utils/helpers';
 import jsPDF from 'jspdf';
 import EditarOS from './EditarOS';
+import VisualizarOS from './VisualizarOS';
 import type { Database } from '@/integrations/supabase/types';
 
 // Usar o tipo correto do Supabase
@@ -518,9 +518,11 @@ const ConsultaOS = () => {
                       </TableCell>
                       <TableCell>
                         <div className="flex space-x-1">
-                          <Button size="sm" variant="outline" title="Visualizar">
-                            <Eye className="w-4 h-4" />
-                          </Button>
+                          <VisualizarOS ordem={ordem}>
+                            <Button size="sm" variant="outline" title="Visualizar">
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </VisualizarOS>
                           <Button 
                             size="sm" 
                             variant="outline" 
