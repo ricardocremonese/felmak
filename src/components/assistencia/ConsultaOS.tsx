@@ -21,30 +21,31 @@ import { useToast } from '@/hooks/use-toast';
 import { formatarTelefone } from '@/utils/helpers';
 import jsPDF from 'jspdf';
 
+// Interface simplificada para evitar problemas de tipo
 interface OrdemServico {
   id: string;
-  numero_os_gerado: string;
+  numero_os_gerado: string | null;
   cliente_nome: string;
   cliente_telefone: string;
   equipamento_tipo: string;
   equipamento_marca: string;
-  equipamento_modelo: string;
-  status: string;
-  data_entrada: string;
-  data_prevista: string;
-  valor_total: number;
-  tecnico_responsavel: string;
-  cliente_email?: string;
-  cliente_endereco?: string;
-  cliente_bairro?: string;
-  cliente_cidade?: string;
-  cliente_estado?: string;
-  equipamento_serie?: string;
+  equipamento_modelo: string | null;
+  status: string | null;
+  data_entrada: string | null;
+  data_prevista: string | null;
+  valor_total: number | null;
+  tecnico_responsavel: string | null;
+  cliente_email?: string | null;
+  cliente_endereco?: string | null;
+  cliente_bairro?: string | null;
+  cliente_cidade?: string | null;
+  cliente_estado?: string | null;
+  equipamento_serie?: string | null;
   defeito_relatado?: string;
-  observacoes_tecnico?: string;
-  prazo_garantia_dias?: number;
-  valor_mao_obra?: number;
-  valor_pecas?: number;
+  observacoes_tecnico?: string | null;
+  prazo_garantia_dias?: number | null;
+  valor_mao_obra?: number | null;
+  valor_pecas?: number | null;
 }
 
 const ConsultaOS = () => {
@@ -146,7 +147,15 @@ const ConsultaOS = () => {
 
       if (error) throw error;
 
-      setOrdens(data || []);
+      // Mapear os dados para garantir a estrutura correta
+      const ordensFormatadas = (data || []).map(ordem => ({
+        ...ordem,
+        numero_os_gerado: ordem.numero_os_gerado || 'Aguardando...',
+        status: ordem.status || 'Em análise',
+        valor_total: ordem.valor_total || 0
+      })) as OrdemServico[];
+
+      setOrdens(ordensFormatadas);
     } catch (error) {
       console.error('Erro ao buscar ordens:', error);
       toast({
@@ -167,7 +176,7 @@ const ConsultaOS = () => {
       doc.setFontSize(20);
       doc.text('FELMAK Ferramentas Elétricas', 20, 20);
       doc.setFontSize(16);
-      doc.text(`Ordem de Serviço ${ordem.numero_os_gerado}`, 20, 30);
+      doc.text(`Ordem de Serviço ${ordem.numero_os_gerado || 'N/A'}`, 20, 30);
       
       // Linha divisória
       doc.line(20, 35, 190, 35);
@@ -189,9 +198,9 @@ const ConsultaOS = () => {
         yPosition += 7;
       }
       if (ordem.cliente_endereco) {
-        doc.text(`Endereço: ${ordem.cliente_endereco}, ${ordem.cliente_bairro}`, 20, yPosition);
+        doc.text(`Endereço: ${ordem.cliente_endereco}, ${ordem.cliente_bairro || ''}`, 20, yPosition);
         yPosition += 7;
-        doc.text(`Cidade: ${ordem.cliente_cidade} - ${ordem.cliente_estado}`, 20, yPosition);
+        doc.text(`Cidade: ${ordem.cliente_cidade || ''} - ${ordem.cliente_estado || ''}`, 20, yPosition);
         yPosition += 7;
       }
       
@@ -254,7 +263,7 @@ const ConsultaOS = () => {
         yPosition += 7;
       }
       doc.setFontSize(12);
-      doc.text(`TOTAL: R$ ${ordem.valor_total.toFixed(2).replace('.', ',')}`, 20, yPosition);
+      doc.text(`TOTAL: R$ ${(ordem.valor_total || 0).toFixed(2).replace('.', ',')}`, 20, yPosition);
       yPosition += 10;
       
       // Status e Datas
@@ -263,10 +272,12 @@ const ConsultaOS = () => {
       yPosition += 10;
       
       doc.setFontSize(10);
-      doc.text(`Status: ${ordem.status}`, 20, yPosition);
+      doc.text(`Status: ${ordem.status || 'Em análise'}`, 20, yPosition);
       yPosition += 7;
-      doc.text(`Data Entrada: ${new Date(ordem.data_entrada).toLocaleDateString('pt-BR')}`, 20, yPosition);
-      yPosition += 7;
+      if (ordem.data_entrada) {
+        doc.text(`Data Entrada: ${new Date(ordem.data_entrada).toLocaleDateString('pt-BR')}`, 20, yPosition);
+        yPosition += 7;
+      }
       if (ordem.data_prevista) {
         doc.text(`Data Prevista: ${new Date(ordem.data_prevista).toLocaleDateString('pt-BR')}`, 20, yPosition);
         yPosition += 7;
@@ -318,7 +329,7 @@ const ConsultaOS = () => {
       
       toast({
         title: "Imprimindo OS",
-        description: `A OS ${ordem.numero_os_gerado} está sendo impressa.`
+        description: `A OS ${ordem.numero_os_gerado || 'N/A'} está sendo impressa.`
       });
     }
   };
@@ -326,20 +337,20 @@ const ConsultaOS = () => {
   const salvarPDF = (ordem: OrdemServico) => {
     const doc = gerarPDF(ordem);
     if (doc) {
-      doc.save(`${ordem.numero_os_gerado}_${ordem.cliente_nome.replace(/\s+/g, '_')}.pdf`);
+      doc.save(`${ordem.numero_os_gerado || 'OS'}_${ordem.cliente_nome.replace(/\s+/g, '_')}.pdf`);
       toast({
         title: "PDF salvo",
-        description: `A OS ${ordem.numero_os_gerado} foi salva como PDF.`
+        description: `A OS ${ordem.numero_os_gerado || 'N/A'} foi salva como PDF.`
       });
     }
   };
 
   const gerarMensagemWhatsApp = (ordem: OrdemServico) => {
-    const dataEntrada = new Date(ordem.data_entrada).toLocaleDateString('pt-BR');
-    const mensagem = `Olá ${ordem.cliente_nome}, sua Ordem de Serviço ${ordem.numero_os_gerado} está com status: ${ordem.status}.
+    const dataEntrada = ordem.data_entrada ? new Date(ordem.data_entrada).toLocaleDateString('pt-BR') : 'N/A';
+    const mensagem = `Olá ${ordem.cliente_nome}, sua Ordem de Serviço ${ordem.numero_os_gerado || 'N/A'} está com status: ${ordem.status || 'Em análise'}.
 📅 Entrada: ${dataEntrada}
-🛠️ Equipamento: ${ordem.equipamento_marca} ${ordem.equipamento_modelo}
-💰 Valor: R$ ${ordem.valor_total.toFixed(2).replace('.', ',')}
+🛠️ Equipamento: ${ordem.equipamento_marca} ${ordem.equipamento_modelo || ''}
+💰 Valor: R$ ${(ordem.valor_total || 0).toFixed(2).replace('.', ',')}
 📝 FELMAK Ferramentas Elétricas - São Bernardo do Campo`;
 
     const telefone = ordem.cliente_telefone.replace(/\D/g, '');
@@ -489,7 +500,7 @@ const ConsultaOS = () => {
                 <TableBody>
                   {ordens.map((ordem) => (
                     <TableRow key={ordem.id}>
-                      <TableCell className="font-medium">{ordem.numero_os_gerado}</TableCell>
+                      <TableCell className="font-medium">{ordem.numero_os_gerado || 'Aguardando...'}</TableCell>
                       <TableCell>{ordem.cliente_nome}</TableCell>
                       <TableCell>{formatarTelefone(ordem.cliente_telefone)}</TableCell>
                       <TableCell>
@@ -497,20 +508,20 @@ const ConsultaOS = () => {
                           <span className="font-medium">{ordem.equipamento_marca}</span>
                           <br />
                           <span className="text-sm text-gray-500">
-                            {ordem.equipamento_tipo} {ordem.equipamento_modelo}
+                            {ordem.equipamento_tipo} {ordem.equipamento_modelo || ''}
                           </span>
                         </div>
                       </TableCell>
                       <TableCell>
-                        <Badge className={statusColors[ordem.status] || 'bg-gray-100 text-gray-800'}>
-                          {ordem.status}
+                        <Badge className={statusColors[ordem.status || 'Em análise'] || 'bg-gray-100 text-gray-800'}>
+                          {ordem.status || 'Em análise'}
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        {new Date(ordem.data_entrada).toLocaleDateString('pt-BR')}
+                        {ordem.data_entrada ? new Date(ordem.data_entrada).toLocaleDateString('pt-BR') : 'N/A'}
                       </TableCell>
                       <TableCell>
-                        R$ {ordem.valor_total.toFixed(2).replace('.', ',')}
+                        R$ {(ordem.valor_total || 0).toFixed(2).replace('.', ',')}
                       </TableCell>
                       <TableCell>
                         <div className="flex space-x-1">

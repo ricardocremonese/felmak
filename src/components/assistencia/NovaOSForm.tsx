@@ -192,7 +192,7 @@ const NovaOSForm = () => {
 
       toast({
         title: "OS criada com sucesso!",
-        description: `Ordem de Serviço ${osData.numero_os_gerado} foi criada.`
+        description: `Ordem de Serviço ${osData.numero_os_gerado || 'criada'} foi salva.`
       });
 
       // Limpar formulário
