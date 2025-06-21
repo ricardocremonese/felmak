@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -87,17 +86,35 @@ const NovaOSForm = () => {
   });
 
   const equipamentoTipos = [
-    'Britadeira', 'Martelete', 'Furadeira', 'Esmerilhadeira', 
-    'Parafusadeira', 'Serra Circular', 'Lixadeira', 'Soprador',
-    'Aspirador', 'Plaina', 'Roteador', 'Outros'
-  ].filter(tipo => tipo.trim() !== ''); // Filter out empty strings
+    'Britadeira', 
+    'Martelete', 
+    'Furadeira', 
+    'Esmerilhadeira', 
+    'Parafusadeira', 
+    'Serra Circular', 
+    'Lixadeira', 
+    'Soprador',
+    'Aspirador', 
+    'Plaina', 
+    'Roteador', 
+    'Outros'
+  ];
 
-  const marcas = ['DeWalt', 'Makita', 'Bosch', 'Outras'].filter(marca => marca.trim() !== ''); // Filter out empty strings
+  const marcas = [
+    'DeWalt', 
+    'Makita', 
+    'Bosch', 
+    'Outras'
+  ];
 
   const statusOptions = [
-    'Em análise', 'Aguardando peça', 'Aguardando autorização', 
-    'Em conserto', 'Finalizado', 'Entregue'
-  ].filter(status => status.trim() !== ''); // Filter out empty strings
+    'Em análise', 
+    'Aguardando peça', 
+    'Aguardando autorização', 
+    'Em conserto', 
+    'Finalizado', 
+    'Entregue'
+  ];
 
   const handleInputChange = (field: keyof FormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
