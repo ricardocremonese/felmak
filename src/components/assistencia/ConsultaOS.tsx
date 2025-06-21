@@ -160,37 +160,34 @@ const ConsultaOS = () => {
       const doc = new jsPDF();
       const numeroOSFormatado = gerarNumeroOS(ordem.numero_os, ordem.data_entrada);
       
-      // Adicionar logo da empresa
-      const logoUrl = '/lovable-uploads/fa7abf6f-1bfe-434f-9ea1-28c3490b61d9.png';
+      // Cabeçalho simples com logo e número da OS
+      let yPosition = 20;
       
-      // Cabeçalho com logo e dados da empresa
-      doc.setFillColor(41, 128, 185); // Azul FELMAK
-      doc.rect(0, 0, 210, 45, 'F');
+      // Adicionar logo da empresa (lado esquerdo)
+      try {
+        const logoUrl = '/lovable-uploads/fa7abf6f-1bfe-434f-9ea1-28c3490b61d9.png';
+        doc.addImage(logoUrl, 'PNG', 20, yPosition, 40, 20);
+      } catch (error) {
+        console.log('Logo não encontrado, continuando sem logo');
+      }
       
-      // Texto da empresa em branco
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(22);
-      doc.setFont(undefined, 'bold');
-      doc.text('FELMAK', 20, 20);
-      
-      doc.setFontSize(14);
-      doc.setFont(undefined, 'normal');
-      doc.text('Ferramentas Elétricas', 20, 28);
-      
-      // Dados de contato da empresa
-      doc.setFontSize(9);
-      doc.text('Tel: (11) 4368-7395 | (11) 2598-7894', 20, 36);
-      doc.text('Av. Senador Vergueiro, 2483 - São Bernardo do Campo', 20, 41);
-      
-      // Número da OS no lado direito do cabeçalho
+      // Número da OS (lado direito)
+      doc.setTextColor(0, 0, 0);
       doc.setFontSize(16);
       doc.setFont(undefined, 'bold');
-      doc.text(`OS: ${numeroOSFormatado}`, 150, 25);
+      doc.text(`OS: ${numeroOSFormatado}`, 150, yPosition + 10);
       
-      // Reset cor do texto
-      doc.setTextColor(0, 0, 0);
+      // Dados de contato da empresa (abaixo do logo)
+      yPosition += 25;
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
+      doc.text('Tel: (11) 4368-7395 | (11) 2598-7894', 20, yPosition);
+      yPosition += 5;
+      doc.text('Av. Senador Vergueiro, 2483 - São Bernardo do Campo', 20, yPosition);
+      yPosition += 5;
+      doc.text('e-mail: felmak.assist@gmail.com', 20, yPosition);
       
-      let yPosition = 55;
+      yPosition += 15;
       
       // Título da seção
       doc.setFontSize(16);
@@ -364,24 +361,9 @@ const ConsultaOS = () => {
         yPosition += 8;
       }
       
-      // Status e Informações de Controle
-      doc.setFillColor(245, 245, 245);
-      doc.rect(15, yPosition - 5, 180, 8, 'F');
-      doc.setFontSize(12);
-      doc.setFont(undefined, 'bold');
-      doc.text('INFORMAÇÕES DE CONTROLE', 20, yPosition);
-      yPosition += 12;
-      
+      // Informações básicas de data (removido a seção "INFORMAÇÕES DE CONTROLE")
       doc.setFontSize(10);
       doc.setFont(undefined, 'normal');
-      doc.text(`Status: ${ordem.status || 'Em análise'}`, 20, yPosition);
-      
-      if (ordem.urgencia) {
-        doc.setTextColor(255, 0, 0);
-        doc.text('URGENTE', 110, yPosition);
-        doc.setTextColor(0, 0, 0);
-      }
-      yPosition += 6;
       
       if (ordem.data_entrada) {
         doc.text(`Data Entrada: ${new Date(ordem.data_entrada).toLocaleDateString('pt-BR')}`, 20, yPosition);
@@ -406,15 +388,6 @@ const ConsultaOS = () => {
         doc.text(`Garantia: ${ordem.prazo_garantia_dias} dias`, 20, yPosition);
         yPosition += 6;
       }
-      
-      // Rodapé
-      doc.setFillColor(41, 128, 185);
-      doc.rect(0, 285, 210, 12, 'F');
-      
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(9);
-      doc.text('FELMAK Ferramentas Elétricas - e-mail: felmak.assist@gmail.com', 20, 292);
-      doc.text(`Documento gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 20, 298);
       
       return doc;
     } catch (error) {
