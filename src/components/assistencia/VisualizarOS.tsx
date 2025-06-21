@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {
   Dialog,
@@ -10,6 +9,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Button } from '@/components/ui/button';
 import { 
   User, 
   Phone, 
@@ -19,7 +19,8 @@ import {
   Calendar, 
   DollarSign,
   FileText,
-  Clock
+  Clock,
+  Printer
 } from 'lucide-react';
 import { formatarTelefone } from '@/utils/helpers';
 import type { Database } from '@/integrations/supabase/types';
@@ -51,6 +52,10 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
     'Entregue': 'bg-gray-100 text-gray-800'
   };
 
+  const imprimirModal = () => {
+    window.print();
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -67,10 +72,21 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
                 className="h-16 w-auto"
               />
             </div>
-            <div className="text-right">
-              <DialogTitle className="text-2xl font-bold">
-                OS: {numeroOSFormatado}
-              </DialogTitle>
+            <div className="flex items-center space-x-4">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={imprimirModal}
+                className="print:hidden"
+              >
+                <Printer className="w-4 h-4 mr-2" />
+                Imprimir
+              </Button>
+              <div className="text-right">
+                <DialogTitle className="text-2xl font-bold">
+                  OS: {numeroOSFormatado}
+                </DialogTitle>
+              </div>
             </div>
           </div>
           
