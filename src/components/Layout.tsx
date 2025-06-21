@@ -48,7 +48,7 @@ const Layout: React.FC<LayoutProps> = ({
         <div className="flex flex-col h-full">
           {/* Header with image */}
           <div className="flex items-center justify-between p-4 border-b border-blue-700">
-            <img alt="Ferramentas Elétricas" className="w-full h-auto max-h-16 object-cover" src="/lovable-uploads/b0fcfbf5-9433-4dd4-abfc-ab35270936db.png" />
+            <img alt="Ferramentas Elétricas" src="/lovable-uploads/b2469a9b-f2af-4031-93df-e8d816f90603.png" className="w-full h-auto max-h-16 object-cover" />
             <button onClick={() => setSidebarOpen(false)} className="lg:hidden text-white hover:bg-blue-700 p-1 rounded ml-2 flex-shrink-0">
               <X className="w-5 h-5" />
             </button>
