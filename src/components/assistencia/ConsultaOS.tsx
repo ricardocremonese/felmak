@@ -160,129 +160,261 @@ const ConsultaOS = () => {
       const doc = new jsPDF();
       const numeroOSFormatado = gerarNumeroOS(ordem.numero_os, ordem.data_entrada);
       
-      // Cabeçalho
-      doc.setFontSize(20);
-      doc.text('FELMAK Ferramentas Elétricas', 20, 20);
+      // Adicionar logo da empresa
+      const logoUrl = '/lovable-uploads/fa7abf6f-1bfe-434f-9ea1-28c3490b61d9.png';
+      
+      // Cabeçalho com logo e dados da empresa
+      doc.setFillColor(41, 128, 185); // Azul FELMAK
+      doc.rect(0, 0, 210, 45, 'F');
+      
+      // Texto da empresa em branco
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(22);
+      doc.setFont(undefined, 'bold');
+      doc.text('FELMAK', 20, 20);
+      
+      doc.setFontSize(14);
+      doc.setFont(undefined, 'normal');
+      doc.text('Ferramentas Elétricas', 20, 28);
+      
+      // Dados de contato da empresa
+      doc.setFontSize(9);
+      doc.text('Tel: (11) 4368-7395 | (11) 2598-7894', 20, 36);
+      doc.text('Av. Senador Vergueiro, 2483 - São Bernardo do Campo', 20, 41);
+      
+      // Número da OS no lado direito do cabeçalho
       doc.setFontSize(16);
-      doc.text(`Ordem de Serviço ${numeroOSFormatado}`, 20, 30);
+      doc.setFont(undefined, 'bold');
+      doc.text(`OS: ${numeroOSFormatado}`, 150, 25);
       
-      // Linha divisória
-      doc.line(20, 35, 190, 35);
+      // Reset cor do texto
+      doc.setTextColor(0, 0, 0);
       
-      let yPosition = 45;
+      let yPosition = 55;
       
-      // Dados do Cliente
-      doc.setFontSize(14);
+      // Título da seção
+      doc.setFontSize(16);
+      doc.setFont(undefined, 'bold');
+      doc.text('ORDEM DE SERVIÇO', 20, yPosition);
+      yPosition += 15;
+      
+      // Dados do Cliente - Seção destacada
+      doc.setFillColor(245, 245, 245);
+      doc.rect(15, yPosition - 5, 180, 8, 'F');
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
       doc.text('DADOS DO CLIENTE', 20, yPosition);
-      yPosition += 10;
+      yPosition += 12;
       
       doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
       doc.text(`Nome: ${ordem.cliente_nome}`, 20, yPosition);
-      yPosition += 7;
+      yPosition += 6;
       doc.text(`Telefone: ${formatarTelefone(ordem.cliente_telefone)}`, 20, yPosition);
-      yPosition += 7;
+      
       if (ordem.cliente_email) {
-        doc.text(`E-mail: ${ordem.cliente_email}`, 20, yPosition);
-        yPosition += 7;
+        doc.text(`E-mail: ${ordem.cliente_email}`, 110, yPosition);
       }
+      yPosition += 6;
+      
+      if (ordem.cliente_cpf_cnpj) {
+        doc.text(`CPF/CNPJ: ${ordem.cliente_cpf_cnpj}`, 20, yPosition);
+        yPosition += 6;
+      }
+      
       if (ordem.cliente_endereco) {
-        doc.text(`Endereço: ${ordem.cliente_endereco}, ${ordem.cliente_bairro || ''}`, 20, yPosition);
-        yPosition += 7;
-        doc.text(`Cidade: ${ordem.cliente_cidade || ''} - ${ordem.cliente_estado || ''}`, 20, yPosition);
-        yPosition += 7;
+        doc.text(`Endereço: ${ordem.cliente_endereco}`, 20, yPosition);
+        if (ordem.cliente_numero) {
+          doc.text(`, ${ordem.cliente_numero}`, doc.getTextWidth(`Endereço: ${ordem.cliente_endereco}`) + 20, yPosition);
+        }
+        yPosition += 6;
+        
+        if (ordem.cliente_bairro || ordem.cliente_cidade) {
+          doc.text(`${ordem.cliente_bairro || ''} - ${ordem.cliente_cidade || ''} - ${ordem.cliente_estado || ''}`, 20, yPosition);
+          yPosition += 6;
+        }
+        
+        if (ordem.cliente_cep) {
+          doc.text(`CEP: ${ordem.cliente_cep}`, 20, yPosition);
+          yPosition += 6;
+        }
       }
       
-      yPosition += 5;
+      yPosition += 8;
       
-      // Dados do Equipamento
-      doc.setFontSize(14);
+      // Dados do Equipamento - Seção destacada
+      doc.setFillColor(245, 245, 245);
+      doc.rect(15, yPosition - 5, 180, 8, 'F');
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
       doc.text('DADOS DO EQUIPAMENTO', 20, yPosition);
-      yPosition += 10;
+      yPosition += 12;
       
       doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
       doc.text(`Tipo: ${ordem.equipamento_tipo}`, 20, yPosition);
-      yPosition += 7;
-      doc.text(`Marca: ${ordem.equipamento_marca}`, 20, yPosition);
-      yPosition += 7;
-      doc.text(`Modelo: ${ordem.equipamento_modelo || 'N/A'}`, 20, yPosition);
-      yPosition += 7;
-      if (ordem.equipamento_serie) {
-        doc.text(`Série: ${ordem.equipamento_serie}`, 20, yPosition);
-        yPosition += 7;
+      doc.text(`Marca: ${ordem.equipamento_marca}`, 110, yPosition);
+      yPosition += 6;
+      
+      if (ordem.equipamento_modelo) {
+        doc.text(`Modelo: ${ordem.equipamento_modelo}`, 20, yPosition);
+        yPosition += 6;
       }
       
-      yPosition += 5;
+      if (ordem.equipamento_serie) {
+        doc.text(`Nº Série: ${ordem.equipamento_serie}`, 20, yPosition);
+      }
       
-      // Defeito e Observações
+      if (ordem.equipamento_cor) {
+        doc.text(`Cor: ${ordem.equipamento_cor}`, 110, yPosition);
+      }
+      yPosition += 6;
+      
+      if (ordem.acessorios_entregues) {
+        doc.text(`Acessórios: ${ordem.acessorios_entregues}`, 20, yPosition);
+        yPosition += 6;
+      }
+      
+      if (ordem.estado_fisico_entrega) {
+        doc.text(`Estado Físico: ${ordem.estado_fisico_entrega}`, 20, yPosition);
+        yPosition += 6;
+      }
+      
+      yPosition += 8;
+      
+      // Defeito Relatado - Seção destacada
       if (ordem.defeito_relatado) {
-        doc.setFontSize(14);
+        doc.setFillColor(245, 245, 245);
+        doc.rect(15, yPosition - 5, 180, 8, 'F');
+        doc.setFontSize(12);
+        doc.setFont(undefined, 'bold');
         doc.text('DEFEITO RELATADO', 20, yPosition);
-        yPosition += 10;
+        yPosition += 12;
         
         doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
         const defeitoLines = doc.splitTextToSize(ordem.defeito_relatado, 170);
         doc.text(defeitoLines, 20, yPosition);
-        yPosition += defeitoLines.length * 7 + 5;
+        yPosition += defeitoLines.length * 5 + 8;
       }
       
+      // Observações Técnicas
       if (ordem.observacoes_tecnico) {
-        doc.setFontSize(14);
+        doc.setFillColor(245, 245, 245);
+        doc.rect(15, yPosition - 5, 180, 8, 'F');
+        doc.setFontSize(12);
+        doc.setFont(undefined, 'bold');
         doc.text('OBSERVAÇÕES TÉCNICAS', 20, yPosition);
-        yPosition += 10;
+        yPosition += 12;
         
         doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
         const obsLines = doc.splitTextToSize(ordem.observacoes_tecnico, 170);
         doc.text(obsLines, 20, yPosition);
-        yPosition += obsLines.length * 7 + 5;
+        yPosition += obsLines.length * 5 + 8;
       }
       
-      // Valores
-      doc.setFontSize(14);
-      doc.text('VALORES', 20, yPosition);
-      yPosition += 10;
+      // Testes Realizados
+      if (ordem.testes_realizados) {
+        doc.setFillColor(245, 245, 245);
+        doc.rect(15, yPosition - 5, 180, 8, 'F');
+        doc.setFontSize(12);
+        doc.setFont(undefined, 'bold');
+        doc.text('TESTES REALIZADOS', 20, yPosition);
+        yPosition += 12;
+        
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+        const testesLines = doc.splitTextToSize(ordem.testes_realizados, 170);
+        doc.text(testesLines, 20, yPosition);
+        yPosition += testesLines.length * 5 + 8;
+      }
       
-      doc.setFontSize(10);
-      if (ordem.valor_pecas) {
-        doc.text(`Valor Peças: R$ ${ordem.valor_pecas.toString().replace('.', ',')}`, 20, yPosition);
-        yPosition += 7;
-      }
-      if (ordem.valor_mao_obra) {
-        doc.text(`Mão de Obra: R$ ${ordem.valor_mao_obra.toString().replace('.', ',')}`, 20, yPosition);
-        yPosition += 7;
-      }
+      // Valores - Seção destacada
+      doc.setFillColor(245, 245, 245);
+      doc.rect(15, yPosition - 5, 180, 8, 'F');
       doc.setFontSize(12);
-      doc.text(`TOTAL: R$ ${(ordem.valor_total || 0).toString().replace('.', ',')}`, 20, yPosition);
-      yPosition += 10;
-      
-      // Status e Datas
-      doc.setFontSize(14);
-      doc.text('STATUS E PRAZOS', 20, yPosition);
-      yPosition += 10;
+      doc.setFont(undefined, 'bold');
+      doc.text('VALORES', 20, yPosition);
+      yPosition += 12;
       
       doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
+      
+      if (ordem.valor_pecas && ordem.valor_pecas > 0) {
+        doc.text(`Valor Peças: R$ ${ordem.valor_pecas.toFixed(2).replace('.', ',')}`, 20, yPosition);
+        yPosition += 6;
+      }
+      
+      if (ordem.valor_mao_obra && ordem.valor_mao_obra > 0) {
+        doc.text(`Mão de Obra: R$ ${ordem.valor_mao_obra.toFixed(2).replace('.', ',')}`, 20, yPosition);
+        yPosition += 6;
+      }
+      
+      // Valor total destacado
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      doc.text(`VALOR TOTAL: R$ ${(ordem.valor_total || 0).toFixed(2).replace('.', ',')}`, 20, yPosition);
+      yPosition += 10;
+      
+      if (ordem.autorizacao_orcamento && ordem.autorizacao_orcamento > 0) {
+        doc.setFontSize(10);
+        doc.setFont(undefined, 'normal');
+        doc.text(`Limite Autorizado: R$ ${ordem.autorizacao_orcamento.toFixed(2).replace('.', ',')}`, 20, yPosition);
+        yPosition += 8;
+      }
+      
+      // Status e Informações de Controle
+      doc.setFillColor(245, 245, 245);
+      doc.rect(15, yPosition - 5, 180, 8, 'F');
+      doc.setFontSize(12);
+      doc.setFont(undefined, 'bold');
+      doc.text('INFORMAÇÕES DE CONTROLE', 20, yPosition);
+      yPosition += 12;
+      
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
       doc.text(`Status: ${ordem.status || 'Em análise'}`, 20, yPosition);
-      yPosition += 7;
+      
+      if (ordem.urgencia) {
+        doc.setTextColor(255, 0, 0);
+        doc.text('URGENTE', 110, yPosition);
+        doc.setTextColor(0, 0, 0);
+      }
+      yPosition += 6;
+      
       if (ordem.data_entrada) {
         doc.text(`Data Entrada: ${new Date(ordem.data_entrada).toLocaleDateString('pt-BR')}`, 20, yPosition);
-        yPosition += 7;
       }
+      
       if (ordem.data_prevista) {
-        doc.text(`Data Prevista: ${new Date(ordem.data_prevista).toLocaleDateString('pt-BR')}`, 20, yPosition);
-        yPosition += 7;
+        doc.text(`Data Prevista: ${new Date(ordem.data_prevista).toLocaleDateString('pt-BR')}`, 110, yPosition);
       }
+      yPosition += 6;
+      
+      if (ordem.data_entrega) {
+        doc.text(`Data Entrega: ${new Date(ordem.data_entrega).toLocaleDateString('pt-BR')}`, 20, yPosition);
+        yPosition += 6;
+      }
+      
       if (ordem.tecnico_responsavel) {
-        doc.text(`Técnico: ${ordem.tecnico_responsavel}`, 20, yPosition);
-        yPosition += 7;
+        doc.text(`Técnico Responsável: ${ordem.tecnico_responsavel}`, 20, yPosition);
+        yPosition += 6;
       }
-      if (ordem.prazo_garantia_dias) {
+      
+      if (ordem.prazo_garantia_dias && ordem.prazo_garantia_dias > 0) {
         doc.text(`Garantia: ${ordem.prazo_garantia_dias} dias`, 20, yPosition);
-        yPosition += 7;
+        yPosition += 6;
       }
       
       // Rodapé
-      doc.setFontSize(8);
-      doc.text('FELMAK Ferramentas Elétricas - São Bernardo do Campo', 20, 280);
-      doc.text(`Gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 20, 285);
+      doc.setFillColor(41, 128, 185);
+      doc.rect(0, 285, 210, 12, 'F');
+      
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(9);
+      doc.text('FELMAK Ferramentas Elétricas - e-mail: felmak.assist@gmail.com', 20, 292);
+      doc.text(`Documento gerado em: ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}`, 20, 298);
       
       return doc;
     } catch (error) {
