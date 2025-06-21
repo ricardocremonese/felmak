@@ -63,27 +63,57 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
         {children}
       </DialogTrigger>
       <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto print:max-w-none print:max-h-none print:overflow-visible">
-        <style jsx>{`
-          @media print {
-            .lovable-badge { display: none !important; }
-            [data-testid="lovable-badge"] { display: none !important; }
-            .lovable-watermark { display: none !important; }
-            .print-hide { display: none !important; }
-            body * {
-              visibility: hidden;
+        <style>
+          {`
+            @media print {
+              .lovable-badge { display: none !important; }
+              [data-testid="lovable-badge"] { display: none !important; }
+              .lovable-watermark { display: none !important; }
+              .print-hide { display: none !important; }
+              body * {
+                visibility: hidden;
+              }
+              .print-container, .print-container * {
+                visibility: visible;
+              }
+              .print-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                font-size: 16px !important;
+                line-height: 1.4 !important;
+              }
+              .print-container h1 {
+                font-size: 22px !important;
+              }
+              .print-container h2 {
+                font-size: 20px !important;
+              }
+              .print-container h3 {
+                font-size: 18px !important;
+              }
+              .print-container .text-base {
+                font-size: 16px !important;
+              }
+              .print-container .space-y-6 > * + * {
+                margin-top: 1.5rem !important;
+              }
+              .print-container .space-y-3 > * + * {
+                margin-top: 0.75rem !important;
+              }
+              .print-container .space-y-2 > * + * {
+                margin-top: 0.5rem !important;
+              }
+              .print-container .p-4 {
+                padding: 1rem !important;
+              }
+              .print-container .mb-3 {
+                margin-bottom: 0.75rem !important;
+              }
             }
-            .print-container, .print-container * {
-              visibility: visible;
-            }
-            .print-container {
-              position: absolute;
-              left: 0;
-              top: 0;
-              width: 100%;
-              font-size: 14px !important;
-            }
-          }
-        `}</style>
+          `}
+        </style>
         
         <div className="print-container">
           <DialogHeader className="text-center space-y-3 print:space-y-2">
@@ -120,19 +150,19 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
               <p>Av. Senador Vergueiro, 2483 - São Bernardo do Campo</p>
             </div>
             
-            <h2 className="text-xl font-bold print:text-lg">ORDEM DE SERVIÇO</h2>
+            <h2 className="text-lg font-bold print:text-lg">ORDEM DE SERVIÇO</h2>
           </DialogHeader>
 
-          <div className="space-y-6 print:space-y-4">
-            {/* DADOS DO CLIENTE - Layout reorganizado */}
-            <div className="bg-gray-50 p-4 rounded-lg border print:p-3">
-              <h3 className="text-lg font-bold mb-3 flex items-center print:text-base print:mb-2">
-                <User className="w-5 h-5 mr-2 print:w-4 print:h-4" />
+          <div className="space-y-4 print:space-y-3">
+            {/* DADOS DO CLIENTE - Layout otimizado */}
+            <div className="bg-gray-50 p-3 rounded-lg border print:p-3">
+              <h3 className="text-base font-bold mb-2 flex items-center print:text-base print:mb-2">
+                <User className="w-4 h-4 mr-2 print:w-4 print:h-4" />
                 DADOS DO CLIENTE
               </h3>
-              <div className="space-y-2 text-base print:text-sm">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 print:grid-cols-2">
-                  <div className="space-y-2">
+              <div className="space-y-1 text-sm print:text-sm">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 print:grid-cols-2">
+                  <div className="space-y-1">
                     <div>
                       <span className="font-medium">Nome:</span> {ordem.cliente_nome}
                     </div>
@@ -151,7 +181,7 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
                     )}
                   </div>
                   
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {ordem.cliente_cpf_cnpj && (
                       <div>
                         <span className="font-medium">CPF/CNPJ:</span> {ordem.cliente_cpf_cnpj}
@@ -174,15 +204,15 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
               </div>
             </div>
 
-            {/* DADOS DO EQUIPAMENTO - Layout melhorado */}
-            <div className="bg-gray-50 p-4 rounded-lg border print:p-3">
-              <h3 className="text-lg font-bold mb-3 flex items-center print:text-base print:mb-2">
-                <Wrench className="w-5 h-5 mr-2 print:w-4 print:h-4" />
+            {/* DADOS DO EQUIPAMENTO - Layout otimizado */}
+            <div className="bg-gray-50 p-3 rounded-lg border print:p-3">
+              <h3 className="text-base font-bold mb-2 flex items-center print:text-base print:mb-2">
+                <Wrench className="w-4 h-4 mr-2 print:w-4 print:h-4" />
                 DADOS DO EQUIPAMENTO
               </h3>
-              <div className="space-y-2 text-base print:text-sm">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 print:grid-cols-2">
-                  <div className="space-y-2">
+              <div className="space-y-1 text-sm print:text-sm">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 print:grid-cols-2">
+                  <div className="space-y-1">
                     <div>
                       <span className="font-medium">Tipo:</span> {ordem.equipamento_tipo}
                     </div>
@@ -196,7 +226,7 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
                     )}
                   </div>
                   
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     {ordem.equipamento_serie && (
                       <div>
                         <span className="font-medium">Nº Série:</span> {ordem.equipamento_serie}
@@ -225,45 +255,45 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
 
             {/* DEFEITO RELATADO */}
             {ordem.defeito_relatado && (
-              <div className="bg-gray-50 p-4 rounded-lg border print:p-3">
-                <h3 className="text-lg font-bold mb-3 flex items-center print:text-base print:mb-2">
-                  <FileText className="w-5 h-5 mr-2 print:w-4 print:h-4" />
+              <div className="bg-gray-50 p-3 rounded-lg border print:p-3">
+                <h3 className="text-base font-bold mb-2 flex items-center print:text-base print:mb-2">
+                  <FileText className="w-4 h-4 mr-2 print:w-4 print:h-4" />
                   DEFEITO RELATADO
                 </h3>
-                <p className="text-base leading-relaxed print:text-sm print:leading-normal">{ordem.defeito_relatado}</p>
+                <p className="text-sm leading-relaxed print:text-sm print:leading-normal">{ordem.defeito_relatado}</p>
               </div>
             )}
 
             {/* OBSERVAÇÕES TÉCNICAS */}
             {ordem.observacoes_tecnico && (
-              <div className="bg-gray-50 p-4 rounded-lg border print:p-3">
-                <h3 className="text-lg font-bold mb-3 flex items-center print:text-base print:mb-2">
-                  <FileText className="w-5 h-5 mr-2 print:w-4 print:h-4" />
+              <div className="bg-gray-50 p-3 rounded-lg border print:p-3">
+                <h3 className="text-base font-bold mb-2 flex items-center print:text-base print:mb-2">
+                  <FileText className="w-4 h-4 mr-2 print:w-4 print:h-4" />
                   OBSERVAÇÕES TÉCNICAS
                 </h3>
-                <p className="text-base leading-relaxed print:text-sm print:leading-normal">{ordem.observacoes_tecnico}</p>
+                <p className="text-sm leading-relaxed print:text-sm print:leading-normal">{ordem.observacoes_tecnico}</p>
               </div>
             )}
 
             {/* TESTES REALIZADOS */}
             {ordem.testes_realizados && (
-              <div className="bg-gray-50 p-4 rounded-lg border print:p-3">
-                <h3 className="text-lg font-bold mb-3 flex items-center print:text-base print:mb-2">
-                  <FileText className="w-5 h-5 mr-2 print:w-4 print:h-4" />
+              <div className="bg-gray-50 p-3 rounded-lg border print:p-3">
+                <h3 className="text-base font-bold mb-2 flex items-center print:text-base print:mb-2">
+                  <FileText className="w-4 h-4 mr-2 print:w-4 print:h-4" />
                   TESTES REALIZADOS
                 </h3>
-                <p className="text-base leading-relaxed print:text-sm print:leading-normal">{ordem.testes_realizados}</p>
+                <p className="text-sm leading-relaxed print:text-sm print:leading-normal">{ordem.testes_realizados}</p>
               </div>
             )}
 
             {/* VALORES */}
-            <div className="bg-gray-50 p-4 rounded-lg border print:p-3">
-              <h3 className="text-lg font-bold mb-3 flex items-center print:text-base print:mb-2">
-                <DollarSign className="w-5 h-5 mr-2 print:w-4 print:h-4" />
+            <div className="bg-gray-50 p-3 rounded-lg border print:p-3">
+              <h3 className="text-base font-bold mb-2 flex items-center print:text-base print:mb-2">
+                <DollarSign className="w-4 h-4 mr-2 print:w-4 print:h-4" />
                 VALORES
               </h3>
-              <div className="space-y-2 text-base print:text-sm">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 print:grid-cols-3">
+              <div className="space-y-1 text-sm print:text-sm">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 print:grid-cols-3">
                   {ordem.valor_pecas && ordem.valor_pecas > 0 && (
                     <div>
                       <span className="font-medium">Valor Peças:</span> R$ {ordem.valor_pecas.toFixed(2).replace('.', ',')}
@@ -276,7 +306,7 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
                     </div>
                   )}
                   
-                  <div className="font-bold text-lg print:text-base">
+                  <div className="font-bold text-base print:text-base">
                     <span className="font-bold">VALOR TOTAL:</span> R$ {(ordem.valor_total || 0).toFixed(2).replace('.', ',')}
                   </div>
                 </div>
@@ -290,8 +320,8 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
             </div>
 
             {/* Informações básicas */}
-            <div className="space-y-3 text-base print:text-sm print:space-y-2">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 print:grid-cols-4">
+            <div className="space-y-2 text-sm print:text-sm print:space-y-1">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 print:grid-cols-4">
                 {ordem.data_entrada && (
                   <div>
                     <span className="font-medium">Data Entrada:</span> {new Date(ordem.data_entrada).toLocaleDateString('pt-BR')}
@@ -314,7 +344,7 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
                 )}
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 print:grid-cols-3">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 print:grid-cols-3">
                 {ordem.prazo_garantia_dias && ordem.prazo_garantia_dias > 0 && (
                   <div>
                     <span className="font-medium">Garantia:</span> {ordem.prazo_garantia_dias} dias
@@ -323,7 +353,7 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
                 
                 <div>
                   <span className="font-medium">Status:</span> 
-                  <Badge className={`ml-2 text-sm print:text-xs ${statusColors[ordem.status || 'Em análise'] || 'bg-gray-100 text-gray-800'}`}>
+                  <Badge className={`ml-2 text-xs print:text-xs ${statusColors[ordem.status || 'Em análise'] || 'bg-gray-100 text-gray-800'}`}>
                     {ordem.status || 'Em análise'}
                   </Badge>
                 </div>
@@ -331,7 +361,7 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
                 {ordem.urgencia && (
                   <div>
                     <span className="font-medium">Urgência:</span> 
-                    <Badge variant="destructive" className="ml-2 text-sm print:text-xs">Urgente</Badge>
+                    <Badge variant="destructive" className="ml-2 text-xs print:text-xs">Urgente</Badge>
                   </div>
                 )}
               </div>
