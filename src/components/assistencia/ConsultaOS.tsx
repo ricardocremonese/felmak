@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -40,7 +39,7 @@ const ConsultaOS = () => {
     dataEspecifica: ''
   });
 
-  // ... keep existing code (statusOptions, meses, anosDisponiveis, statusColors)
+  // ... keep existing code (statusOptions, meses, anosDisponiveis, statusColors, buscarOrdens, gerarNumeroOS)
 
   const statusOptions = [
     'Em análise', 
@@ -406,25 +405,60 @@ const ConsultaOS = () => {
     const doc = gerarPDF(ordem);
     if (doc) {
       const numeroOSFormatado = gerarNumeroOS(ordem.numero_os, ordem.data_entrada);
-      doc.autoPrint();
-      const blob = doc.output('blob');
-      const url = URL.createObjectURL(blob);
-      const iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
-      iframe.src = url;
-      document.body.appendChild(iframe);
       
-      iframe.onload = () => {
-        iframe.contentWindow?.print();
-        setTimeout(() => {
-          document.body.removeChild(iframe);
-          URL.revokeObjectURL(url);
-        }, 100);
-      };
+      // Criar uma nova janela com o PDF para impressão
+      const pdfDataUri = doc.output('datauristring');
+      const printWindow = window.open('', '_blank');
+      
+      if (printWindow) {
+        printWindow.document.write(`
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <title>Imprimir OS ${numeroOSFormatado}</title>
+              <style>
+                body {
+                  margin: 0;
+                  padding: 0;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  min-height: 100vh;
+                }
+                iframe {
+                  width: 100%;
+                  height: 100vh;
+                  border: none;
+                }
+              </style>
+            </head>
+            <body>
+              <iframe src="${pdfDataUri}" onload="window.print(); window.onafterprint = function() { window.close(); }"></iframe>
+            </body>
+          </html>
+        `);
+        printWindow.document.close();
+      } else {
+        // Fallback se a janela não puder ser aberta
+        const blob = doc.output('blob');
+        const url = URL.createObjectURL(blob);
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        iframe.src = url;
+        document.body.appendChild(iframe);
+        
+        iframe.onload = () => {
+          iframe.contentWindow?.print();
+          setTimeout(() => {
+            document.body.removeChild(iframe);
+            URL.revokeObjectURL(url);
+          }, 100);
+        };
+      }
       
       toast({
-        title: "Imprimindo OS",
-        description: `A OS ${numeroOSFormatado} está sendo impressa.`
+        title: "Abrindo impressão",
+        description: `O diálogo de impressão será aberto para a OS ${numeroOSFormatado}.`
       });
     }
   };
