@@ -9,7 +9,193 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      ordens_servico: {
+        Row: {
+          acessorios_entregues: string | null
+          autorizacao_orcamento: number | null
+          cliente_bairro: string | null
+          cliente_cep: string | null
+          cliente_cidade: string | null
+          cliente_cpf_cnpj: string | null
+          cliente_email: string | null
+          cliente_endereco: string | null
+          cliente_estado: string | null
+          cliente_nome: string
+          cliente_numero: string | null
+          cliente_telefone: string
+          created_at: string | null
+          data_entrada: string | null
+          data_entrega: string | null
+          data_prevista: string | null
+          defeito_relatado: string
+          equipamento_cor: string | null
+          equipamento_marca: string
+          equipamento_modelo: string | null
+          equipamento_serie: string | null
+          equipamento_tipo: string
+          estado_fisico_entrega: string | null
+          foto_equipamento_url: string | null
+          id: string
+          numero_os: number
+          observacoes_tecnico: string | null
+          prazo_garantia_dias: number | null
+          status: string | null
+          tecnico_responsavel: string | null
+          testes_realizados: string | null
+          updated_at: string | null
+          urgencia: boolean | null
+          valor_mao_obra: number | null
+          valor_pecas: number | null
+          valor_total: number | null
+        }
+        Insert: {
+          acessorios_entregues?: string | null
+          autorizacao_orcamento?: number | null
+          cliente_bairro?: string | null
+          cliente_cep?: string | null
+          cliente_cidade?: string | null
+          cliente_cpf_cnpj?: string | null
+          cliente_email?: string | null
+          cliente_endereco?: string | null
+          cliente_estado?: string | null
+          cliente_nome: string
+          cliente_numero?: string | null
+          cliente_telefone: string
+          created_at?: string | null
+          data_entrada?: string | null
+          data_entrega?: string | null
+          data_prevista?: string | null
+          defeito_relatado: string
+          equipamento_cor?: string | null
+          equipamento_marca: string
+          equipamento_modelo?: string | null
+          equipamento_serie?: string | null
+          equipamento_tipo: string
+          estado_fisico_entrega?: string | null
+          foto_equipamento_url?: string | null
+          id?: string
+          numero_os?: number
+          observacoes_tecnico?: string | null
+          prazo_garantia_dias?: number | null
+          status?: string | null
+          tecnico_responsavel?: string | null
+          testes_realizados?: string | null
+          updated_at?: string | null
+          urgencia?: boolean | null
+          valor_mao_obra?: number | null
+          valor_pecas?: number | null
+          valor_total?: number | null
+        }
+        Update: {
+          acessorios_entregues?: string | null
+          autorizacao_orcamento?: number | null
+          cliente_bairro?: string | null
+          cliente_cep?: string | null
+          cliente_cidade?: string | null
+          cliente_cpf_cnpj?: string | null
+          cliente_email?: string | null
+          cliente_endereco?: string | null
+          cliente_estado?: string | null
+          cliente_nome?: string
+          cliente_numero?: string | null
+          cliente_telefone?: string
+          created_at?: string | null
+          data_entrada?: string | null
+          data_entrega?: string | null
+          data_prevista?: string | null
+          defeito_relatado?: string
+          equipamento_cor?: string | null
+          equipamento_marca?: string
+          equipamento_modelo?: string | null
+          equipamento_serie?: string | null
+          equipamento_tipo?: string
+          estado_fisico_entrega?: string | null
+          foto_equipamento_url?: string | null
+          id?: string
+          numero_os?: number
+          observacoes_tecnico?: string | null
+          prazo_garantia_dias?: number | null
+          status?: string | null
+          tecnico_responsavel?: string | null
+          testes_realizados?: string | null
+          updated_at?: string | null
+          urgencia?: boolean | null
+          valor_mao_obra?: number | null
+          valor_pecas?: number | null
+          valor_total?: number | null
+        }
+        Relationships: []
+      }
+      os_comunicacoes: {
+        Row: {
+          data_comunicacao: string | null
+          id: string
+          mensagem: string
+          os_id: string | null
+          tipo: string
+        }
+        Insert: {
+          data_comunicacao?: string | null
+          id?: string
+          mensagem: string
+          os_id?: string | null
+          tipo: string
+        }
+        Update: {
+          data_comunicacao?: string | null
+          id?: string
+          mensagem?: string
+          os_id?: string | null
+          tipo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "os_comunicacoes_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      os_pecas: {
+        Row: {
+          created_at: string | null
+          id: string
+          os_id: string | null
+          peca_nome: string
+          preco_total: number
+          preco_unitario: number
+          quantidade: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          os_id?: string | null
+          peca_nome: string
+          preco_total: number
+          preco_unitario: number
+          quantidade?: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          os_id?: string | null
+          peca_nome?: string
+          preco_total?: number
+          preco_unitario?: number
+          quantidade?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "os_pecas_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
