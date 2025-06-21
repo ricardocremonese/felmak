@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,8 +14,7 @@ import {
   Printer, 
   MessageCircle,
   Filter,
-  Calendar,
-  FilePdf
+  Calendar
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -532,7 +530,7 @@ const ConsultaOS = () => {
                             title="Salvar em PDF"
                             onClick={() => salvarPDF(ordem)}
                           >
-                            <FilePdf className="w-4 h-4" />
+                            <FileText className="w-4 h-4" />
                           </Button>
                           <Button size="sm" variant="outline" title="Editar">
                             <Edit className="w-4 h-4" />
