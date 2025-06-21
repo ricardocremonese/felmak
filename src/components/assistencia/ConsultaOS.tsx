@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,6 +21,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { formatarTelefone } from '@/utils/helpers';
 import jsPDF from 'jspdf';
+import EditarOS from './EditarOS';
 import type { Database } from '@/integrations/supabase/types';
 
 // Usar o tipo correto do Supabase
@@ -535,9 +537,11 @@ const ConsultaOS = () => {
                           >
                             <FileText className="w-4 h-4" />
                           </Button>
-                          <Button size="sm" variant="outline" title="Editar">
-                            <Edit className="w-4 h-4" />
-                          </Button>
+                          <EditarOS ordem={ordem} onSuccess={buscarOrdens}>
+                            <Button size="sm" variant="outline" title="Editar">
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                          </EditarOS>
                           <Button 
                             size="sm" 
                             variant="outline" 
