@@ -40,7 +40,6 @@ interface FormData {
   observacoes_tecnico: string;
   testes_realizados: string;
   urgencia: boolean;
-  autorizacao_orcamento: number;
   
   // Valores
   valor_mao_obra: number;
@@ -79,7 +78,6 @@ const NovaOSForm = () => {
     observacoes_tecnico: '',
     testes_realizados: '',
     urgencia: false,
-    autorizacao_orcamento: 0,
     valor_mao_obra: 0,
     data_prevista: '',
     tecnico_responsavel: '',
@@ -220,7 +218,6 @@ const NovaOSForm = () => {
         observacoes_tecnico: '',
         testes_realizados: '',
         urgencia: false,
-        autorizacao_orcamento: 0,
         valor_mao_obra: 0,
         data_prevista: '',
         tecnico_responsavel: '',
@@ -512,7 +509,7 @@ const NovaOSForm = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="urgencia"
@@ -520,16 +517,6 @@ const NovaOSForm = () => {
                 onCheckedChange={(checked) => handleInputChange('urgencia', checked)}
               />
               <Label htmlFor="urgencia">Atendimento Urgente</Label>
-            </div>
-
-            <div>
-              <Label htmlFor="autorizacao_orcamento">Autorização até</Label>
-              <Input
-                id="autorizacao_orcamento"
-                value={formatCurrency(formData.autorizacao_orcamento)}
-                onChange={(e) => handleCurrencyInputChange('autorizacao_orcamento', e.target.value)}
-                placeholder="R$ 0,00"
-              />
             </div>
 
             <div>
@@ -551,6 +538,7 @@ const NovaOSForm = () => {
         setPecas={setPecas}
         valorMaoObra={formData.valor_mao_obra}
         setValorMaoObra={(valor) => handleInputChange('valor_mao_obra', valor)}
+        showInitialValue={false}
       />
 
       {/* Prazo e Status */}
