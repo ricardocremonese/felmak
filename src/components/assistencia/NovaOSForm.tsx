@@ -112,7 +112,7 @@ const NovaOSForm = () => {
             ...prev,
             cliente_endereco: endereco.logradouro,
             cliente_bairro: endereco.bairro,
-            cliente_cidade: endereco.localidade,
+            cliente_cidade: endereco.cidade,
             cliente_estado: endereco.uf
           }));
         }

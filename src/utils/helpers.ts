@@ -1,4 +1,3 @@
-
 // Utilitários para o sistema FELMAK
 
 // Formatação de moeda brasileira
@@ -13,6 +12,30 @@ export const formatCurrency = (value: number): string => {
 export const formatDate = (date: string | Date): string => {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
   return dateObj.toLocaleDateString('pt-BR');
+};
+
+// Formatação de telefone brasileiro
+export const formatarTelefone = (telefone: string): string => {
+  const numero = telefone.replace(/\D/g, '');
+  
+  if (numero.length <= 10) {
+    return numero.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+  } else {
+    return numero.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+  }
+};
+
+// Formatação de CPF/CNPJ
+export const formatarCPFCNPJ = (valor: string): string => {
+  const numero = valor.replace(/\D/g, '');
+  
+  if (numero.length <= 11) {
+    // CPF
+    return numero.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+  } else {
+    // CNPJ
+    return numero.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+  }
 };
 
 // Busca CEP via ViaCEP
