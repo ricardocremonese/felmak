@@ -66,9 +66,6 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
         <style>
           {`
             @media print {
-              .lovable-badge { display: none !important; }
-              [data-testid="lovable-badge"] { display: none !important; }
-              .lovable-watermark { display: none !important; }
               .print-hide { display: none !important; }
               
               @page {
@@ -81,9 +78,11 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
                 color-adjust: exact !important;
               }
               
-              body {
+              html, body {
                 margin: 0 !important;
                 padding: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
               }
               
               body * {
@@ -99,57 +98,79 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
                 left: 0 !important;
                 top: 0 !important;
                 width: 100% !important;
+                height: 100% !important;
                 margin: 0 !important;
-                padding: 0 !important;
-                font-size: 14px !important;
-                line-height: 1.4 !important;
+                padding: 20px !important;
+                font-size: 16px !important;
+                line-height: 1.5 !important;
+                box-sizing: border-box !important;
               }
               
               .print-container h1 {
+                font-size: 22px !important;
+                margin: 0 0 10px 0 !important;
+              }
+              
+              .print-container h2 {
                 font-size: 20px !important;
                 margin: 0 0 8px 0 !important;
               }
               
-              .print-container h2 {
+              .print-container h3 {
                 font-size: 18px !important;
                 margin: 0 0 6px 0 !important;
               }
               
-              .print-container h3 {
-                font-size: 16px !important;
-                margin: 0 0 4px 0 !important;
-              }
-              
               .print-container .text-base {
-                font-size: 14px !important;
+                font-size: 16px !important;
               }
               
               .print-container .space-y-6 > * + * {
-                margin-top: 12px !important;
+                margin-top: 16px !important;
               }
               
               .print-container .space-y-3 > * + * {
-                margin-top: 6px !important;
+                margin-top: 8px !important;
               }
               
               .print-container .space-y-2 > * + * {
+                margin-top: 6px !important;
+              }
+              
+              .print-container .space-y-1 > * + * {
                 margin-top: 4px !important;
               }
               
               .print-container .p-4 {
-                padding: 8px !important;
+                padding: 12px !important;
               }
               
               .print-container .p-3 {
-                padding: 6px !important;
+                padding: 10px !important;
+              }
+              
+              .print-container .p-2 {
+                padding: 8px !important;
               }
               
               .print-container .mb-3 {
-                margin-bottom: 6px !important;
+                margin-bottom: 8px !important;
               }
               
               .print-container .mb-2 {
+                margin-bottom: 6px !important;
+              }
+              
+              .print-container .mb-1 {
                 margin-bottom: 4px !important;
+              }
+              
+              .print-container .text-xs {
+                font-size: 14px !important;
+              }
+              
+              .print-container .text-sm {
+                font-size: 16px !important;
               }
             }
           `}
