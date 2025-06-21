@@ -60,6 +60,37 @@ const NovaOSForm = () => {
   const [loading, setLoading] = useState(false);
   const [pecas, setPecas] = useState<Array<{id: string, nome: string, quantidade: number, preco_unitario: number}>>([]);
 
+  // Add the missing formData state
+  const [formData, setFormData] = useState<FormData>({
+    cliente_nome: '',
+    cliente_telefone: '',
+    cliente_email: '',
+    cliente_cep: '',
+    cliente_endereco: '',
+    cliente_numero: '',
+    cliente_complemento: '',
+    cliente_bairro: '',
+    cliente_cidade: '',
+    cliente_estado: '',
+    cliente_cpf_cnpj: '',
+    equipamento_tipo: '',
+    equipamento_marca: '',
+    equipamento_modelo: '',
+    equipamento_serie: '',
+    equipamento_cor: '',
+    acessorios_entregues: '',
+    estado_fisico_entrega: '',
+    defeito_relatado: '',
+    observacoes_tecnico: '',
+    testes_realizados: '',
+    urgencia: false,
+    valor_mao_obra: 0,
+    data_prevista: '',
+    tecnico_responsavel: '',
+    status: 'Em análise',
+    prazo_garantia_dias: 90
+  });
+
   const equipamentoTipos = [
     'Britadeira', 
     'Martelete', 
