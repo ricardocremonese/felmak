@@ -90,14 +90,14 @@ const NovaOSForm = () => {
     'Britadeira', 'Martelete', 'Furadeira', 'Esmerilhadeira', 
     'Parafusadeira', 'Serra Circular', 'Lixadeira', 'Soprador',
     'Aspirador', 'Plaina', 'Roteador', 'Outros'
-  ];
+  ].filter(tipo => tipo.trim() !== ''); // Filter out empty strings
 
-  const marcas = ['DeWalt', 'Makita', 'Bosch', 'Outras'];
+  const marcas = ['DeWalt', 'Makita', 'Bosch', 'Outras'].filter(marca => marca.trim() !== ''); // Filter out empty strings
 
   const statusOptions = [
     'Em análise', 'Aguardando peça', 'Aguardando autorização', 
     'Em conserto', 'Finalizado', 'Entregue'
-  ];
+  ].filter(status => status.trim() !== ''); // Filter out empty strings
 
   const handleInputChange = (field: keyof FormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -352,8 +352,8 @@ const NovaOSForm = () => {
                 <SelectValue placeholder="Selecione o tipo" />
               </SelectTrigger>
               <SelectContent>
-                {equipamentoTipos.map(tipo => (
-                  <SelectItem key={tipo} value={tipo}>{tipo}</SelectItem>
+                {equipamentoTipos.map((tipo, index) => (
+                  <SelectItem key={`tipo-${index}`} value={tipo}>{tipo}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -366,8 +366,8 @@ const NovaOSForm = () => {
                 <SelectValue placeholder="Selecione a marca" />
               </SelectTrigger>
               <SelectContent>
-                {marcas.map(marca => (
-                  <SelectItem key={marca} value={marca}>{marca}</SelectItem>
+                {marcas.map((marca, index) => (
+                  <SelectItem key={`marca-${index}`} value={marca}>{marca}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -548,8 +548,8 @@ const NovaOSForm = () => {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {statusOptions.map(status => (
-                  <SelectItem key={status} value={status}>{status}</SelectItem>
+                {statusOptions.map((status, index) => (
+                  <SelectItem key={`status-${index}`} value={status}>{status}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
