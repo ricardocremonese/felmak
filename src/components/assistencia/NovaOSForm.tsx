@@ -11,6 +11,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { buscarCEP, formatarTelefone, formatarCPFCNPJ, formatCurrency, parseCurrencyValue, formatCurrencyInput } from '@/utils/helpers';
 import PecasMateriais from './PecasMateriais';
+import type { Database } from '@/integrations/supabase/types';
+
+// Usar o tipo correto do Supabase para inserção
+type NovaOrdemServico = Database['public']['Tables']['ordens_servico']['Insert'];
 
 interface FormData {
   // Cliente
@@ -160,23 +164,31 @@ const NovaOSForm = () => {
     try {
       const valorPecas = pecas.reduce((total, peca) => total + (peca.quantidade * peca.preco_unitario), 0);
       
-      // Inserir OS sem especificar numero_os_gerado - será gerado automaticamente pelo trigger
-      const { data: osData, error: osError } = await supabase
+      // Preparar dados para inserção
+      const osData: NovaOrdemServico = {
+        ...formData,
+        valor_pecas: valorPecas,
+        valor_total: valorPecas + formData.valor_mao_obra
+      };
+
+      // Inserir OS - o número será gerado automaticamente pelo trigger
+      const { data: osResult, error: osError } = await supabase
         .from('ordens_servico')
-        .insert([{
-          ...formData,
-          valor_pecas: valorPecas,
-          valor_total: valorPecas + formData.valor_mao_obra
-        }])
+        .insert([osData])
         .select()
         .single();
 
       if (osError) throw osError;
 
+      // Gerar número da OS formatado para mostrar na mensagem de sucesso
+      const anoAtual = new Date().getFullYear();
+      const ano2Digitos = anoAtual.toString().slice(-2);
+      const numeroOSFormatado = `OS${ano2Digitos}-${osResult.numero_os.toString().padStart(4, '0')}`;
+
       // Inserir peças
       if (pecas.length > 0) {
         const pecasData = pecas.map(peca => ({
-          os_id: osData.id,
+          os_id: osResult.id,
           peca_nome: peca.nome,
           quantidade: peca.quantidade,
           preco_unitario: peca.preco_unitario,
@@ -192,7 +204,7 @@ const NovaOSForm = () => {
 
       toast({
         title: "OS criada com sucesso!",
-        description: `Ordem de Serviço ${osData.numero_os_gerado || 'criada'} foi salva.`
+        description: `Ordem de Serviço ${numeroOSFormatado} foi salva.`
       });
 
       // Limpar formulário

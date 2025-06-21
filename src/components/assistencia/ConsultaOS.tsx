@@ -20,33 +20,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { formatarTelefone } from '@/utils/helpers';
 import jsPDF from 'jspdf';
+import type { Database } from '@/integrations/supabase/types';
 
-// Interface simplificada para evitar problemas de tipo
-interface OrdemServico {
-  id: string;
-  numero_os_gerado: string | null;
-  cliente_nome: string;
-  cliente_telefone: string;
-  equipamento_tipo: string;
-  equipamento_marca: string;
-  equipamento_modelo: string | null;
-  status: string | null;
-  data_entrada: string | null;
-  data_prevista: string | null;
-  valor_total: number | null;
-  tecnico_responsavel: string | null;
-  cliente_email?: string | null;
-  cliente_endereco?: string | null;
-  cliente_bairro?: string | null;
-  cliente_cidade?: string | null;
-  cliente_estado?: string | null;
-  equipamento_serie?: string | null;
-  defeito_relatado?: string;
-  observacoes_tecnico?: string | null;
-  prazo_garantia_dias?: number | null;
-  valor_mao_obra?: number | null;
-  valor_pecas?: number | null;
-}
+// Usar o tipo correto do Supabase
+type OrdemServico = Database['public']['Tables']['ordens_servico']['Row'];
 
 const ConsultaOS = () => {
   const { toast } = useToast();
@@ -59,6 +36,8 @@ const ConsultaOS = () => {
     ano: '',
     dataEspecifica: ''
   });
+
+  // ... keep existing code (statusOptions, meses, anosDisponiveis, statusColors)
 
   const statusOptions = [
     'Em análise', 
@@ -112,9 +91,14 @@ const ConsultaOS = () => {
 
       // Aplicar filtros
       if (filtros.busca) {
-        // Tentar buscar por número da OS primeiro
+        // Tentar buscar por número da OS primeiro - usar campo numero_os em vez de numero_os_gerado
         if (filtros.busca.startsWith('OS')) {
-          query = query.eq('numero_os_gerado', filtros.busca.toUpperCase());
+          // Extrair o número da OS do formato OS25-0001
+          const numeroMatch = filtros.busca.match(/OS\d{2}-(\d{4})/);
+          if (numeroMatch) {
+            const numeroOS = parseInt(numeroMatch[1]);
+            query = query.eq('numero_os', numeroOS);
+          }
         } else {
           // Buscar por nome ou telefone
           query = query.or(`cliente_nome.ilike.%${filtros.busca}%,cliente_telefone.ilike.%${filtros.busca}%`);
@@ -147,15 +131,7 @@ const ConsultaOS = () => {
 
       if (error) throw error;
 
-      // Mapear os dados para garantir a estrutura correta
-      const ordensFormatadas = (data || []).map(ordem => ({
-        ...ordem,
-        numero_os_gerado: ordem.numero_os_gerado || 'Aguardando...',
-        status: ordem.status || 'Em análise',
-        valor_total: ordem.valor_total || 0
-      })) as OrdemServico[];
-
-      setOrdens(ordensFormatadas);
+      setOrdens(data || []);
     } catch (error) {
       console.error('Erro ao buscar ordens:', error);
       toast({
@@ -168,15 +144,25 @@ const ConsultaOS = () => {
     }
   };
 
+  // Função para gerar o número da OS no formato correto
+  const gerarNumeroOS = (numeroOS: number, dataEntrada: string | null): string => {
+    if (!dataEntrada) return 'Aguardando...';
+    
+    const ano = new Date(dataEntrada).getFullYear();
+    const ano2Digitos = ano.toString().slice(-2);
+    return `OS${ano2Digitos}-${numeroOS.toString().padStart(4, '0')}`;
+  };
+
   const gerarPDF = (ordem: OrdemServico) => {
     try {
       const doc = new jsPDF();
+      const numeroOSFormatado = gerarNumeroOS(ordem.numero_os, ordem.data_entrada);
       
       // Cabeçalho
       doc.setFontSize(20);
       doc.text('FELMAK Ferramentas Elétricas', 20, 20);
       doc.setFontSize(16);
-      doc.text(`Ordem de Serviço ${ordem.numero_os_gerado || 'N/A'}`, 20, 30);
+      doc.text(`Ordem de Serviço ${numeroOSFormatado}`, 20, 30);
       
       // Linha divisória
       doc.line(20, 35, 190, 35);
@@ -255,15 +241,15 @@ const ConsultaOS = () => {
       
       doc.setFontSize(10);
       if (ordem.valor_pecas) {
-        doc.text(`Valor Peças: R$ ${ordem.valor_pecas.toFixed(2).replace('.', ',')}`, 20, yPosition);
+        doc.text(`Valor Peças: R$ ${ordem.valor_pecas.toString().replace('.', ',')}`, 20, yPosition);
         yPosition += 7;
       }
       if (ordem.valor_mao_obra) {
-        doc.text(`Mão de Obra: R$ ${ordem.valor_mao_obra.toFixed(2).replace('.', ',')}`, 20, yPosition);
+        doc.text(`Mão de Obra: R$ ${ordem.valor_mao_obra.toString().replace('.', ',')}`, 20, yPosition);
         yPosition += 7;
       }
       doc.setFontSize(12);
-      doc.text(`TOTAL: R$ ${(ordem.valor_total || 0).toFixed(2).replace('.', ',')}`, 20, yPosition);
+      doc.text(`TOTAL: R$ ${(ordem.valor_total || 0).toString().replace('.', ',')}`, 20, yPosition);
       yPosition += 10;
       
       // Status e Datas
@@ -311,6 +297,7 @@ const ConsultaOS = () => {
   const imprimirOS = (ordem: OrdemServico) => {
     const doc = gerarPDF(ordem);
     if (doc) {
+      const numeroOSFormatado = gerarNumeroOS(ordem.numero_os, ordem.data_entrada);
       doc.autoPrint();
       const blob = doc.output('blob');
       const url = URL.createObjectURL(blob);
@@ -329,7 +316,7 @@ const ConsultaOS = () => {
       
       toast({
         title: "Imprimindo OS",
-        description: `A OS ${ordem.numero_os_gerado || 'N/A'} está sendo impressa.`
+        description: `A OS ${numeroOSFormatado} está sendo impressa.`
       });
     }
   };
@@ -337,20 +324,22 @@ const ConsultaOS = () => {
   const salvarPDF = (ordem: OrdemServico) => {
     const doc = gerarPDF(ordem);
     if (doc) {
-      doc.save(`${ordem.numero_os_gerado || 'OS'}_${ordem.cliente_nome.replace(/\s+/g, '_')}.pdf`);
+      const numeroOSFormatado = gerarNumeroOS(ordem.numero_os, ordem.data_entrada);
+      doc.save(`${numeroOSFormatado}_${ordem.cliente_nome.replace(/\s+/g, '_')}.pdf`);
       toast({
         title: "PDF salvo",
-        description: `A OS ${ordem.numero_os_gerado || 'N/A'} foi salva como PDF.`
+        description: `A OS ${numeroOSFormatado} foi salva como PDF.`
       });
     }
   };
 
   const gerarMensagemWhatsApp = (ordem: OrdemServico) => {
     const dataEntrada = ordem.data_entrada ? new Date(ordem.data_entrada).toLocaleDateString('pt-BR') : 'N/A';
-    const mensagem = `Olá ${ordem.cliente_nome}, sua Ordem de Serviço ${ordem.numero_os_gerado || 'N/A'} está com status: ${ordem.status || 'Em análise'}.
+    const numeroOSFormatado = gerarNumeroOS(ordem.numero_os, ordem.data_entrada);
+    const mensagem = `Olá ${ordem.cliente_nome}, sua Ordem de Serviço ${numeroOSFormatado} está com status: ${ordem.status || 'Em análise'}.
 📅 Entrada: ${dataEntrada}
 🛠️ Equipamento: ${ordem.equipamento_marca} ${ordem.equipamento_modelo || ''}
-💰 Valor: R$ ${(ordem.valor_total || 0).toFixed(2).replace('.', ',')}
+💰 Valor: R$ ${(ordem.valor_total || 0).toString().replace('.', ',')}
 📝 FELMAK Ferramentas Elétricas - São Bernardo do Campo`;
 
     const telefone = ordem.cliente_telefone.replace(/\D/g, '');
@@ -500,7 +489,9 @@ const ConsultaOS = () => {
                 <TableBody>
                   {ordens.map((ordem) => (
                     <TableRow key={ordem.id}>
-                      <TableCell className="font-medium">{ordem.numero_os_gerado || 'Aguardando...'}</TableCell>
+                      <TableCell className="font-medium">
+                        {gerarNumeroOS(ordem.numero_os, ordem.data_entrada)}
+                      </TableCell>
                       <TableCell>{ordem.cliente_nome}</TableCell>
                       <TableCell>{formatarTelefone(ordem.cliente_telefone)}</TableCell>
                       <TableCell>
@@ -521,7 +512,7 @@ const ConsultaOS = () => {
                         {ordem.data_entrada ? new Date(ordem.data_entrada).toLocaleDateString('pt-BR') : 'N/A'}
                       </TableCell>
                       <TableCell>
-                        R$ {(ordem.valor_total || 0).toFixed(2).replace('.', ',')}
+                        R$ {(ordem.valor_total || 0).toString().replace('.', ',')}
                       </TableCell>
                       <TableCell>
                         <div className="flex space-x-1">
