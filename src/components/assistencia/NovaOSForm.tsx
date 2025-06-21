@@ -9,7 +9,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Camera, Save, FileText, MessageCircle, MapPin, Upload } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { buscarCEP, formatarTelefone, formatarCPFCNPJ, formatCurrency } from '@/utils/helpers';
+import { buscarCEP, formatarTelefone, formatarCPFCNPJ, formatCurrency, parseCurrencyValue, formatCurrencyInput } from '@/utils/helpers';
 import PecasMateriais from './PecasMateriais';
 
 interface FormData {
@@ -122,29 +122,9 @@ const NovaOSForm = () => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const formatCurrencyInput = (value: string) => {
-    // Remove tudo que não é número
-    const numericValue = value.replace(/\D/g, '');
-    
-    // Converte para número dividindo por 100 para ter centavos
-    const numberValue = parseInt(numericValue) / 100;
-    
-    // Formata como moeda brasileira
-    return numberValue.toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL'
-    });
-  };
-
-  const parseCurrencyValue = (formattedValue: string): number => {
-    // Remove o símbolo de moeda e espaços, substitui vírgula por ponto
-    const cleanValue = formattedValue
-      .replace('R$', '')
-      .replace(/\s/g, '')
-      .replace('.', '')
-      .replace(',', '.');
-    
-    return parseFloat(cleanValue) || 0;
+  const handleCurrencyInputChange = (field: keyof FormData, value: string) => {
+    const numericValue = parseCurrencyValue(value);
+    setFormData(prev => ({ ...prev, [field]: numericValue }));
   };
 
   const buscarEnderecoPorCEP = async (cep: string) => {
@@ -547,10 +527,7 @@ const NovaOSForm = () => {
               <Input
                 id="autorizacao_orcamento"
                 value={formatCurrency(formData.autorizacao_orcamento)}
-                onChange={(e) => {
-                  const value = parseCurrencyValue(e.target.value);
-                  handleInputChange('autorizacao_orcamento', value);
-                }}
+                onChange={(e) => handleCurrencyInputChange('autorizacao_orcamento', e.target.value)}
                 placeholder="R$ 0,00"
               />
             </div>
