@@ -1,4 +1,3 @@
-
 // Utilitários para o sistema FELMAK
 
 // Formatação de moeda brasileira
@@ -113,4 +112,31 @@ export const getStatusEstoque = (quantidade: number) => {
   if (quantidade <= 5) return { nivel: 'baixo', cor: 'yellow', texto: 'Estoque Baixo' };
   if (quantidade <= 20) return { nivel: 'normal', cor: 'green', texto: 'Em Estoque' };
   return { nivel: 'alto', cor: 'blue', texto: 'Estoque Alto' };
+};
+
+// Formatação de moeda com parsing para input
+export const parseCurrencyValue = (formattedValue: string): number => {
+  // Remove o símbolo de moeda e espaços, substitui vírgula por ponto
+  const cleanValue = formattedValue
+    .replace('R$', '')
+    .replace(/\s/g, '')
+    .replace(/\./g, '') // Remove pontos de milhares
+    .replace(',', '.'); // Substitui vírgula decimal por ponto
+  
+  return parseFloat(cleanValue) || 0;
+};
+
+// Formatação de input de moeda em tempo real
+export const formatCurrencyInput = (value: string): string => {
+  // Remove tudo que não é número
+  const numericValue = value.replace(/\D/g, '');
+  
+  // Converte para número dividindo por 100 para ter centavos
+  const numberValue = parseInt(numericValue) / 100;
+  
+  // Formata como moeda brasileira
+  return numberValue.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL'
+  });
 };

@@ -6,10 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Camera, Save, FileText, MessageCircle, MapPin } from 'lucide-react';
+import { Camera, Save, FileText, MessageCircle, MapPin, Upload } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { buscarCEP, formatarTelefone, formatarCPFCNPJ } from '@/utils/helpers';
+import { buscarCEP, formatarTelefone, formatarCPFCNPJ, formatCurrency } from '@/utils/helpers';
 import PecasMateriais from './PecasMateriais';
 
 interface FormData {
@@ -20,6 +20,7 @@ interface FormData {
   cliente_cep: string;
   cliente_endereco: string;
   cliente_numero: string;
+  cliente_complemento: string;
   cliente_bairro: string;
   cliente_cidade: string;
   cliente_estado: string;
@@ -62,6 +63,7 @@ const NovaOSForm = () => {
     cliente_cep: '',
     cliente_endereco: '',
     cliente_numero: '',
+    cliente_complemento: '',
     cliente_bairro: '',
     cliente_cidade: '',
     cliente_estado: '',
@@ -118,6 +120,31 @@ const NovaOSForm = () => {
 
   const handleInputChange = (field: keyof FormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const formatCurrencyInput = (value: string) => {
+    // Remove tudo que não é número
+    const numericValue = value.replace(/\D/g, '');
+    
+    // Converte para número dividindo por 100 para ter centavos
+    const numberValue = parseInt(numericValue) / 100;
+    
+    // Formata como moeda brasileira
+    return numberValue.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL'
+    });
+  };
+
+  const parseCurrencyValue = (formattedValue: string): number => {
+    // Remove o símbolo de moeda e espaços, substitui vírgula por ponto
+    const cleanValue = formattedValue
+      .replace('R$', '')
+      .replace(/\s/g, '')
+      .replace('.', '')
+      .replace(',', '.');
+    
+    return parseFloat(cleanValue) || 0;
   };
 
   const buscarEnderecoPorCEP = async (cep: string) => {
@@ -197,6 +224,7 @@ const NovaOSForm = () => {
         cliente_cep: '',
         cliente_endereco: '',
         cliente_numero: '',
+        cliente_complemento: '',
         cliente_bairro: '',
         cliente_cidade: '',
         cliente_estado: '',
@@ -325,6 +353,16 @@ const NovaOSForm = () => {
           </div>
 
           <div>
+            <Label htmlFor="cliente_complemento">Complemento</Label>
+            <Input
+              id="cliente_complemento"
+              value={formData.cliente_complemento}
+              onChange={(e) => handleInputChange('cliente_complemento', e.target.value)}
+              placeholder="Apto, Bloco, Casa..."
+            />
+          </div>
+
+          <div>
             <Label htmlFor="cliente_bairro">Bairro</Label>
             <Input
               id="cliente_bairro"
@@ -418,11 +456,17 @@ const NovaOSForm = () => {
           </div>
 
           <div>
-            <Label>Foto do Equipamento</Label>
-            <Button type="button" variant="outline" className="w-full">
-              <Camera className="w-4 h-4 mr-2" />
-              Tirar Foto
-            </Button>
+            <Label>Foto/Arquivo do Equipamento</Label>
+            <div className="flex space-x-2">
+              <Button type="button" variant="outline" className="flex-1">
+                <Camera className="w-4 h-4 mr-2" />
+                Tirar Foto
+              </Button>
+              <Button type="button" variant="outline" className="flex-1">
+                <Upload className="w-4 h-4 mr-2" />
+                Upload Arquivo
+              </Button>
+            </div>
           </div>
 
           <div className="md:col-span-2">
@@ -499,14 +543,15 @@ const NovaOSForm = () => {
             </div>
 
             <div>
-              <Label htmlFor="autorizacao_orcamento">Autorização até R$</Label>
+              <Label htmlFor="autorizacao_orcamento">Autorização até</Label>
               <Input
                 id="autorizacao_orcamento"
-                type="number"
-                step="0.01"
-                value={formData.autorizacao_orcamento}
-                onChange={(e) => handleInputChange('autorizacao_orcamento', parseFloat(e.target.value) || 0)}
-                placeholder="0,00"
+                value={formatCurrency(formData.autorizacao_orcamento)}
+                onChange={(e) => {
+                  const value = parseCurrencyValue(e.target.value);
+                  handleInputChange('autorizacao_orcamento', value);
+                }}
+                placeholder="R$ 0,00"
               />
             </div>
 
@@ -580,7 +625,7 @@ const NovaOSForm = () => {
           <div className="flex justify-between items-center text-lg font-semibold">
             <span>Valor Total da OS:</span>
             <span className="text-2xl text-felmak-blue">
-              R$ {calcularValorTotal().toFixed(2).replace('.', ',')}
+              {formatCurrency(calcularValorTotal())}
             </span>
           </div>
         </CardContent>
