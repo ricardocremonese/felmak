@@ -290,13 +290,14 @@ const VisualizarOS = ({
         {children}
       </DialogTrigger>
       <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto print:max-w-none print:max-h-none print:overflow-visible">
+        <DialogTitle className="sr-only">Visualizar Ordem de Serviço {numeroOSFormatado}</DialogTitle>
         <style>
           {`
             @media print {
               .print-hide { display: none !important; }
               
               @page {
-                margin: 0.5in;
+                margin: 0.3in;
                 size: A4 portrait;
               }
               
@@ -310,7 +311,8 @@ const VisualizarOS = ({
                 padding: 0 !important;
                 width: 100% !important;
                 height: 100% !important;
-                font-size: 8px !important;
+                font-size: 7px !important;
+                line-height: 1.1 !important;
               }
               
               body * {
@@ -326,34 +328,34 @@ const VisualizarOS = ({
                 left: 0 !important;
                 top: 0 !important;
                 width: 100% !important;
-                height: 100% !important;
+                height: 100vh !important;
                 margin: 0 !important;
                 padding: 0 !important;
-                font-size: 8px !important;
+                font-size: 7px !important;
                 line-height: 1.1 !important;
                 box-sizing: border-box !important;
-                display: flex !important;
-                flex-direction: column !important;
+                display: block !important;
               }
               
               .primeira-via {
                 width: 100% !important;
-                height: 45% !important;
+                height: 48% !important;
                 overflow: hidden !important;
                 margin: 0 !important;
-                padding: 5px !important;
+                padding: 3px !important;
                 box-sizing: border-box !important;
+                page-break-inside: avoid !important;
               }
               
               .print-divider {
                 width: 100% !important;
                 text-align: center !important;
                 margin: 0 !important;
-                padding: 5px 0 !important;
+                padding: 2px 0 !important;
                 border-top: 1px dashed #000 !important;
                 font-size: 6px !important;
                 font-weight: bold !important;
-                height: 10% !important;
+                height: 4% !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
@@ -361,11 +363,113 @@ const VisualizarOS = ({
               
               .segunda-via {
                 width: 100% !important;
-                height: 45% !important;
+                height: 48% !important;
                 overflow: hidden !important;
                 margin: 0 !important;
-                padding: 5px !important;
+                padding: 3px !important;
                 box-sizing: border-box !important;
+                page-break-inside: avoid !important;
+              }
+              
+              .print-container > .hidden {
+                display: block !important;
+              }
+              
+              .print-container .print\\:text-xs {
+                font-size: 7px !important;
+              }
+              
+              .print-container .print\\:h-6 {
+                height: 20px !important;
+              }
+              
+              .print-container .print\\:p-1 {
+                padding: 2px !important;
+              }
+              
+              .print-container .print\\:mb-1 {
+                margin-bottom: 2px !important;
+              }
+              
+              .print-container .print\\:space-y-0 > * + * {
+                margin-top: 0 !important;
+              }
+              
+              .print-container .print\\:grid-cols-2 {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+              }
+              
+              .print-container .print\\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+              }
+              
+              .print-container .print\\:grid-cols-4 {
+                grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+              }
+              
+              .print-container .print\\:gap-1 {
+                gap: 2px !important;
+              }
+              
+              .print-container .print\\:w-2 {
+                width: 8px !important;
+              }
+              
+              .print-container .print\\:h-2 {
+                height: 8px !important;
+              }
+              
+              .print-container .print\\:leading-tight {
+                line-height: 1.1 !important;
+              }
+              
+              .print-container .print\\:border {
+                border: 1px solid #000 !important;
+              }
+              
+              .print-container .print\\:bg-white {
+                background-color: white !important;
+              }
+              
+              .print-container .print\\:relative {
+                position: relative !important;
+              }
+              
+              .print-container .print\\:absolute {
+                position: absolute !important;
+              }
+              
+              .print-container .print\\:right-0 {
+                right: 0 !important;
+              }
+              
+              .print-container .print\\:top-0 {
+                top: 0 !important;
+              }
+              
+              .print-container .print\\:font-bold {
+                font-weight: bold !important;
+              }
+              
+              .print-container .print\\:mx-auto {
+                margin-left: auto !important;
+                margin-right: auto !important;
+              }
+              
+              .print-container .print\\:block {
+                display: block !important;
+              }
+              
+              .print-container .print\\:flex {
+                display: flex !important;
+              }
+              
+              .print-container .print\\:justify-center {
+                justify-content: center !important;
+              }
+              
+              .print-container .print\\:w-full {
+                width: 100% !important;
               }
             }
           `}
@@ -395,7 +499,7 @@ const VisualizarOS = ({
           </div>
 
           {/* Versão para impressão - duas cópias na mesma página */}
-          <div className="hidden print:flex print:flex-col print:h-full">
+          <div className="hidden print:block">
             {/* PRIMEIRA VIA - CLIENTE */}
             <div className="primeira-via">
               <ConteudoOS />
