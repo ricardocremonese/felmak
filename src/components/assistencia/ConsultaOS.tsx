@@ -478,11 +478,11 @@ const ConsultaOS = () => {
   const gerarMensagemWhatsApp = (ordem: OrdemServico) => {
     const dataEntrada = ordem.data_entrada ? new Date(ordem.data_entrada).toLocaleDateString('pt-BR') : 'N/A';
     const numeroOSFormatado = gerarNumeroOS(ordem.numero_os, ordem.data_entrada);
-    const mensagem = `Olá ${ordem.cliente_nome}, sua Ordem de Serviço ${numeroOSFormatado} está com status: ${ordem.status || 'Em análise'}.
-📅 Entrada: ${dataEntrada}
-🛠️ Equipamento: ${ordem.equipamento_marca} ${ordem.equipamento_modelo || ''}
-💰 Valor: R$ ${(ordem.valor_total || 0).toString().replace('.', ',')}
-📝 FELMAK Ferramentas Elétricas - São Bernardo do Campo`;
+    const mensagem = `Olá ${ordem.cliente_nome}, sua Ordem de Serviço ${numeroOSFormatado} está com status: Aguardando Aprovação do Cliente.
+Entrada: ${dataEntrada}
+Equipamento: ${ordem.equipamento_marca} ${ordem.equipamento_modelo || ''}
+Valor: R$ ${(ordem.valor_total || 0).toString().replace('.', ',')}
+FELMAK Ferramentas Elétricas - São Bernardo do Campo`;
 
     const telefone = ordem.cliente_telefone.replace(/\D/g, '');
     const url = `https://wa.me/55${telefone}?text=${encodeURIComponent(mensagem)}`;
