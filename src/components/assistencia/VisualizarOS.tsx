@@ -1,49 +1,28 @@
-
 import React from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { 
-  User, 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Wrench, 
-  Calendar, 
-  DollarSign,
-  FileText,
-  Clock,
-  Printer
-} from 'lucide-react';
+import { User, Phone, Mail, MapPin, Wrench, Calendar, DollarSign, FileText, Clock, Printer } from 'lucide-react';
 import { formatarTelefone } from '@/utils/helpers';
 import type { Database } from '@/integrations/supabase/types';
-
 type OrdemServico = Database['public']['Tables']['ordens_servico']['Row'];
-
 interface VisualizarOSProps {
   ordem: OrdemServico;
   children: React.ReactNode;
 }
-
-const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
+const VisualizarOS = ({
+  ordem,
+  children
+}: VisualizarOSProps) => {
   const gerarNumeroOS = (numeroOS: number, dataEntrada: string | null): string => {
     if (!dataEntrada) return 'Aguardando...';
-    
     const ano = new Date(dataEntrada).getFullYear();
     const ano2Digitos = ano.toString().slice(-2);
     return `OS${ano2Digitos}-${numeroOS.toString().padStart(4, '0')}`;
   };
-
   const numeroOSFormatado = gerarNumeroOS(ordem.numero_os, ordem.data_entrada);
-
   const statusColors: Record<string, string> = {
     'Em análise': 'bg-yellow-100 text-yellow-800',
     'Aguardando peça': 'bg-orange-100 text-orange-800',
@@ -52,32 +31,28 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
     'Finalizado': 'bg-green-100 text-green-800',
     'Entregue': 'bg-gray-100 text-gray-800'
   };
-
   const imprimirModal = () => {
     window.print();
   };
 
   // Componente para renderizar o conteúdo da OS
-  const ConteudoOS = ({ tipoVia }: { tipoVia: string }) => (
-    <div className="space-y-3 print:space-y-2">
+  const ConteudoOS = ({
+    tipoVia
+  }: {
+    tipoVia: string;
+  }) => <div className="space-y-3 print:space-y-2">
       {/* Header com logo e número da OS */}
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <img 
-            src="/lovable-uploads/9428a948-19d8-4c0c-abbb-048b4717f2cc.png" 
-            alt="Logo FELMAK" 
-            className="h-16 w-auto print:h-12"
-          />
+          <img src="/lovable-uploads/9428a948-19d8-4c0c-abbb-048b4717f2cc.png" alt="Logo FELMAK" className="h-16 w-auto print:h-12" />
         </div>
         <div className="text-right">
           <div className="text-xl font-bold print:text-lg">
             OS: {numeroOSFormatado}
           </div>
-          {tipoVia && (
-            <div className="text-xs font-medium print:text-xs text-gray-600">
+          {tipoVia && <div className="text-xs font-medium print:text-xs text-gray-600">
               {tipoVia}
-            </div>
-          )}
+            </div>}
         </div>
       </div>
       
@@ -104,36 +79,26 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
               <div>
                 <span className="font-medium">Telefone:</span> {formatarTelefone(ordem.cliente_telefone)}
               </div>
-              {ordem.cliente_email && (
-                <div>
+              {ordem.cliente_email && <div>
                   <span className="font-medium">E-mail:</span> {ordem.cliente_email}
-                </div>
-              )}
-              {ordem.cliente_bairro && (
-                <div>
+                </div>}
+              {ordem.cliente_bairro && <div>
                   <span className="font-medium">Bairro:</span> {ordem.cliente_bairro} - {ordem.cliente_cidade || ''} - {ordem.cliente_estado || ''}
-                </div>
-              )}
+                </div>}
             </div>
             
             <div className="space-y-1">
-              {ordem.cliente_cpf_cnpj && (
-                <div>
+              {ordem.cliente_cpf_cnpj && <div>
                   <span className="font-medium">CPF/CNPJ:</span> {ordem.cliente_cpf_cnpj}
-                </div>
-              )}
+                </div>}
               
-              {ordem.cliente_endereco && (
-                <div>
+              {ordem.cliente_endereco && <div>
                   <span className="font-medium">Endereço:</span> {ordem.cliente_endereco}{ordem.cliente_numero ? `, ${ordem.cliente_numero}` : ''}
-                </div>
-              )}
+                </div>}
               
-              {ordem.cliente_cep && (
-                <div>
+              {ordem.cliente_cep && <div>
                   <span className="font-medium">CEP:</span> {ordem.cliente_cep}
-                </div>
-              )}
+                </div>}
             </div>
           </div>
         </div>
@@ -154,72 +119,56 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
               <div>
                 <span className="font-medium">Marca:</span> {ordem.equipamento_marca}
               </div>
-              {ordem.equipamento_modelo && (
-                <div>
+              {ordem.equipamento_modelo && <div>
                   <span className="font-medium">Modelo:</span> {ordem.equipamento_modelo}
-                </div>
-              )}
+                </div>}
             </div>
             
             <div className="space-y-1">
-              {ordem.equipamento_serie && (
-                <div>
+              {ordem.equipamento_serie && <div>
                   <span className="font-medium">Nº Série:</span> {ordem.equipamento_serie}
-                </div>
-              )}
-              {ordem.equipamento_cor && (
-                <div>
+                </div>}
+              {ordem.equipamento_cor && <div>
                   <span className="font-medium">Cor:</span> {ordem.equipamento_cor}
-                </div>
-              )}
-              {ordem.estado_fisico_entrega && (
-                <div>
+                </div>}
+              {ordem.estado_fisico_entrega && <div>
                   <span className="font-medium">Estado Físico:</span> {ordem.estado_fisico_entrega}
-                </div>
-              )}
+                </div>}
             </div>
           </div>
           
-          {ordem.acessorios_entregues && (
-            <div>
+          {ordem.acessorios_entregues && <div>
               <span className="font-medium">Acessórios:</span> {ordem.acessorios_entregues}
-            </div>
-          )}
+            </div>}
         </div>
       </div>
 
       {/* DEFEITO RELATADO */}
-      {ordem.defeito_relatado && (
-        <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
+      {ordem.defeito_relatado && <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
           <h3 className="text-sm font-bold mb-2 flex items-center print:text-sm print:mb-2">
             <FileText className="w-3 h-3 mr-2 print:w-3 print:h-3" />
             DEFEITO RELATADO
           </h3>
           <p className="text-xs leading-relaxed print:text-sm print:leading-normal">{ordem.defeito_relatado}</p>
-        </div>
-      )}
+        </div>}
 
       {/* OBSERVAÇÕES TÉCNICAS */}
-      {ordem.observacoes_tecnico && (
-        <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
+      {ordem.observacoes_tecnico && <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
           <h3 className="text-sm font-bold mb-2 flex items-center print:text-sm print:mb-2">
             <FileText className="w-3 h-3 mr-2 print:w-3 print:h-3" />
             OBSERVAÇÕES TÉCNICAS
           </h3>
           <p className="text-xs leading-relaxed print:text-sm print:leading-normal">{ordem.observacoes_tecnico}</p>
-        </div>
-      )}
+        </div>}
 
       {/* TESTES REALIZADOS */}
-      {ordem.testes_realizados && (
-        <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
+      {ordem.testes_realizados && <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
           <h3 className="text-sm font-bold mb-2 flex items-center print:text-sm print:mb-2">
             <FileText className="w-3 h-3 mr-2 print:w-3 print:h-3" />
             TESTES REALIZADOS
           </h3>
           <p className="text-xs leading-relaxed print:text-sm print:leading-normal">{ordem.testes_realizados}</p>
-        </div>
-      )}
+        </div>}
 
       {/* VALORES */}
       <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
@@ -229,62 +178,46 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
         </h3>
         <div className="space-y-1 text-xs print:text-sm">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 print:grid-cols-3 print:gap-2">
-            {ordem.valor_pecas && ordem.valor_pecas > 0 && (
-              <div>
+            {ordem.valor_pecas && ordem.valor_pecas > 0 && <div>
                 <span className="font-medium">Valor Peças:</span> R$ {ordem.valor_pecas.toFixed(2).replace('.', ',')}
-              </div>
-            )}
+              </div>}
             
-            {ordem.valor_mao_obra && ordem.valor_mao_obra > 0 && (
-              <div>
+            {ordem.valor_mao_obra && ordem.valor_mao_obra > 0 && <div>
                 <span className="font-medium">Mão de Obra:</span> R$ {ordem.valor_mao_obra.toFixed(2).replace('.', ',')}
-              </div>
-            )}
+              </div>}
             
             <div className="font-bold text-sm print:text-sm">
               <span className="font-bold">VALOR TOTAL:</span> R$ {(ordem.valor_total || 0).toFixed(2).replace('.', ',')}
             </div>
           </div>
           
-          {ordem.autorizacao_orcamento && ordem.autorizacao_orcamento > 0 && (
-            <div>
+          {ordem.autorizacao_orcamento && ordem.autorizacao_orcamento > 0 && <div>
               <span className="font-medium">Limite Autorizado:</span> R$ {ordem.autorizacao_orcamento.toFixed(2).replace('.', ',')}
-            </div>
-          )}
+            </div>}
         </div>
       </div>
 
       {/* Informações básicas */}
       <div className="space-y-1 text-xs print:text-sm print:space-y-1">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-2 print:grid-cols-4 print:gap-2">
-          {ordem.data_entrada && (
-            <div>
+          {ordem.data_entrada && <div>
               <span className="font-medium">Data Entrada:</span> {new Date(ordem.data_entrada).toLocaleDateString('pt-BR')}
-            </div>
-          )}
-          {ordem.data_prevista && (
-            <div>
+            </div>}
+          {ordem.data_prevista && <div>
               <span className="font-medium">Data Prevista:</span> {new Date(ordem.data_prevista).toLocaleDateString('pt-BR')}
-            </div>
-          )}
-          {ordem.data_entrega && (
-            <div>
+            </div>}
+          {ordem.data_entrega && <div>
               <span className="font-medium">Data Entrega:</span> {new Date(ordem.data_entrega).toLocaleDateString('pt-BR')}
-            </div>
-          )}
-          {ordem.tecnico_responsavel && (
-            <div>
+            </div>}
+          {ordem.tecnico_responsavel && <div>
               <span className="font-medium">Técnico:</span> {ordem.tecnico_responsavel}
-            </div>
-          )}
+            </div>}
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 print:grid-cols-3 print:gap-2">
-          {ordem.prazo_garantia_dias && ordem.prazo_garantia_dias > 0 && (
-            <div>
+          {ordem.prazo_garantia_dias && ordem.prazo_garantia_dias > 0 && <div>
               <span className="font-medium">Garantia:</span> {ordem.prazo_garantia_dias} dias
-            </div>
-          )}
+            </div>}
           
           <div>
             <span className="font-medium">Status:</span> 
@@ -293,19 +226,14 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
             </Badge>
           </div>
           
-          {ordem.urgencia && (
-            <div>
+          {ordem.urgencia && <div>
               <span className="font-medium">Urgência:</span> 
               <Badge variant="destructive" className="ml-2 text-xs print:text-xs">Urgente</Badge>
-            </div>
-          )}
+            </div>}
         </div>
       </div>
-    </div>
-  );
-
-  return (
-    <Dialog>
+    </div>;
+  return <Dialog>
       <DialogTrigger asChild>
         {children}
       </DialogTrigger>
@@ -376,26 +304,15 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
           <DialogHeader className="text-center space-y-2 print:hidden">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <img 
-                  src="/lovable-uploads/9428a948-19d8-4c0c-abbb-048b4717f2cc.png" 
-                  alt="Logo FELMAK" 
-                  className="h-16 w-auto"
-                />
+                
               </div>
               <div className="flex items-center space-x-4">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={imprimirModal}
-                  className="print-hide"
-                >
+                <Button variant="outline" size="sm" onClick={imprimirModal} className="print-hide">
                   <Printer className="w-4 h-4 mr-2" />
                   Imprimir
                 </Button>
                 <div className="text-right">
-                  <DialogTitle className="text-xl font-bold">
-                    OS: {numeroOSFormatado}
-                  </DialogTitle>
+                  
                 </div>
               </div>
             </div>
@@ -425,8 +342,6 @@ const VisualizarOS = ({ ordem, children }: VisualizarOSProps) => {
           </div>
         </div>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>;
 };
-
 export default VisualizarOS;
