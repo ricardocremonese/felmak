@@ -1,5 +1,4 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Wrench, 
   Clock, 
@@ -11,8 +10,17 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import type { Database } from '@/integrations/supabase/types';
+
+type OrdemServico = Database['public']['Tables']['ordens_servico']['Row'];
 
 const Dashboard = () => {
+  const [recentOrders, setRecentOrders] = useState<OrdemServico[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
+
   // Dados mockados para demonstração
   const statsData = [
     {
@@ -61,39 +69,50 @@ const Dashboard = () => {
     { day: 'Sáb', os: 3, vendas: 6 }
   ];
 
-  const recentOrders = [
-    {
-      id: "OS-2024-001",
-      cliente: "João Silva",
-      equipamento: "Furadeira DeWalt DCD771",
-      status: "Em Análise",
-      data: "2024-01-15",
-      valor: "R$ 85,00"
-    },
-    {
-      id: "OS-2024-002", 
-      cliente: "Maria Santos",
-      equipamento: "Esmerilhadeira Bosch GWS 850",
-      status: "Aguardando Peça",
-      data: "2024-01-14",
-      valor: "R$ 120,00"
-    },
-    {
-      id: "OS-2024-003",
-      cliente: "Pedro Costa",
-      equipamento: "Martelete Makita HR2470",
-      status: "Finalizado",
-      data: "2024-01-13",
-      valor: "R$ 200,00"
+  const fetchRecentOrders = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('ordens_servico')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+
+      setRecentOrders(data || []);
+    } catch (error) {
+      console.error('Erro ao buscar ordens recentes:', error);
+      toast({
+        title: "Erro ao carregar dados",
+        description: "Não foi possível carregar as ordens de serviço recentes.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
+
+  useEffect(() => {
+    fetchRecentOrders();
+  }, []);
+
+  const gerarNumeroOS = (numeroOS: number, dataEntrada: string | null): string => {
+    if (!dataEntrada) return 'Aguardando...';
+    
+    const ano = new Date(dataEntrada).getFullYear();
+    const ano2Digitos = ano.toString().slice(-2);
+    return `OS${ano2Digitos}-${numeroOS.toString().padStart(4, '0')}`;
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'Em Análise': return 'bg-blue-100 text-blue-800';
-      case 'Aguardando Peça': return 'bg-yellow-100 text-yellow-800';
-      case 'Autorizado': return 'bg-green-100 text-green-800';
-      case 'Finalizado': return 'bg-gray-100 text-gray-800';
+      case 'Em análise': return 'bg-blue-100 text-blue-800';
+      case 'Aguardando peça': return 'bg-yellow-100 text-yellow-800';
+      case 'Aguardando autorização': return 'bg-orange-100 text-orange-800';
+      case 'Em conserto': return 'bg-purple-100 text-purple-800';
+      case 'Finalizado': return 'bg-green-100 text-green-800';
+      case 'Entregue': return 'bg-gray-100 text-gray-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -201,36 +220,64 @@ const Dashboard = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">OS</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">Cliente</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">Equipamento</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">Status</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">Data</th>
-                  <th className="text-left py-3 px-2 font-medium text-gray-600">Valor</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentOrders.map((order, index) => (
-                  <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-3 px-2 font-medium text-felmak-blue">{order.id}</td>
-                    <td className="py-3 px-2">{order.cliente}</td>
-                    <td className="py-3 px-2">{order.equipamento}</td>
-                    <td className="py-3 px-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="py-3 px-2">{new Date(order.data).toLocaleDateString('pt-BR')}</td>
-                    <td className="py-3 px-2 font-medium">{order.valor}</td>
+          {loading ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-felmak-blue mx-auto"></div>
+              <p className="mt-2 text-gray-600">Carregando ordens de serviço...</p>
+            </div>
+          ) : recentOrders.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">
+              <FileText className="w-12 h-12 mx-auto mb-4 opacity-50" />
+              <p>Nenhuma ordem de serviço encontrada.</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-3 px-2 font-medium text-gray-600">OS</th>
+                    <th className="text-left py-3 px-2 font-medium text-gray-600">Cliente</th>
+                    <th className="text-left py-3 px-2 font-medium text-gray-600">Equipamento</th>
+                    <th className="text-left py-3 px-2 font-medium text-gray-600">Status</th>
+                    <th className="text-left py-3 px-2 font-medium text-gray-600">Data</th>
+                    <th className="text-left py-3 px-2 font-medium text-gray-600">Valor</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {recentOrders.map((order, index) => (
+                    <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-3 px-2 font-medium text-felmak-blue">
+                        {gerarNumeroOS(order.numero_os, order.data_entrada)}
+                      </td>
+                      <td className="py-3 px-2">{order.cliente_nome}</td>
+                      <td className="py-3 px-2">
+                        <div>
+                          <span className="font-medium">{order.equipamento_marca}</span>
+                          {order.equipamento_modelo && (
+                            <>
+                              <br />
+                              <span className="text-sm text-gray-500">{order.equipamento_modelo}</span>
+                            </>
+                          )}
+                        </div>
+                      </td>
+                      <td className="py-3 px-2">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status || 'Em análise')}`}>
+                          {order.status || 'Em análise'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-2">
+                        {order.created_at ? new Date(order.created_at).toLocaleDateString('pt-BR') : 'N/A'}
+                      </td>
+                      <td className="py-3 px-2 font-medium">
+                        R$ {(order.valor_total || 0).toFixed(2).replace('.', ',')}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
