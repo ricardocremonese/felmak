@@ -44,40 +44,40 @@ const VisualizarOS = ({
 
   // Componente para renderizar o conteúdo da OS
   const ConteudoOS = () => (
-    <div className="space-y-3 print:space-y-2">
+    <div className="space-y-3 print:space-y-1">
       {/* Header com logo e número da OS */}
       <div className="flex items-center justify-between print:relative">
-        <div className="flex items-center space-x-4 print:justify-center print:w-full">
+        <div className="flex items-center space-x-4 print:flex print:justify-center print:w-full">
           <img 
             src="/lovable-uploads/9428a948-19d8-4c0c-abbb-048b4717f2cc.png" 
             alt="Logo FELMAK" 
-            className="h-16 w-auto print:h-12 print:mx-auto print:block" 
+            className="h-16 w-auto print:h-8 print:mx-auto print:block" 
           />
         </div>
         <div className="text-right print:absolute print:right-0 print:top-0">
-          <div className="text-xl font-bold print:text-lg">
+          <div className="text-xl font-bold print:text-sm print:font-bold">
             OS: {numeroOSFormatado}
           </div>
         </div>
       </div>
       
       {/* Dados de contato da empresa */}
-      <div className="text-sm text-gray-600 space-y-1 print:text-sm text-center">
+      <div className="text-sm text-gray-600 space-y-1 print:text-xs text-center print:mb-1">
         <p>Tel: (11) 4368-7395 | (11) 2598-7894 | e-mail: felmak.assist@gmail.com</p>
         <p>Av. Senador Vergueiro, 2483 - São Bernardo do Campo</p>
       </div>
       
-      <h2 className="text-lg font-bold print:text-lg text-center">ORDEM DE SERVIÇO</h2>
+      <h2 className="text-lg font-bold print:text-sm text-center print:mb-1">ORDEM DE SERVIÇO</h2>
 
       {/* DADOS DO CLIENTE */}
-      <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
-        <h3 className="text-sm font-bold mb-2 flex items-center print:text-sm print:mb-2">
-          <User className="w-3 h-3 mr-2 print:w-3 print:h-3" />
+      <div className="bg-gray-50 p-3 rounded-lg border print:p-1 print:bg-white print:border print:mb-1">
+        <h3 className="text-sm font-bold mb-2 flex items-center print:text-xs print:mb-1">
+          <User className="w-3 h-3 mr-2 print:w-2 print:h-2" />
           DADOS DO CLIENTE
         </h3>
-        <div className="space-y-1 text-xs print:text-sm">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 print:grid-cols-2 print:gap-2">
-            <div className="space-y-1">
+        <div className="space-y-1 text-xs print:text-xs print:space-y-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 print:grid-cols-2 print:gap-1">
+            <div className="space-y-1 print:space-y-0">
               <div>
                 <span className="font-medium">Nome:</span> {ordem.cliente_nome}
               </div>
@@ -96,7 +96,7 @@ const VisualizarOS = ({
               )}
             </div>
             
-            <div className="space-y-1">
+            <div className="space-y-1 print:space-y-0">
               {ordem.cliente_cpf_cnpj && (
                 <div>
                   <span className="font-medium">CPF/CNPJ:</span> {ordem.cliente_cpf_cnpj}
@@ -120,14 +120,14 @@ const VisualizarOS = ({
       </div>
 
       {/* DADOS DO EQUIPAMENTO */}
-      <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
-        <h3 className="text-sm font-bold mb-2 flex items-center print:text-sm print:mb-2">
-          <Wrench className="w-3 h-3 mr-2 print:w-3 print:h-3" />
+      <div className="bg-gray-50 p-3 rounded-lg border print:p-1 print:bg-white print:border print:mb-1">
+        <h3 className="text-sm font-bold mb-2 flex items-center print:text-xs print:mb-1">
+          <Wrench className="w-3 h-3 mr-2 print:w-2 print:h-2" />
           DADOS DO EQUIPAMENTO
         </h3>
-        <div className="space-y-1 text-xs print:text-sm">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 print:grid-cols-2 print:gap-2">
-            <div className="space-y-1">
+        <div className="space-y-1 text-xs print:text-xs print:space-y-0">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 print:grid-cols-2 print:gap-1">
+            <div className="space-y-1 print:space-y-0">
               <div>
                 <span className="font-medium">Tipo:</span> {ordem.equipamento_tipo}
               </div>
@@ -141,7 +141,7 @@ const VisualizarOS = ({
               )}
             </div>
             
-            <div className="space-y-1">
+            <div className="space-y-1 print:space-y-0">
               {ordem.equipamento_serie && (
                 <div>
                   <span className="font-medium">Nº Série:</span> {ordem.equipamento_serie}
@@ -170,45 +170,45 @@ const VisualizarOS = ({
 
       {/* DEFEITO RELATADO */}
       {ordem.defeito_relatado && (
-        <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
-          <h3 className="text-sm font-bold mb-2 flex items-center print:text-sm print:mb-2">
-            <FileText className="w-3 h-3 mr-2 print:w-3 print:h-3" />
+        <div className="bg-gray-50 p-3 rounded-lg border print:p-1 print:bg-white print:border print:mb-1">
+          <h3 className="text-sm font-bold mb-2 flex items-center print:text-xs print:mb-1">
+            <FileText className="w-3 h-3 mr-2 print:w-2 print:h-2" />
             DEFEITO RELATADO
           </h3>
-          <p className="text-xs leading-relaxed print:text-sm print:leading-normal">{ordem.defeito_relatado}</p>
+          <p className="text-xs leading-relaxed print:text-xs print:leading-tight">{ordem.defeito_relatado}</p>
         </div>
       )}
 
       {/* OBSERVAÇÕES TÉCNICAS */}
       {ordem.observacoes_tecnico && (
-        <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
-          <h3 className="text-sm font-bold mb-2 flex items-center print:text-sm print:mb-2">
-            <FileText className="w-3 h-3 mr-2 print:w-3 print:h-3" />
+        <div className="bg-gray-50 p-3 rounded-lg border print:p-1 print:bg-white print:border print:mb-1">
+          <h3 className="text-sm font-bold mb-2 flex items-center print:text-xs print:mb-1">
+            <FileText className="w-3 h-3 mr-2 print:w-2 print:h-2" />
             OBSERVAÇÕES TÉCNICAS
           </h3>
-          <p className="text-xs leading-relaxed print:text-sm print:leading-normal">{ordem.observacoes_tecnico}</p>
+          <p className="text-xs leading-relaxed print:text-xs print:leading-tight">{ordem.observacoes_tecnico}</p>
         </div>
       )}
 
       {/* TESTES REALIZADOS */}
       {ordem.testes_realizados && (
-        <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
-          <h3 className="text-sm font-bold mb-2 flex items-center print:text-sm print:mb-2">
-            <FileText className="w-3 h-3 mr-2 print:w-3 print:h-3" />
+        <div className="bg-gray-50 p-3 rounded-lg border print:p-1 print:bg-white print:border print:mb-1">
+          <h3 className="text-sm font-bold mb-2 flex items-center print:text-xs print:mb-1">
+            <FileText className="w-3 h-3 mr-2 print:w-2 print:h-2" />
             TESTES REALIZADOS
           </h3>
-          <p className="text-xs leading-relaxed print:text-sm print:leading-normal">{ordem.testes_realizados}</p>
+          <p className="text-xs leading-relaxed print:text-xs print:leading-tight">{ordem.testes_realizados}</p>
         </div>
       )}
 
       {/* VALORES */}
-      <div className="bg-gray-50 p-3 rounded-lg border print:p-2 print:bg-white print:border">
-        <h3 className="text-sm font-bold mb-2 flex items-center print:text-sm print:mb-2">
-          <DollarSign className="w-3 h-3 mr-2 print:w-3 print:h-3" />
+      <div className="bg-gray-50 p-3 rounded-lg border print:p-1 print:bg-white print:border print:mb-1">
+        <h3 className="text-sm font-bold mb-2 flex items-center print:text-xs print:mb-1">
+          <DollarSign className="w-3 h-3 mr-2 print:w-2 print:h-2" />
           VALORES
         </h3>
-        <div className="space-y-1 text-xs print:text-sm">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 print:grid-cols-3 print:gap-2">
+        <div className="space-y-1 text-xs print:text-xs print:space-y-0">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 print:grid-cols-3 print:gap-1">
             {ordem.valor_pecas && ordem.valor_pecas > 0 && (
               <div>
                 <span className="font-medium">Valor Peças:</span> R$ {ordem.valor_pecas.toFixed(2).replace('.', ',')}
@@ -221,7 +221,7 @@ const VisualizarOS = ({
               </div>
             )}
             
-            <div className="font-bold text-sm print:text-sm">
+            <div className="font-bold text-sm print:text-xs">
               <span className="font-bold">VALOR TOTAL:</span> R$ {(ordem.valor_total || 0).toFixed(2).replace('.', ',')}
             </div>
           </div>
@@ -235,8 +235,8 @@ const VisualizarOS = ({
       </div>
 
       {/* Informações básicas */}
-      <div className="space-y-1 text-xs print:text-sm print:space-y-1">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 print:grid-cols-4 print:gap-2">
+      <div className="space-y-1 text-xs print:text-xs print:space-y-0">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 print:grid-cols-4 print:gap-1">
           {ordem.data_entrada && (
             <div>
               <span className="font-medium">Data Entrada:</span> {new Date(ordem.data_entrada).toLocaleDateString('pt-BR')}
@@ -259,7 +259,7 @@ const VisualizarOS = ({
           )}
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 print:grid-cols-3 print:gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 print:grid-cols-3 print:gap-1">
           {ordem.prazo_garantia_dias && ordem.prazo_garantia_dias > 0 && (
             <div>
               <span className="font-medium">Garantia:</span> {ordem.prazo_garantia_dias} dias
@@ -296,8 +296,8 @@ const VisualizarOS = ({
               .print-hide { display: none !important; }
               
               @page {
-                margin: 0.5in;
-                size: A4;
+                margin: 0.3in;
+                size: A4 portrait;
               }
               
               * {
@@ -310,6 +310,7 @@ const VisualizarOS = ({
                 padding: 0 !important;
                 width: 100% !important;
                 height: 100% !important;
+                font-size: 10px !important;
               }
               
               body * {
@@ -327,26 +328,37 @@ const VisualizarOS = ({
                 width: 100% !important;
                 height: 100% !important;
                 margin: 0 !important;
-                padding: 20px !important;
-                font-size: 12px !important;
-                line-height: 1.3 !important;
+                padding: 10px !important;
+                font-size: 10px !important;
+                line-height: 1.2 !important;
                 box-sizing: border-box !important;
               }
               
               .print-divider {
                 width: 100% !important;
                 text-align: center !important;
-                margin: 20px 0 !important;
-                padding: 10px 0 !important;
-                border-top: 2px dashed #000 !important;
-                page-break-inside: avoid !important;
-                font-size: 10px !important;
+                margin: 10px 0 !important;
+                padding: 5px 0 !important;
+                border-top: 1px dashed #000 !important;
+                font-size: 8px !important;
                 font-weight: bold !important;
+                page-break-inside: avoid !important;
               }
               
               .via-copy {
+                width: 100% !important;
+                margin-bottom: 5px !important;
                 page-break-inside: avoid !important;
-                margin-bottom: 10px !important;
+              }
+              
+              .via-copy:first-child {
+                height: 45% !important;
+                overflow: hidden !important;
+              }
+              
+              .via-copy:last-child {
+                height: 45% !important;
+                overflow: hidden !important;
               }
             }
           `}
@@ -375,7 +387,7 @@ const VisualizarOS = ({
             <ConteudoOS />
           </div>
 
-          {/* Versão para impressão - duas cópias idênticas */}
+          {/* Versão para impressão - duas cópias na mesma página */}
           <div className="hidden print:block">
             {/* PRIMEIRA CÓPIA */}
             <div className="via-copy">
@@ -384,7 +396,7 @@ const VisualizarOS = ({
             
             {/* Linha divisória */}
             <div className="print-divider">
-              ✂️ ------------------------------------------------------------ CORTE AQUI ------------------------------------------------------------
+              ✂️ ---------------------------------------- CORTE AQUI ----------------------------------------
             </div>
             
             {/* SEGUNDA CÓPIA */}
