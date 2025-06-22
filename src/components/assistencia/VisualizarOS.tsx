@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -297,7 +296,7 @@ const VisualizarOS = ({
               .print-hide { display: none !important; }
               
               @page {
-                margin: 0.3in;
+                margin: 0.5in;
                 size: A4 portrait;
               }
               
@@ -311,8 +310,8 @@ const VisualizarOS = ({
                 padding: 0 !important;
                 width: 100% !important;
                 height: 100% !important;
-                font-size: 7px !important;
-                line-height: 1.1 !important;
+                font-size: 8px !important;
+                line-height: 1.2 !important;
               }
               
               body * {
@@ -324,51 +323,58 @@ const VisualizarOS = ({
               }
               
               .print-container {
-                position: absolute !important;
+                position: fixed !important;
                 left: 0 !important;
                 top: 0 !important;
-                width: 100% !important;
+                width: 100vw !important;
                 height: 100vh !important;
                 margin: 0 !important;
-                padding: 0 !important;
-                font-size: 7px !important;
-                line-height: 1.1 !important;
+                padding: 8px !important;
+                font-size: 8px !important;
+                line-height: 1.2 !important;
                 box-sizing: border-box !important;
                 display: block !important;
+                background: white !important;
+                z-index: 9999 !important;
               }
               
-              .primeira-via {
+              .print-copies-container {
                 width: 100% !important;
-                height: 48% !important;
+                height: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: flex-start !important;
+                align-items: stretch !important;
+                margin: 0 !important;
+                padding: 0 !important;
+              }
+              
+              .primeira-via,
+              .segunda-via {
+                width: 100% !important;
+                height: 45% !important;
                 overflow: hidden !important;
                 margin: 0 !important;
-                padding: 3px !important;
+                padding: 4px !important;
                 box-sizing: border-box !important;
                 page-break-inside: avoid !important;
+                border: 1px solid #000 !important;
+                background: white !important;
               }
               
               .print-divider {
                 width: 100% !important;
                 text-align: center !important;
                 margin: 0 !important;
-                padding: 2px 0 !important;
+                padding: 4px 0 !important;
                 border-top: 1px dashed #000 !important;
                 font-size: 6px !important;
                 font-weight: bold !important;
-                height: 4% !important;
+                height: 10% !important;
                 display: flex !important;
                 align-items: center !important;
                 justify-content: center !important;
-              }
-              
-              .segunda-via {
-                width: 100% !important;
-                height: 48% !important;
-                overflow: hidden !important;
-                margin: 0 !important;
-                padding: 3px !important;
-                box-sizing: border-box !important;
-                page-break-inside: avoid !important;
+                background: white !important;
               }
               
               .print-container > .hidden {
@@ -380,7 +386,7 @@ const VisualizarOS = ({
               }
               
               .print-container .print\\:h-6 {
-                height: 20px !important;
+                height: 16px !important;
               }
               
               .print-container .print\\:p-1 {
@@ -388,7 +394,7 @@ const VisualizarOS = ({
               }
               
               .print-container .print\\:mb-1 {
-                margin-bottom: 2px !important;
+                margin-bottom: 1px !important;
               }
               
               .print-container .print\\:space-y-0 > * + * {
@@ -408,15 +414,15 @@ const VisualizarOS = ({
               }
               
               .print-container .print\\:gap-1 {
-                gap: 2px !important;
+                gap: 1px !important;
               }
               
               .print-container .print\\:w-2 {
-                width: 8px !important;
+                width: 6px !important;
               }
               
               .print-container .print\\:h-2 {
-                height: 8px !important;
+                height: 6px !important;
               }
               
               .print-container .print\\:leading-tight {
@@ -500,19 +506,21 @@ const VisualizarOS = ({
 
           {/* Versão para impressão - duas cópias na mesma página */}
           <div className="hidden print:block">
-            {/* PRIMEIRA VIA - CLIENTE */}
-            <div className="primeira-via">
-              <ConteudoOS />
-            </div>
-            
-            {/* Linha divisória */}
-            <div className="print-divider">
-              ✂️ ---------------------------------------- CORTE AQUI ----------------------------------------
-            </div>
-            
-            {/* SEGUNDA VIA - EMPRESA */}
-            <div className="segunda-via">
-              <ConteudoOS />
+            <div className="print-copies-container">
+              {/* PRIMEIRA VIA - CLIENTE */}
+              <div className="primeira-via">
+                <ConteudoOS />
+              </div>
+              
+              {/* Linha divisória */}
+              <div className="print-divider">
+                ✂️ ---------------------------------------- CORTE AQUI ----------------------------------------
+              </div>
+              
+              {/* SEGUNDA VIA - EMPRESA */}
+              <div className="segunda-via">
+                <ConteudoOS />
+              </div>
             </div>
           </div>
         </div>
