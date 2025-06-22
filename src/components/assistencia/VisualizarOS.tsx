@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,30 +43,21 @@ const VisualizarOS = ({
   };
 
   // Componente para renderizar o conteúdo da OS
-  const ConteudoOS = ({
-    tipoVia
-  }: {
-    tipoVia: string;
-  }) => (
+  const ConteudoOS = () => (
     <div className="space-y-3 print:space-y-2">
       {/* Header com logo e número da OS */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between print:relative">
         <div className="flex items-center space-x-4 print:justify-center print:w-full">
           <img 
             src="/lovable-uploads/9428a948-19d8-4c0c-abbb-048b4717f2cc.png" 
             alt="Logo FELMAK" 
-            className="h-16 w-auto print:h-12 print:mx-auto" 
+            className="h-16 w-auto print:h-12 print:mx-auto print:block" 
           />
         </div>
         <div className="text-right print:absolute print:right-0 print:top-0">
           <div className="text-xl font-bold print:text-lg">
             OS: {numeroOSFormatado}
           </div>
-          {tipoVia && (
-            <div className="text-xs font-medium print:text-xs text-gray-600">
-              {tipoVia}
-            </div>
-          )}
         </div>
       </div>
       
@@ -336,25 +328,25 @@ const VisualizarOS = ({
                 height: 100% !important;
                 margin: 0 !important;
                 padding: 20px !important;
-                font-size: 14px !important;
-                line-height: 1.4 !important;
+                font-size: 12px !important;
+                line-height: 1.3 !important;
                 box-sizing: border-box !important;
               }
               
               .print-divider {
                 width: 100% !important;
                 text-align: center !important;
-                margin: 30px 0 !important;
-                padding: 15px 0 !important;
+                margin: 20px 0 !important;
+                padding: 10px 0 !important;
                 border-top: 2px dashed #000 !important;
                 page-break-inside: avoid !important;
-                font-size: 12px !important;
+                font-size: 10px !important;
                 font-weight: bold !important;
               }
               
               .via-copy {
                 page-break-inside: avoid !important;
-                margin-bottom: 15px !important;
+                margin-bottom: 10px !important;
               }
             }
           `}
@@ -380,14 +372,14 @@ const VisualizarOS = ({
 
           {/* Versão para tela - conteúdo normal */}
           <div className="print:hidden">
-            <ConteudoOS tipoVia="" />
+            <ConteudoOS />
           </div>
 
-          {/* Versão para impressão - duas vias */}
+          {/* Versão para impressão - duas cópias idênticas */}
           <div className="hidden print:block">
-            {/* VIA CLIENTE */}
+            {/* PRIMEIRA CÓPIA */}
             <div className="via-copy">
-              <ConteudoOS tipoVia="VIA CLIENTE" />
+              <ConteudoOS />
             </div>
             
             {/* Linha divisória */}
@@ -395,9 +387,9 @@ const VisualizarOS = ({
               ✂️ ------------------------------------------------------------ CORTE AQUI ------------------------------------------------------------
             </div>
             
-            {/* VIA EMPRESA */}
+            {/* SEGUNDA CÓPIA */}
             <div className="via-copy">
-              <ConteudoOS tipoVia="VIA EMPRESA" />
+              <ConteudoOS />
             </div>
           </div>
         </div>
