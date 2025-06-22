@@ -44,18 +44,18 @@ const VisualizarOS = ({
 
   // Componente para renderizar o conteúdo da OS
   const ConteudoOS = () => (
-    <div className="space-y-3 print:space-y-1">
+    <div className="space-y-2 print:space-y-1">
       {/* Header com logo e número da OS */}
       <div className="flex items-center justify-between print:relative">
         <div className="flex items-center space-x-4 print:flex print:justify-center print:w-full">
           <img 
             src="/lovable-uploads/9428a948-19d8-4c0c-abbb-048b4717f2cc.png" 
             alt="Logo FELMAK" 
-            className="h-16 w-auto print:h-8 print:mx-auto print:block" 
+            className="h-16 w-auto print:h-6 print:mx-auto print:block" 
           />
         </div>
         <div className="text-right print:absolute print:right-0 print:top-0">
-          <div className="text-xl font-bold print:text-sm print:font-bold">
+          <div className="text-xl font-bold print:text-xs print:font-bold">
             OS: {numeroOSFormatado}
           </div>
         </div>
@@ -67,7 +67,7 @@ const VisualizarOS = ({
         <p>Av. Senador Vergueiro, 2483 - São Bernardo do Campo</p>
       </div>
       
-      <h2 className="text-lg font-bold print:text-sm text-center print:mb-1">ORDEM DE SERVIÇO</h2>
+      <h2 className="text-lg font-bold print:text-xs text-center print:mb-1">ORDEM DE SERVIÇO</h2>
 
       {/* DADOS DO CLIENTE */}
       <div className="bg-gray-50 p-3 rounded-lg border print:p-1 print:bg-white print:border print:mb-1">
@@ -296,7 +296,7 @@ const VisualizarOS = ({
               .print-hide { display: none !important; }
               
               @page {
-                margin: 0.3in;
+                margin: 0.5in;
                 size: A4 portrait;
               }
               
@@ -310,7 +310,7 @@ const VisualizarOS = ({
                 padding: 0 !important;
                 width: 100% !important;
                 height: 100% !important;
-                font-size: 10px !important;
+                font-size: 8px !important;
               }
               
               body * {
@@ -328,37 +328,44 @@ const VisualizarOS = ({
                 width: 100% !important;
                 height: 100% !important;
                 margin: 0 !important;
-                padding: 10px !important;
-                font-size: 10px !important;
-                line-height: 1.2 !important;
+                padding: 0 !important;
+                font-size: 8px !important;
+                line-height: 1.1 !important;
+                box-sizing: border-box !important;
+                display: flex !important;
+                flex-direction: column !important;
+              }
+              
+              .primeira-via {
+                width: 100% !important;
+                height: 45% !important;
+                overflow: hidden !important;
+                margin: 0 !important;
+                padding: 5px !important;
                 box-sizing: border-box !important;
               }
               
               .print-divider {
                 width: 100% !important;
                 text-align: center !important;
-                margin: 10px 0 !important;
+                margin: 0 !important;
                 padding: 5px 0 !important;
                 border-top: 1px dashed #000 !important;
-                font-size: 8px !important;
+                font-size: 6px !important;
                 font-weight: bold !important;
-                page-break-inside: avoid !important;
+                height: 10% !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
               }
               
-              .via-copy {
+              .segunda-via {
                 width: 100% !important;
-                margin-bottom: 5px !important;
-                page-break-inside: avoid !important;
-              }
-              
-              .via-copy:first-child {
                 height: 45% !important;
                 overflow: hidden !important;
-              }
-              
-              .via-copy:last-child {
-                height: 45% !important;
-                overflow: hidden !important;
+                margin: 0 !important;
+                padding: 5px !important;
+                box-sizing: border-box !important;
               }
             }
           `}
@@ -388,9 +395,9 @@ const VisualizarOS = ({
           </div>
 
           {/* Versão para impressão - duas cópias na mesma página */}
-          <div className="hidden print:block">
-            {/* PRIMEIRA CÓPIA */}
-            <div className="via-copy">
+          <div className="hidden print:flex print:flex-col print:h-full">
+            {/* PRIMEIRA VIA - CLIENTE */}
+            <div className="primeira-via">
               <ConteudoOS />
             </div>
             
@@ -399,8 +406,8 @@ const VisualizarOS = ({
               ✂️ ---------------------------------------- CORTE AQUI ----------------------------------------
             </div>
             
-            {/* SEGUNDA CÓPIA */}
-            <div className="via-copy">
+            {/* SEGUNDA VIA - EMPRESA */}
+            <div className="segunda-via">
               <ConteudoOS />
             </div>
           </div>
