@@ -16,88 +16,124 @@ export type Database = {
     Tables: {
       ordens_servico: {
         Row: {
+          acessorios_entregues: string | null
+          autorizacao_orcamento: boolean | null
           cliente_bairro: string | null
           cliente_cep: string | null
           cliente_cidade: string | null
+          cliente_cpf_cnpj: string | null
           cliente_email: string | null
           cliente_endereco: string | null
           cliente_estado: string | null
           cliente_nome: string
+          cliente_numero: string | null
           cliente_telefone: string | null
           created_at: string
           data_conclusao: string | null
           data_entrada: string
+          data_entrega: string | null
           data_previsao: string | null
+          data_prevista: string | null
           defeito_relatado: string
+          equipamento_cor: string | null
           equipamento_marca: string | null
           equipamento_modelo: string | null
           equipamento_serie: string | null
           equipamento_tipo: string
+          estado_fisico_entrega: string | null
           id: string
           numero_os: number
           observacoes: string | null
+          observacoes_tecnico: string | null
+          prazo_garantia_dias: number | null
           prioridade: string
           status: string
           tecnico_responsavel: string | null
+          testes_realizados: string | null
           updated_at: string
+          valor_mao_obra: number | null
           valor_pecas: number | null
           valor_servico: number | null
           valor_total: number | null
         }
         Insert: {
+          acessorios_entregues?: string | null
+          autorizacao_orcamento?: boolean | null
           cliente_bairro?: string | null
           cliente_cep?: string | null
           cliente_cidade?: string | null
+          cliente_cpf_cnpj?: string | null
           cliente_email?: string | null
           cliente_endereco?: string | null
           cliente_estado?: string | null
           cliente_nome: string
+          cliente_numero?: string | null
           cliente_telefone?: string | null
           created_at?: string
           data_conclusao?: string | null
           data_entrada?: string
+          data_entrega?: string | null
           data_previsao?: string | null
+          data_prevista?: string | null
           defeito_relatado: string
+          equipamento_cor?: string | null
           equipamento_marca?: string | null
           equipamento_modelo?: string | null
           equipamento_serie?: string | null
           equipamento_tipo: string
+          estado_fisico_entrega?: string | null
           id?: string
           numero_os?: number
           observacoes?: string | null
+          observacoes_tecnico?: string | null
+          prazo_garantia_dias?: number | null
           prioridade?: string
           status?: string
           tecnico_responsavel?: string | null
+          testes_realizados?: string | null
           updated_at?: string
+          valor_mao_obra?: number | null
           valor_pecas?: number | null
           valor_servico?: number | null
           valor_total?: number | null
         }
         Update: {
+          acessorios_entregues?: string | null
+          autorizacao_orcamento?: boolean | null
           cliente_bairro?: string | null
           cliente_cep?: string | null
           cliente_cidade?: string | null
+          cliente_cpf_cnpj?: string | null
           cliente_email?: string | null
           cliente_endereco?: string | null
           cliente_estado?: string | null
           cliente_nome?: string
+          cliente_numero?: string | null
           cliente_telefone?: string | null
           created_at?: string
           data_conclusao?: string | null
           data_entrada?: string
+          data_entrega?: string | null
           data_previsao?: string | null
+          data_prevista?: string | null
           defeito_relatado?: string
+          equipamento_cor?: string | null
           equipamento_marca?: string | null
           equipamento_modelo?: string | null
           equipamento_serie?: string | null
           equipamento_tipo?: string
+          estado_fisico_entrega?: string | null
           id?: string
           numero_os?: number
           observacoes?: string | null
+          observacoes_tecnico?: string | null
+          prazo_garantia_dias?: number | null
           prioridade?: string
           status?: string
           tecnico_responsavel?: string | null
+          testes_realizados?: string | null
           updated_at?: string
+          valor_mao_obra?: number | null
           valor_pecas?: number | null
           valor_servico?: number | null
           valor_total?: number | null

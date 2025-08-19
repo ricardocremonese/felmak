@@ -215,15 +215,15 @@ const ConsultaOS = () => {
       }
       yPosition += 6;
       
-      if (ordem.cliente_cpf_cnpj) {
-        doc.text(`CPF/CNPJ: ${ordem.cliente_cpf_cnpj}`, 20, yPosition);
+      if ((ordem as any).cliente_cpf_cnpj) {
+        doc.text(`CPF/CNPJ: ${(ordem as any).cliente_cpf_cnpj}`, 20, yPosition);
         yPosition += 6;
       }
       
       if (ordem.cliente_endereco) {
         doc.text(`Endereço: ${ordem.cliente_endereco}`, 20, yPosition);
-        if (ordem.cliente_numero) {
-          doc.text(`, ${ordem.cliente_numero}`, doc.getTextWidth(`Endereço: ${ordem.cliente_endereco}`) + 20, yPosition);
+        if ((ordem as any).cliente_numero) {
+          doc.text(`, ${(ordem as any).cliente_numero}`, doc.getTextWidth(`Endereço: ${ordem.cliente_endereco}`) + 20, yPosition);
         }
         yPosition += 6;
         
@@ -263,18 +263,18 @@ const ConsultaOS = () => {
         doc.text(`Nº Série: ${ordem.equipamento_serie}`, 20, yPosition);
       }
       
-      if (ordem.equipamento_cor) {
-        doc.text(`Cor: ${ordem.equipamento_cor}`, 110, yPosition);
+      if ((ordem as any).equipamento_cor) {
+        doc.text(`Cor: ${(ordem as any).equipamento_cor}`, 110, yPosition);
       }
       yPosition += 6;
       
-      if (ordem.acessorios_entregues) {
-        doc.text(`Acessórios: ${ordem.acessorios_entregues}`, 20, yPosition);
+      if ((ordem as any).acessorios_entregues) {
+        doc.text(`Acessórios: ${(ordem as any).acessorios_entregues}`, 20, yPosition);
         yPosition += 6;
       }
       
-      if (ordem.estado_fisico_entrega) {
-        doc.text(`Estado Físico: ${ordem.estado_fisico_entrega}`, 20, yPosition);
+      if ((ordem as any).estado_fisico_entrega) {
+        doc.text(`Estado Físico: ${(ordem as any).estado_fisico_entrega}`, 20, yPosition);
         yPosition += 6;
       }
       
@@ -297,7 +297,7 @@ const ConsultaOS = () => {
       }
       
       // Observações Técnicas
-      if (ordem.observacoes_tecnico) {
+      if ((ordem as any).observacoes_tecnico) {
         doc.setFillColor(245, 245, 245);
         doc.rect(15, yPosition - 5, 180, 8, 'F');
         doc.setFontSize(12);
@@ -307,13 +307,13 @@ const ConsultaOS = () => {
         
         doc.setFontSize(10);
         doc.setFont(undefined, 'normal');
-        const obsLines = doc.splitTextToSize(ordem.observacoes_tecnico, 170);
+        const obsLines = doc.splitTextToSize((ordem as any).observacoes_tecnico, 170);
         doc.text(obsLines, 20, yPosition);
         yPosition += obsLines.length * 5 + 8;
       }
       
       // Testes Realizados
-      if (ordem.testes_realizados) {
+      if ((ordem as any).testes_realizados) {
         doc.setFillColor(245, 245, 245);
         doc.rect(15, yPosition - 5, 180, 8, 'F');
         doc.setFontSize(12);
@@ -323,7 +323,7 @@ const ConsultaOS = () => {
         
         doc.setFontSize(10);
         doc.setFont(undefined, 'normal');
-        const testesLines = doc.splitTextToSize(ordem.testes_realizados, 170);
+        const testesLines = doc.splitTextToSize((ordem as any).testes_realizados, 170);
         doc.text(testesLines, 20, yPosition);
         yPosition += testesLines.length * 5 + 8;
       }
@@ -344,8 +344,8 @@ const ConsultaOS = () => {
         yPosition += 6;
       }
       
-      if (ordem.valor_mao_obra && ordem.valor_mao_obra > 0) {
-        doc.text(`Mão de Obra: R$ ${ordem.valor_mao_obra.toFixed(2).replace('.', ',')}`, 20, yPosition);
+      if ((ordem as any).valor_mao_obra && (ordem as any).valor_mao_obra > 0) {
+        doc.text(`Mão de Obra: R$ ${(ordem as any).valor_mao_obra.toFixed(2).replace('.', ',')}`, 20, yPosition);
         yPosition += 6;
       }
       
@@ -355,10 +355,10 @@ const ConsultaOS = () => {
       doc.text(`VALOR TOTAL: R$ ${(ordem.valor_total || 0).toFixed(2).replace('.', ',')}`, 20, yPosition);
       yPosition += 10;
       
-      if (ordem.autorizacao_orcamento && ordem.autorizacao_orcamento > 0) {
+      if ((ordem as any).autorizacao_orcamento && (ordem as any).autorizacao_orcamento > 0) {
         doc.setFontSize(10);
         doc.setFont(undefined, 'normal');
-        doc.text(`Limite Autorizado: R$ ${ordem.autorizacao_orcamento.toFixed(2).replace('.', ',')}`, 20, yPosition);
+        doc.text(`Limite Autorizado: R$ ${(ordem as any).autorizacao_orcamento.toFixed(2).replace('.', ',')}`, 20, yPosition);
         yPosition += 8;
       }
       
@@ -370,13 +370,13 @@ const ConsultaOS = () => {
         doc.text(`Data Entrada: ${new Date(ordem.data_entrada).toLocaleDateString('pt-BR')}`, 20, yPosition);
       }
       
-      if (ordem.data_prevista) {
-        doc.text(`Data Prevista: ${new Date(ordem.data_prevista).toLocaleDateString('pt-BR')}`, 110, yPosition);
+      if ((ordem as any).data_prevista) {
+        doc.text(`Data Prevista: ${new Date((ordem as any).data_prevista).toLocaleDateString('pt-BR')}`, 110, yPosition);
       }
       yPosition += 6;
       
-      if (ordem.data_entrega) {
-        doc.text(`Data Entrega: ${new Date(ordem.data_entrega).toLocaleDateString('pt-BR')}`, 20, yPosition);
+      if ((ordem as any).data_entrega) {
+        doc.text(`Data Entrega: ${new Date((ordem as any).data_entrega).toLocaleDateString('pt-BR')}`, 20, yPosition);
         yPosition += 6;
       }
       
@@ -385,8 +385,8 @@ const ConsultaOS = () => {
         yPosition += 6;
       }
       
-      if (ordem.prazo_garantia_dias && ordem.prazo_garantia_dias > 0) {
-        doc.text(`Garantia: ${ordem.prazo_garantia_dias} dias`, 20, yPosition);
+      if ((ordem as any).prazo_garantia_dias && (ordem as any).prazo_garantia_dias > 0) {
+        doc.text(`Garantia: ${(ordem as any).prazo_garantia_dias} dias`, 20, yPosition);
         yPosition += 6;
       }
       

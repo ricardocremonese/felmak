@@ -225,9 +225,9 @@ const VisualizarOS = ({
             </div>
           </div>
           
-          {ordem.autorizacao_orcamento && ordem.autorizacao_orcamento > 0 && (
+          {(ordem as any).autorizacao_orcamento && (ordem as any).autorizacao_orcamento > 0 && (
             <div>
-              <span className="font-medium">Limite Autorizado:</span> R$ {ordem.autorizacao_orcamento.toFixed(2).replace('.', ',')}
+              <span className="font-medium">Limite Autorizado:</span> R$ {((ordem as any).autorizacao_orcamento).toFixed(2).replace('.', ',')}
             </div>
           )}
         </div>
@@ -272,7 +272,7 @@ const VisualizarOS = ({
             </Badge>
           </div>
           
-          {ordem.urgencia && (
+          {(ordem as any).urgencia && (
             <div>
               <span className="font-medium">Urgência:</span> 
               <Badge variant="destructive" className="ml-2 text-xs print:text-xs">Urgente</Badge>

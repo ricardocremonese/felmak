@@ -176,7 +176,7 @@ const NovaOSForm = () => {
         cliente_cep: formData.cliente_cep || null,
         cliente_endereco: formData.cliente_endereco || null,
         cliente_numero: formData.cliente_numero || null,
-        cliente_complemento: formData.cliente_complemento || null,
+        // cliente_complemento: formData.cliente_complemento, // Temporarily disabled until types updated
         cliente_bairro: formData.cliente_bairro || null,
         cliente_cidade: formData.cliente_cidade || null,
         cliente_estado: formData.cliente_estado || null,
@@ -191,7 +191,7 @@ const NovaOSForm = () => {
         defeito_relatado: formData.defeito_relatado,
         observacoes_tecnico: formData.observacoes_tecnico || null,
         testes_realizados: formData.testes_realizados || null,
-        urgencia: formData.urgencia,
+        // urgencia: formData.urgencia, // Temporarily disabled until types updated
         valor_mao_obra: formData.valor_mao_obra,
         valor_pecas: valorPecas,
         valor_total: valorPecas + formData.valor_mao_obra,
@@ -235,7 +235,7 @@ const NovaOSForm = () => {
         console.log('Inserindo peças:', pecasData);
 
         const { error: pecasError } = await supabase
-          .from('os_pecas')
+          .from('pecas_materiais')
           .insert(pecasData);
 
         if (pecasError) {
