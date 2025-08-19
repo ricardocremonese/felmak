@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BarChart3, Store, Package, Wrench, Calendar, Menu, X, Home } from 'lucide-react';
+import { BarChart3, Store, Package, Wrench, Calendar, Calculator, Menu, X, Home } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
 interface LayoutProps {
   children: React.ReactNode;
@@ -29,6 +29,10 @@ const Layout: React.FC<LayoutProps> = ({
     icon: Calendar,
     label: 'Locação',
     path: '/locacao'
+  }, {
+    icon: Calculator,
+    label: 'Contabilidade',
+    path: '/contabilidade'
   }];
   const isActivePath = (path: string) => {
     if (path === '/' && location.pathname === '/') return true;

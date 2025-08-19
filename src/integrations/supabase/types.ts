@@ -14,7 +14,164 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      ordens_servico: {
+        Row: {
+          cliente_bairro: string | null
+          cliente_cep: string | null
+          cliente_cidade: string | null
+          cliente_email: string | null
+          cliente_endereco: string | null
+          cliente_estado: string | null
+          cliente_nome: string
+          cliente_telefone: string | null
+          created_at: string
+          data_conclusao: string | null
+          data_entrada: string
+          data_previsao: string | null
+          defeito_relatado: string
+          equipamento_marca: string | null
+          equipamento_modelo: string | null
+          equipamento_serie: string | null
+          equipamento_tipo: string
+          id: string
+          numero_os: number
+          observacoes: string | null
+          prioridade: string
+          status: string
+          tecnico_responsavel: string | null
+          updated_at: string
+          valor_pecas: number | null
+          valor_servico: number | null
+          valor_total: number | null
+        }
+        Insert: {
+          cliente_bairro?: string | null
+          cliente_cep?: string | null
+          cliente_cidade?: string | null
+          cliente_email?: string | null
+          cliente_endereco?: string | null
+          cliente_estado?: string | null
+          cliente_nome: string
+          cliente_telefone?: string | null
+          created_at?: string
+          data_conclusao?: string | null
+          data_entrada?: string
+          data_previsao?: string | null
+          defeito_relatado: string
+          equipamento_marca?: string | null
+          equipamento_modelo?: string | null
+          equipamento_serie?: string | null
+          equipamento_tipo: string
+          id?: string
+          numero_os?: number
+          observacoes?: string | null
+          prioridade?: string
+          status?: string
+          tecnico_responsavel?: string | null
+          updated_at?: string
+          valor_pecas?: number | null
+          valor_servico?: number | null
+          valor_total?: number | null
+        }
+        Update: {
+          cliente_bairro?: string | null
+          cliente_cep?: string | null
+          cliente_cidade?: string | null
+          cliente_email?: string | null
+          cliente_endereco?: string | null
+          cliente_estado?: string | null
+          cliente_nome?: string
+          cliente_telefone?: string | null
+          created_at?: string
+          data_conclusao?: string | null
+          data_entrada?: string
+          data_previsao?: string | null
+          defeito_relatado?: string
+          equipamento_marca?: string | null
+          equipamento_modelo?: string | null
+          equipamento_serie?: string | null
+          equipamento_tipo?: string
+          id?: string
+          numero_os?: number
+          observacoes?: string | null
+          prioridade?: string
+          status?: string
+          tecnico_responsavel?: string | null
+          updated_at?: string
+          valor_pecas?: number | null
+          valor_servico?: number | null
+          valor_total?: number | null
+        }
+        Relationships: []
+      }
+      pecas_materiais: {
+        Row: {
+          created_at: string
+          id: string
+          os_id: string | null
+          peca_nome: string
+          preco_total: number
+          preco_unitario: number
+          quantidade: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          os_id?: string | null
+          peca_nome: string
+          preco_total?: number
+          preco_unitario?: number
+          quantidade?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          os_id?: string | null
+          peca_nome?: string
+          preco_total?: number
+          preco_unitario?: number
+          quantidade?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pecas_materiais_os_id_fkey"
+            columns: ["os_id"]
+            isOneToOne: false
+            referencedRelation: "ordens_servico"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          department: string | null
+          email: string
+          full_name: string | null
+          id: string
+          role: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          department?: string | null
+          email: string
+          full_name?: string | null
+          id: string
+          role?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          department?: string | null
+          email?: string
+          full_name?: string | null
+          id?: string
+          role?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
