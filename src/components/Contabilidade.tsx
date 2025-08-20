@@ -1,13 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Separator } from '@/components/ui/separator';
-import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
 import { 
   FileText, 
   Download, 
@@ -20,8 +10,21 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 
-interface ContabilidadeProps {}
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+
+import { CadastrarAcessoModal } from './contabilidade/CadastrarAcessoModal';
+
+type ContabilidadeProps = Record<string, never>;
 
 const Contabilidade: React.FC<ContabilidadeProps> = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -29,7 +32,14 @@ const Contabilidade: React.FC<ContabilidadeProps> = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  type Profile = {
+    id: string;
+    email?: string;
+    full_name?: string;
+    role?: string;
+    department?: string;
+  } | null;
+  const [user, setUser] = useState<Profile>(null);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -90,11 +100,12 @@ const Contabilidade: React.FC<ContabilidadeProps> = () => {
           });
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Erro inesperado';
       toast({
         variant: "destructive",
         title: "Erro no login",
-        description: error.message,
+        description: message,
       });
     } finally {
       setLoading(false);
@@ -197,6 +208,7 @@ const Contabilidade: React.FC<ContabilidadeProps> = () => {
               {user?.role === 'admin' ? 'Administrador' : 'Contabilidade'}
             </span>
           </div>
+          <CadastrarAcessoModal onSuccess={() => { /* podemos recarregar dados se necessário */ }} />
           <Button variant="outline" size="sm" onClick={handleLogout}>
             Sair
           </Button>
