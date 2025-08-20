@@ -180,13 +180,6 @@ const Contabilidade: React.FC<ContabilidadeProps> = () => {
                 {loading ? 'Entrando...' : 'Entrar'}
               </Button>
             </form>
-            
-            <Alert className="mt-4">
-              <AlertDescription className="text-xs">
-                <strong>Usuário Admin:</strong> admin@felmak.com.br<br />
-                <strong>Senha:</strong> Rik@1109842010
-              </AlertDescription>
-            </Alert>
           </CardContent>
         </Card>
       </div>
