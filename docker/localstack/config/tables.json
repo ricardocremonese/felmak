@@ -1,0 +1,777 @@
+[
+  {
+    "TableName": "scheduleNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "id",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "KeyType": "HASH",
+        "AttributeName": "id"
+      }
+    ]
+  },
+  {
+    "TableName": "checkupScheduleNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "id",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "chassis",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "active_schDate",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "accountId",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "assetId",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "tAccountId",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "tAssetId",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "dealershipId",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "KeyType": "HASH",
+        "AttributeName": "id"
+      }
+    ],
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "checkup_schedule_chassis",
+        "KeySchema": [
+          {
+            "AttributeName": "chassis",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "checkup_schedule_account_id",
+        "KeySchema": [
+          {
+            "AttributeName": "accountId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "active_schDate",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "checkup_schedule_asset_id",
+        "KeySchema": [
+          {
+            "AttributeName": "assetId",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "INCLUDE",
+          "NonKeyAttributes": [
+            "campaigns",
+            "checkup"
+          ]
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "checkup_schedule_tower_account_id",
+        "KeySchema": [
+          {
+            "AttributeName": "tAccountId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "active_schDate",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "checkup_schedule_tower_asset_id",
+        "KeySchema": [
+          {
+            "AttributeName": "tAssetId",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "INCLUDE",
+          "NonKeyAttributes": [
+            "campaigns",
+            "checkup"
+          ]
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "checkup_schedule_dealership_id",
+        "KeySchema": [
+          {
+            "AttributeName": "dealershipId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "active_schDate",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    ]
+  },
+  {
+    "TableName": "assistanceNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "id",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "tAssetId",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "chassis",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "occurType",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "state",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "createdAt",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "stateAndCreatedDate",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "KeyType": "HASH",
+        "AttributeName": "id"
+      }
+    ],
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "assistance_chassis",
+        "KeySchema": [
+          {
+            "AttributeName": "chassis",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "WriteCapacityUnits": 1,
+          "ReadCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "assistance_t_asset_id",
+        "KeySchema": [
+          {
+            "AttributeName": "tAssetId",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "WriteCapacityUnits": 1,
+          "ReadCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "assistance_state",
+        "KeySchema": [
+          {
+            "AttributeName": "state",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "createdAt",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "assistance_occur_type_created_date",
+        "KeySchema": [
+          {
+            "AttributeName": "occurType",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "stateAndCreatedDate",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    ]
+  },
+  {
+    "TableName": "dealershipFavoriteNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "id",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "KeyType": "HASH",
+        "AttributeName": "id"
+      }
+    ]
+  },
+  {
+    "TableName": "dealershipNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "dn",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "KeyType": "HASH",
+        "AttributeName": "dn"
+      }
+    ]
+  },
+  {
+    "TableName": "fieldCampaignNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "chassis",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "campaignNumber",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "KeyType": "HASH",
+        "AttributeName": "chassis"
+      },
+      {
+        "KeyType": "RANGE",
+        "AttributeName": "campaignNumber"
+      }
+    ]
+  },
+  {
+    "TableName": "consultantNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "id",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "KeyType": "HASH",
+        "AttributeName": "id"
+      }
+    ]
+  },
+  {
+    "TableName": "dealershipTransRioNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "id",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "chassis",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "KeyType": "HASH",
+        "AttributeName": "id"
+      }
+    ],
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "dealership_transrio_chassis",
+        "KeySchema": [
+          {
+            "AttributeName": "chassis",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    ]
+  },
+  {
+    "TableName": "maintenanceTicketNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "id",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "assetId",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "accountId",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "dealershipId",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "towerAccountId",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "startDate",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "statusGrp_startDt",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "maintenanceScheduleId",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "chassis",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "KeyType": "HASH",
+        "AttributeName": "id"
+      }
+    ],
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "maintenance_ticket_account_id_date",
+        "KeySchema": [
+          {
+            "AttributeName": "accountId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "startDate",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "maintenance_ticket_dealership_id_date",
+        "KeySchema": [
+          {
+            "AttributeName": "dealershipId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "startDate",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "maintenance_ticket_tower_account_id_date",
+        "KeySchema": [
+          {
+            "AttributeName": "towerAccountId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "startDate",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "maintenance_ticket_account_id",
+        "KeySchema": [
+          {
+            "AttributeName": "accountId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "statusGrp_startDt",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "maintenance_ticket_dealership_id",
+        "KeySchema": [
+          {
+            "AttributeName": "dealershipId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "statusGrp_startDt",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "maintenance_ticket_tower_account_id",
+        "KeySchema": [
+          {
+            "AttributeName": "towerAccountId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "statusGrp_startDt",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "maintenance_ticket_asset_id",
+        "KeySchema": [
+          {
+            "AttributeName": "assetId",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "maintenance_ticket_checkup_schedule_id",
+        "KeySchema": [
+          {
+            "AttributeName": "maintenanceScheduleId",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      },
+      {
+        "IndexName": "maintenance_ticket_chassis",
+        "KeySchema": [
+          {
+            "AttributeName": "chassis",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    ]
+  },
+  {
+    "TableName": "uptimeAssetNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "chassis",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "odpState",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "KeyType": "HASH",
+        "AttributeName": "chassis"
+      }
+    ],
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "uptime_asset_odpState",
+        "KeySchema": [
+          {
+            "AttributeName": "odpState",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    ]
+  },
+  {
+    "TableName": "configTableNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "name",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "KeyType": "HASH",
+        "AttributeName": "name"
+      }
+    ]
+  },
+  {
+    "TableName": "assetNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "accountId",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "id",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "identification",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "KeyType": "HASH",
+        "AttributeName": "accountId"
+      },
+      {
+        "KeyType": "RANGE",
+        "AttributeName": "id"
+      }
+    ],
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "asset_identification",
+        "KeySchema": [
+          {
+            "AttributeName": "identification",
+            "KeyType": "HASH"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 1,
+          "WriteCapacityUnits": 1
+        }
+      }
+    ]
+  },
+  {
+    "TableName": "sequencesNonProd",
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "name",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "WriteCapacityUnits": 200,
+      "ReadCapacityUnits": 200
+    },
+    "KeySchema": [
+      {
+        "AttributeName": "name",
+        "KeyType": "HASH"
+      }
+    ]
+  }
+]

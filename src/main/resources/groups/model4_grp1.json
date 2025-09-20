@@ -1,0 +1,575 @@
+{
+  "manualName": "Tractor 33-460",
+  "manualId": "4",
+  "groupId": "1",
+  "metricType": "1",
+  "checkups": [
+    {
+      "id": "528",
+      "typeId": "1",
+      "range": {
+        "start": 1000,
+        "end": 5000
+      },
+      "compls": []
+    },
+    {
+      "id": "529",
+      "typeId": "2",
+      "range": {
+        "start": 20000
+      },
+      "compls": []
+    },
+    {
+      "id": "530",
+      "typeId": "3",
+      "range": {
+        "start": 40000
+      },
+      "compls": []
+    },
+    {
+      "id": "531",
+      "typeId": "2",
+      "range": {
+        "start": 60000
+      },
+      "compls": []
+    },
+    {
+      "id": "532",
+      "typeId": "3",
+      "range": {
+        "start": 80000
+      },
+      "compls": [
+        "3",
+        "5",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "533",
+      "typeId": "2",
+      "range": {
+        "start": 100000
+      },
+      "compls": []
+    },
+    {
+      "id": "534",
+      "typeId": "4",
+      "range": {
+        "start": 120000
+      },
+      "compls": [
+        "7"
+      ]
+    },
+    {
+      "id": "535",
+      "typeId": "2",
+      "range": {
+        "start": 140000
+      },
+      "compls": []
+    },
+    {
+      "id": "536",
+      "typeId": "3",
+      "range": {
+        "start": 160000
+      },
+      "compls": [
+        "3",
+        "4",
+        "5",
+        "6",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "537",
+      "typeId": "2",
+      "range": {
+        "start": 180000
+      },
+      "compls": []
+    },
+    {
+      "id": "538",
+      "typeId": "3",
+      "range": {
+        "start": 200000
+      },
+      "compls": [
+        "36"
+      ]
+    },
+    {
+      "id": "539",
+      "typeId": "2",
+      "range": {
+        "start": 220000
+      },
+      "compls": []
+    },
+    {
+      "id": "540",
+      "typeId": "4",
+      "range": {
+        "start": 240000
+      },
+      "compls": [
+        "3",
+        "5",
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "541",
+      "typeId": "2",
+      "range": {
+        "start": 260000
+      },
+      "compls": []
+    },
+    {
+      "id": "542",
+      "typeId": "3",
+      "range": {
+        "start": 280000
+      },
+      "compls": [
+        "2"
+      ]
+    },
+    {
+      "id": "543",
+      "typeId": "2",
+      "range": {
+        "start": 300000
+      },
+      "compls": []
+    },
+    {
+      "id": "544",
+      "typeId": "3",
+      "range": {
+        "start": 320000
+      },
+      "compls": [
+        "3",
+        "4",
+        "5",
+        "6",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "545",
+      "typeId": "2",
+      "range": {
+        "start": 340000
+      },
+      "compls": []
+    },
+    {
+      "id": "546",
+      "typeId": "4",
+      "range": {
+        "start": 360000
+      },
+      "compls": [
+        "7"
+      ]
+    },
+    {
+      "id": "547",
+      "typeId": "2",
+      "range": {
+        "start": 380000
+      },
+      "compls": []
+    },
+    {
+      "id": "548",
+      "typeId": "3",
+      "range": {
+        "start": 400000
+      },
+      "compls": [
+        "36",
+        "3",
+        "5",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "549",
+      "typeId": "2",
+      "range": {
+        "start": 420000
+      },
+      "compls": []
+    },
+    {
+      "id": "550",
+      "typeId": "3",
+      "range": {
+        "start": 440000
+      },
+      "compls": []
+    },
+    {
+      "id": "551",
+      "typeId": "2",
+      "range": {
+        "start": 460000
+      },
+      "compls": []
+    },
+    {
+      "id": "552",
+      "typeId": "4",
+      "range": {
+        "start": 480000
+      },
+      "compls": [
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "553",
+      "typeId": "2",
+      "range": {
+        "start": 500000
+      },
+      "compls": []
+    },
+    {
+      "id": "554",
+      "typeId": "3",
+      "range": {
+        "start": 520000
+      },
+      "compls": []
+    },
+    {
+      "id": "555",
+      "typeId": "2",
+      "range": {
+        "start": 540000
+      },
+      "compls": []
+    },
+    {
+      "id": "556",
+      "typeId": "3",
+      "range": {
+        "start": 560000
+      },
+      "compls": [
+        "2",
+        "3",
+        "5",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "557",
+      "typeId": "2",
+      "range": {
+        "start": 580000
+      },
+      "compls": []
+    },
+    {
+      "id": "558",
+      "typeId": "4",
+      "range": {
+        "start": 600000
+      },
+      "compls": [
+        "36",
+        "7"
+      ]
+    },
+    {
+      "id": "559",
+      "typeId": "2",
+      "range": {
+        "start": 620000
+      },
+      "compls": []
+    },
+    {
+      "id": "560",
+      "typeId": "3",
+      "range": {
+        "start": 640000
+      },
+      "compls": [
+        "3",
+        "4",
+        "5",
+        "6",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "561",
+      "typeId": "2",
+      "range": {
+        "start": 660000
+      },
+      "compls": []
+    },
+    {
+      "id": "562",
+      "typeId": "3",
+      "range": {
+        "start": 680000
+      },
+      "compls": []
+    },
+    {
+      "id": "563",
+      "typeId": "2",
+      "range": {
+        "start": 700000
+      },
+      "compls": []
+    },
+    {
+      "id": "564",
+      "typeId": "4",
+      "range": {
+        "start": 720000
+      },
+      "compls": [
+        "3",
+        "5",
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "565",
+      "typeId": "2",
+      "range": {
+        "start": 740000
+      },
+      "compls": []
+    },
+    {
+      "id": "566",
+      "typeId": "3",
+      "range": {
+        "start": 760000
+      },
+      "compls": []
+    },
+    {
+      "id": "567",
+      "typeId": "2",
+      "range": {
+        "start": 780000
+      },
+      "compls": []
+    },
+    {
+      "id": "568",
+      "typeId": "3",
+      "range": {
+        "start": 800000
+      },
+      "compls": [
+        "36",
+        "3",
+        "4",
+        "5",
+        "6",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "569",
+      "typeId": "2",
+      "range": {
+        "start": 820000
+      },
+      "compls": []
+    },
+    {
+      "id": "570",
+      "typeId": "4",
+      "range": {
+        "start": 840000
+      },
+      "compls": [
+        "2",
+        "7"
+      ]
+    },
+    {
+      "id": "571",
+      "typeId": "2",
+      "range": {
+        "start": 860000
+      },
+      "compls": []
+    },
+    {
+      "id": "572",
+      "typeId": "3",
+      "range": {
+        "start": 880000
+      },
+      "compls": [
+        "3",
+        "5",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "573",
+      "typeId": "2",
+      "range": {
+        "start": 900000
+      },
+      "compls": []
+    },
+    {
+      "id": "574",
+      "typeId": "3",
+      "range": {
+        "start": 920000
+      },
+      "compls": []
+    },
+    {
+      "id": "575",
+      "typeId": "2",
+      "range": {
+        "start": 940000
+      },
+      "compls": []
+    },
+    {
+      "id": "576",
+      "typeId": "4",
+      "range": {
+        "start": 960000
+      },
+      "compls": [
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "577",
+      "typeId": "2",
+      "range": {
+        "start": 980000
+      },
+      "compls": []
+    },
+    {
+      "id": "578",
+      "typeId": "3",
+      "range": {
+        "start": 1000000
+      },
+      "compls": [
+        "36"
+      ]
+    },
+    {
+      "id": "579",
+      "typeId": "2",
+      "range": {
+        "start": 1020000
+      },
+      "compls": []
+    },
+    {
+      "id": "580",
+      "typeId": "3",
+      "range": {
+        "start": 1040000
+      },
+      "compls": [
+        "3",
+        "5",
+        "8",
+        "9"
+      ]
+    },
+    {
+      "id": "581",
+      "typeId": "2",
+      "range": {
+        "start": 1060000
+      },
+      "compls": []
+    },
+    {
+      "id": "582",
+      "typeId": "4",
+      "range": {
+        "start": 1080000
+      },
+      "compls": [
+        "7"
+      ]
+    },
+    {
+      "id": "583",
+      "typeId": "2",
+      "range": {
+        "start": 1100000
+      },
+      "compls": []
+    },
+    {
+      "id": "584",
+      "typeId": "3",
+      "range": {
+        "start": 1120000
+      },
+      "compls": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "8",
+        "9"
+      ]
+    }
+  ]
+}

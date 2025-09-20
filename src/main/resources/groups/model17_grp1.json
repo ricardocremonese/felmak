@@ -1,0 +1,371 @@
+{
+  "manualName": "Constellation 30-330",
+  "manualId": "17",
+  "groupId": "1",
+  "metricType": "1",
+  "checkups": [
+    {
+      "id": "2605",
+      "typeId": "1",
+      "range": {
+        "start": 1000,
+        "end": 5000
+      },
+      "compls": []
+    },
+    {
+      "id": "2606",
+      "typeId": "3",
+      "range": {
+        "start": 40000
+      },
+      "compls": []
+    },
+    {
+      "id": "2607",
+      "typeId": "4",
+      "range": {
+        "start": 80000
+      },
+      "compls": []
+    },
+    {
+      "id": "2608",
+      "typeId": "3",
+      "range": {
+        "start": 120000
+      },
+      "compls": [
+        "1",
+        "29",
+        "32",
+        "33"
+      ]
+    },
+    {
+      "id": "2609",
+      "typeId": "5",
+      "range": {
+        "start": 160000
+      },
+      "compls": []
+    },
+    {
+      "id": "2610",
+      "typeId": "3",
+      "range": {
+        "start": 200000
+      },
+      "compls": []
+    },
+    {
+      "id": "2611",
+      "typeId": "4",
+      "range": {
+        "start": 240000
+      },
+      "compls": [
+        "1",
+        "29",
+        "32",
+        "33",
+        "34",
+        "6"
+      ]
+    },
+    {
+      "id": "2612",
+      "typeId": "3",
+      "range": {
+        "start": 280000
+      },
+      "compls": [
+        "80"
+      ]
+    },
+    {
+      "id": "2613",
+      "typeId": "5",
+      "range": {
+        "start": 320000
+      },
+      "compls": []
+    },
+    {
+      "id": "2614",
+      "typeId": "3",
+      "range": {
+        "start": 360000
+      },
+      "compls": [
+        "1",
+        "29",
+        "32",
+        "33"
+      ]
+    },
+    {
+      "id": "2615",
+      "typeId": "4",
+      "range": {
+        "start": 400000
+      },
+      "compls": []
+    },
+    {
+      "id": "2616",
+      "typeId": "3",
+      "range": {
+        "start": 440000
+      },
+      "compls": []
+    },
+    {
+      "id": "2617",
+      "typeId": "5",
+      "range": {
+        "start": 480000
+      },
+      "compls": [
+        "1",
+        "29",
+        "32",
+        "33",
+        "34",
+        "6"
+      ]
+    },
+    {
+      "id": "2618",
+      "typeId": "3",
+      "range": {
+        "start": 520000
+      },
+      "compls": []
+    },
+    {
+      "id": "2619",
+      "typeId": "4",
+      "range": {
+        "start": 560000
+      },
+      "compls": [
+        "80"
+      ]
+    },
+    {
+      "id": "2620",
+      "typeId": "3",
+      "range": {
+        "start": 600000
+      },
+      "compls": [
+        "1",
+        "29",
+        "32",
+        "33"
+      ]
+    },
+    {
+      "id": "2621",
+      "typeId": "5",
+      "range": {
+        "start": 640000
+      },
+      "compls": []
+    },
+    {
+      "id": "2622",
+      "typeId": "3",
+      "range": {
+        "start": 680000
+      },
+      "compls": []
+    },
+    {
+      "id": "2623",
+      "typeId": "4",
+      "range": {
+        "start": 720000
+      },
+      "compls": [
+        "1",
+        "29",
+        "32",
+        "33",
+        "34",
+        "6"
+      ]
+    },
+    {
+      "id": "2624",
+      "typeId": "3",
+      "range": {
+        "start": 760000
+      },
+      "compls": []
+    },
+    {
+      "id": "2625",
+      "typeId": "5",
+      "range": {
+        "start": 800000
+      },
+      "compls": []
+    },
+    {
+      "id": "2626",
+      "typeId": "3",
+      "range": {
+        "start": 840000
+      },
+      "compls": [
+        "1",
+        "80",
+        "29",
+        "32",
+        "33"
+      ]
+    },
+    {
+      "id": "2627",
+      "typeId": "4",
+      "range": {
+        "start": 880000
+      },
+      "compls": []
+    },
+    {
+      "id": "2628",
+      "typeId": "3",
+      "range": {
+        "start": 920000
+      },
+      "compls": []
+    },
+    {
+      "id": "2629",
+      "typeId": "5",
+      "range": {
+        "start": 960000
+      },
+      "compls": [
+        "1",
+        "29",
+        "32",
+        "33",
+        "34",
+        "6"
+      ]
+    },
+    {
+      "id": "2630",
+      "typeId": "3",
+      "range": {
+        "start": 1000000
+      },
+      "compls": []
+    },
+    {
+      "id": "2631",
+      "typeId": "4",
+      "range": {
+        "start": 1040000
+      },
+      "compls": []
+    },
+    {
+      "id": "2632",
+      "typeId": "3",
+      "range": {
+        "start": 1080000
+      },
+      "compls": [
+        "1",
+        "29",
+        "32",
+        "33"
+      ]
+    },
+    {
+      "id": "2633",
+      "typeId": "5",
+      "range": {
+        "start": 1120000
+      },
+      "compls": [
+        "80"
+      ]
+    },
+    {
+      "id": "2634",
+      "typeId": "3",
+      "range": {
+        "start": 1160000
+      },
+      "compls": []
+    },
+    {
+      "id": "2635",
+      "typeId": "4",
+      "range": {
+        "start": 1200000
+      },
+      "compls": [
+        "1",
+        "29",
+        "32",
+        "33",
+        "34",
+        "6"
+      ]
+    },
+    {
+      "id": "2636",
+      "typeId": "3",
+      "range": {
+        "start": 1240000
+      },
+      "compls": []
+    },
+    {
+      "id": "2637",
+      "typeId": "5",
+      "range": {
+        "start": 1280000
+      },
+      "compls": []
+    },
+    {
+      "id": "2638",
+      "typeId": "3",
+      "range": {
+        "start": 1320000
+      },
+      "compls": [
+        "1",
+        "29",
+        "32",
+        "33"
+      ]
+    },
+    {
+      "id": "2639",
+      "typeId": "4",
+      "range": {
+        "start": 1360000
+      },
+      "compls": []
+    },
+    {
+      "id": "2640",
+      "typeId": "3",
+      "range": {
+        "start": 1400000
+      },
+      "compls": [
+        "80"
+      ]
+    }
+  ]
+}

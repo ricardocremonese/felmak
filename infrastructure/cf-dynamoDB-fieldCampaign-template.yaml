@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'DynamoDB for activations used by the discount service'
+Parameters:
+  BillingMode:
+    Default: PAY_PER_REQUEST
+    Type: String
+  IdAttributeName:
+    Type: String
+    Default: chassis
+  IdAttributeType:
+    Type: String
+    Default: S
+  IdSecondaryAttributeName:
+    Type: String
+    Default: campaignNumber
+  IdSecondaryAttributeType:
+    Type: String
+    Default: S
+
+Resources:
+  database:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Sub ${AWS::StackName}
+      BillingMode: !Ref 'BillingMode'
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      AttributeDefinitions:
+        - AttributeName: !Ref 'IdAttributeName'
+          AttributeType: !Ref 'IdAttributeType'
+        - AttributeName: !Ref 'IdSecondaryAttributeName'
+          AttributeType: !Ref 'IdSecondaryAttributeType'
+      KeySchema:
+        - AttributeName: !Ref 'IdAttributeName'
+          KeyType: HASH
+        - AttributeName: !Ref 'IdSecondaryAttributeName'
+          KeyType: RANGE
+      SSESpecification:
+        SSEEnabled: true
+
+Outputs:
+  TableName:
+    Value: !Ref database
+    Description: Table name of the newly created DynamoDB table
+    Export:
+      Name: !Sub ${AWS::StackName}-tableName
+  TableArn:
+    Value: !GetAtt database.Arn
+    Description: Arn of the newly created DynamoDB table
+    Export:
+      Name: !Sub ${AWS::StackName}-table-arn

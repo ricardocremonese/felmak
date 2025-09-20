@@ -1,0 +1,158 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'DynamoDB for checkup schedule (non-production)'
+
+Parameters:
+  BillingMode:
+    Default: PAY_PER_REQUEST
+    Type: String
+
+  IdAttributeName:
+    Type: String
+    Default: id
+  IdAttributeType:
+    Type: String
+    Default: S
+
+  ChassisAttributeName:
+    Type: String
+    Default: chassis
+  ChassisAttributeType:
+    Type: String
+    Default: S
+
+  ActiveScheduledDateAttributeName:
+    Type: String
+    Default: active_schDate
+  ActiveScheduledDateAttributeType:
+    Type: String
+    Default: S
+
+  AccountIdAttributeName:
+    Type: String
+    Default: accountId
+  AccountIdAttributeType:
+    Type: String
+    Default: S
+
+  AssetIdAttributeName:
+    Type: String
+    Default: assetId
+  AssetIdAttributeType:
+    Type: String
+    Default: S
+
+  TAccountIdAttributeName:
+    Type: String
+    Default: tAccountId
+  TAccountIdAttributeType:
+    Type: String
+    Default: S
+
+  TAssetIdAttributeName:
+    Type: String
+    Default: tAssetId
+  TAssetIdAttributeType:
+    Type: String
+    Default: S
+
+  DealershipIdAttributeName:
+    Type: String
+    Default: dealershipId
+  DealershipIdAttributeType:
+    Type: String
+    Default: S
+ 
+Resources:
+  database:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Sub ${AWS::StackName}
+      BillingMode: !Ref BillingMode
+      AttributeDefinitions:
+        - AttributeName: !Ref IdAttributeName
+          AttributeType: !Ref IdAttributeType
+        - AttributeName: !Ref ChassisAttributeName
+          AttributeType: !Ref ChassisAttributeType
+        - AttributeName: !Ref ActiveScheduledDateAttributeName
+          AttributeType: !Ref ActiveScheduledDateAttributeType
+        - AttributeName: !Ref AccountIdAttributeName
+          AttributeType: !Ref AccountIdAttributeType
+        - AttributeName: !Ref AssetIdAttributeName
+          AttributeType: !Ref AssetIdAttributeType
+        - AttributeName: !Ref TAccountIdAttributeName
+          AttributeType: !Ref TAccountIdAttributeType
+        - AttributeName: !Ref TAssetIdAttributeName
+          AttributeType: !Ref TAssetIdAttributeType
+        - AttributeName: !Ref DealershipIdAttributeName
+          AttributeType: !Ref DealershipIdAttributeType
+      KeySchema:
+        - AttributeName: !Ref IdAttributeName
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: checkup_schedule_chassis
+          KeySchema:
+            - AttributeName: !Ref ChassisAttributeName
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: checkup_schedule_account_id
+          KeySchema:
+            - AttributeName: !Ref AccountIdAttributeName
+              KeyType: HASH
+            - AttributeName: !Ref ActiveScheduledDateAttributeName
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: checkup_schedule_asset_id
+          KeySchema:
+            - AttributeName: !Ref AssetIdAttributeName
+              KeyType: HASH
+          Projection:
+            ProjectionType: INCLUDE
+            NonKeyAttributes:
+              - campaigns
+              - checkup
+        - IndexName: checkup_schedule_tower_account_id
+          KeySchema:
+            - AttributeName: !Ref TAccountIdAttributeName
+              KeyType: HASH
+            - AttributeName: !Ref ActiveScheduledDateAttributeName
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: checkup_schedule_tower_asset_id
+          KeySchema:
+            - AttributeName: !Ref TAssetIdAttributeName
+              KeyType: HASH
+          Projection:
+            ProjectionType: INCLUDE
+            NonKeyAttributes:
+              - campaigns
+              - checkup
+        - IndexName: checkup_schedule_dealership_id
+          KeySchema:
+            - AttributeName: !Ref DealershipIdAttributeName
+              KeyType: HASH
+            - AttributeName: !Ref ActiveScheduledDateAttributeName
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      SSESpecification:
+        SSEEnabled: true
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+
+Outputs:
+  TableName:
+    Value: !Ref database
+    Description: Table name of the newly created DynamoDB table
+    Export:
+      Name: !Sub ${AWS::StackName}-tableName
+  TableArn:
+    Value: !GetAtt database.Arn
+    Description: Arn of the newly created DynamoDB table
+    Export:
+      Name: !Sub ${AWS::StackName}-table-arn
+

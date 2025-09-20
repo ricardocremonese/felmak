@@ -1,0 +1,175 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'DynamoDB for activations used by the discount service'
+Parameters:
+  BillingMode:
+    Default: PAY_PER_REQUEST
+    Type: String
+
+  IdAttributeName:
+    Type: String
+    Default: id
+  IdAttributeType:
+    Type: String
+    Default: S
+  AssetIdAttributeName:
+    Type: String
+    Default: assetId
+  AssetIdAttributeType:
+    Type: String
+    Default: S
+  AccountIdIdAttributeName:
+    Type: String
+    Default: accountId
+  AccountIdIdAttributeType:
+    Type: String
+    Default: S
+  DealershipIdAttributeName:
+    Type: String
+    Default: dealershipId
+  DealershipIdAttributeType:
+    Type: String
+    Default: S
+  TowerAccountIdAttributeName:
+    Type: String
+    Default: towerAccountId
+  TowerAccountIdAttributeType:
+    Type: String
+    Default: S
+  StartDateAttributeName:
+    Type: String
+    Default: startDate
+  StartDateAttributeType:
+    Type: String
+    Default: S
+  StatusGrpAttributeName:
+    Type: String
+    Default: statusGrp_startDt
+  StatusGrpAttributeType:
+    Type: String
+    Default: S
+  MaintenanceScheduleIdAttributeName:
+    Type: String
+    Default: maintenanceScheduleId
+  MaintenanceScheduleIdAttributeType:
+    Type: String
+    Default: S
+  ChassisAttributeName:
+    Type: String
+    Default: chassis
+  ChassisAttributeType:
+    Type: String
+    Default: S
+
+Resources:
+  database:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Sub ${AWS::StackName}
+      BillingMode: !Ref 'BillingMode'
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      AttributeDefinitions:
+        - AttributeName: !Ref 'IdAttributeName'
+          AttributeType: !Ref 'IdAttributeType'
+        - AttributeName: !Ref 'AssetIdAttributeName'
+          AttributeType: !Ref 'AssetIdAttributeType'
+        - AttributeName: !Ref 'AccountIdIdAttributeName'
+          AttributeType: !Ref 'AccountIdIdAttributeType'
+        - AttributeName: !Ref 'DealershipIdAttributeName'
+          AttributeType: !Ref 'DealershipIdAttributeType'
+        - AttributeName: !Ref 'TowerAccountIdAttributeName'
+          AttributeType: !Ref 'TowerAccountIdAttributeType'
+        - AttributeName: !Ref 'StartDateAttributeName'
+          AttributeType: !Ref 'StartDateAttributeType'
+        - AttributeName: !Ref 'StatusGrpAttributeName'
+          AttributeType: !Ref 'StatusGrpAttributeType'
+        - AttributeName: !Ref 'MaintenanceScheduleIdAttributeName'
+          AttributeType: !Ref 'MaintenanceScheduleIdAttributeType'
+        - AttributeName: !Ref 'ChassisAttributeName'
+          AttributeType: !Ref 'ChassisAttributeType'
+      KeySchema:
+        - AttributeName: !Ref 'IdAttributeName'
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: maintenance_ticket_account_id_date
+          KeySchema:
+            - AttributeName: !Ref 'AccountIdIdAttributeName'
+              KeyType: HASH
+            - AttributeName: !Ref 'StartDateAttributeName'
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: maintenance_ticket_dealership_id_date
+          KeySchema:
+            - AttributeName: !Ref 'DealershipIdAttributeName'
+              KeyType: HASH
+            - AttributeName: !Ref 'StartDateAttributeName'
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: maintenance_ticket_chassis
+          KeySchema:
+            - AttributeName: !Ref 'ChassisAttributeName'
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: maintenance_ticket_tower_account_id_date
+          KeySchema:
+            - AttributeName: !Ref 'TowerAccountIdAttributeName'
+              KeyType: HASH
+            - AttributeName: !Ref 'StartDateAttributeName'
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: maintenance_ticket_account_id
+          KeySchema:
+            - AttributeName: !Ref 'AccountIdIdAttributeName'
+              KeyType: HASH
+            - AttributeName: !Ref 'StatusGrpAttributeName'
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: maintenance_ticket_dealership_id
+          KeySchema:
+            - AttributeName: !Ref 'DealershipIdAttributeName'
+              KeyType: HASH
+            - AttributeName: !Ref 'StatusGrpAttributeName'
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: maintenance_ticket_tower_account_id
+          KeySchema:
+            - AttributeName: !Ref 'TowerAccountIdAttributeName'
+              KeyType: HASH
+            - AttributeName: !Ref 'StatusGrpAttributeName'
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: maintenance_ticket_asset_id
+          KeySchema:
+            - AttributeName: !Ref 'AssetIdAttributeName'
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: maintenance_ticket_checkup_schedule_id
+          KeySchema:
+            - AttributeName: !Ref 'MaintenanceScheduleIdAttributeName'
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+      SSESpecification:
+        SSEEnabled: true
+
+Outputs:
+  TableName:
+    Value: !Ref database
+    Description: Table name of the newly created DynamoDB table
+    Export:
+      Name: !Sub ${AWS::StackName}-tableName
+  TableArn:
+    Value: !GetAtt database.Arn
+    Description: Arn of the newly created DynamoDB table
+    Export:
+      Name: !Sub ${AWS::StackName}-table-arn

@@ -1,0 +1,750 @@
+Description: Backend Latam Driver Assist - Microservice Fleets
+Parameters:
+  Repository:
+    Type: String
+    Description: Docker image ECR repository URI.
+  Tag:
+    Type: String
+    Description: Docker image ECR tag
+  DesiredCount:
+    Type: Number
+    Description: The number of simultaneous tasks that you want to run on the cluster.
+  EnableDataDog:
+    Type: String
+    AllowedValues:
+      - true
+      - false
+    Default: false
+  DealershipFavoriteTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: dealershipFavoriteDev-table-arn
+  AssetTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: assetDev-table-arn
+  ConfigTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: configTableDev-table-arn
+  AssistanceTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: assistanceDev-table-arn
+  ScheduleTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: scheduleDev-table-arn
+  CheckupScheduleTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: checkupScheduleDev-table-arn
+  DealershipTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: dealershipDev-table-arn
+  ConsultantTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: consultantDev-table-arn
+  FieldCampaignTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: fieldCampaignDev-table-arn
+  MaintenanceTicketTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: maintenanceTicketDev-table-arn
+  DealershipTransRioTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: dealershipTransRioDev-table-arn
+  ChecklistTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: checklistDev-table-arn
+  UptimeAssetTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: uptimeAssetDev-table-arn
+  MaintenancePartsTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: maintenancePartsDev-table-arn
+  MaintenanceRangeTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: maintenanceRangeDev-table-arn
+  EngineModelTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: engineModelDev-table-arn
+  ModelCodeTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: modelCodeDev-table-arn
+  UserProfileTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: userProfileDev-table-arn
+  SequencesTableArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: sequencesDev-table-arn
+  SchedulesQueueArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: sqs-schedules-dev-arn
+  InquiryChassiUpdatedQueueArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: rio-uptime-inquiry-chassi-updated-dev-arn
+  CallbackChassisUpdateQueueArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: rio-uptime-callback-chassis-update-dev-arn
+  ScheduleNotificationQueueArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: sqs-schedule-notification-dev-arn
+  OccurrenceMaintenanceManagerQueueArn:
+    Type: String
+    Description: Export name of the arn.
+    Default: rio-uptime-occurrence-maintenance-manager-dev-arn
+  KafkaKeyAndTrustStoreLocation:
+    Type: String
+    Description: Location of Key and Trust Store
+    Default: file:kafka-keystore.p12
+  DataDogApiKey:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /rio/config/datadog-integration/api-key
+  DataDogAppKey:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /rio/config/datadog-integration/application-key
+  DatadogSite:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /rio/config/datadog-integration/site
+  ContainerPort:
+    Type: Number
+    Description: The port number that the container should forward.
+  HealthCheckPath:
+    Type: String
+    Description: Path of the service health check endpoint, e.g., /actuator/health
+    Default: /actuator/health
+  TeamName:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /config/team/name
+  DatabaseHostRead:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /config/database/non-prod/host_read
+  DatabaseHostWrite:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /config/database/non-prod/host_write
+  DatabaseName:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /config/database/non-prod/name
+  DatabaseUsername:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /config/database/non-prod/user
+  DatabasePassword:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /config/database/non-prod/password
+  RioCMSUsername:
+    Type: String
+    Default: '/config/rio/cms/username'
+  RioCMSPassword:
+    Type: String
+    Default: '/config/rio/cms/password'
+  RioODPClientId:
+    Type: String
+    Default: '/config/rio/odp/prod/client_id'
+  RioODPClientSecret:
+    Type: String
+    Default: '/config/rio/odp/prod/client_secret'
+  NonProdRioODPClientId:
+    Type: String
+    Default: '/config/rio/odp/non-prod/client_id'
+  NonProdRioODPClientSecret:
+    Type: String
+    Default: '/config/rio/odp/non-prod/client_secret'
+  RioIAMClientId:
+    Type: String
+    Default: '/config/rio/iam/client_id'
+  RioIAMClientBasic:
+    Type: String
+    Default: '/config/rio/iam/basic'
+  RioStreamingAccountId:
+    Type: String
+    Description: Account Id for rio-streaming account.
+    Default: 186993757734
+  KeystorePasswordSsmPath:
+    Type: String
+    Description: 'SSM path to keystore password'
+    Default: '/config/kafka-manager/service-keystore-password'
+  KafkaBootstrapServersSsmPath:
+    Type: String
+    Default: '/config/kafka-integration/bootstrap-server'
+  ProfileActivePath:
+    Type: String
+    Default: '/environment/active'
+Mappings:
+  Config:
+    Service:
+      Name: microservice-maintenence-dev          # Change the service name to match your service name
+      Cpu: 800                                    # Should be sufficient for most cases but change if you are experiencing CPU problems
+      Memory: 1536                                  # Should be sufficient for most cases but change if you are experiencing memory problems
+      FQDN: api.latam-uptime-gateway.rio.cloud          # Change this to be of the format api.<CONTEXT>.rio.cloud where <CONTEXT> is the context name of your service
+    ServiceTask:
+      Cpu: 1024
+      Memory: 2048
+    Account:
+      Name: rio-latam-uptime-gateway             # Change this to be name of the AWS account your service will run under
+    DataDogAgent:
+      Name: microservice-maintenence-statsd-dev      # Change this to be the statsd name for your service
+      Cpu: 10
+      Memory: 512
+Resources:
+  ECSServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ecs.amazonaws.com
+                - ecs-tasks.amazonaws.com
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: send-email-mail-policy
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ses:SendEmail
+                  - ses:SendRawEmail
+                Resource: '*'
+        - PolicyName: CloudFormationDeployPolicyWithLambda
+          PolicyDocument:
+            Statement:
+            - Action:
+              - s3:GetObject
+              - s3:PutObject
+              - s3:PutObjectAcl
+              - s3:PutObjectVersionAcl
+              - s3:DeleteObject
+              Effect: Allow
+              Resource: 'arn:aws:s3:::documents-uptime-gateway-latam-dev/*'
+            - Action:
+              - s3:ListBucket
+              Effect: Allow
+              Resource: 'arn:aws:s3:::documents-uptime-gateway-latam-dev'
+        - PolicyName: ecs-service
+          PolicyDocument:
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ssm:DescribeParameters
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                  - ssm:GetParameters
+                  - ssm:GetParametersByPath
+                Resource:
+                  - !Sub
+                    - arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/config/${ServiceName}*
+                    - ServiceName: !FindInMap [Config, Service, Name]
+                  - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/config/application*
+              - Effect: Allow
+                Action:
+                  - secretsmanager:ListSecrets
+                  - cloudwatch:PutMetricData
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - execute-api:Invoke
+                Resource:
+                  - !Sub arn:aws:execute-api:eu-west-1:${RioStreamingAccountId}:*/*/*/*
+              - Effect: Allow
+                Action:
+                  - sns:'*'
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - dynamodb:DeleteItem
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:Query
+                  - dynamodb:UpdateItem
+                  - dynamodb:Scan
+                  - dynamodb:BatchWriteItem
+                  - dynamodb:BatchGetItem
+                Resource: '*'
+              - Effect: Allow
+                Action:
+                  - sqs:SendMessage
+                  - sqs:ReceiveMessage
+                Resource: 
+                  - Fn::ImportValue: !Ref SchedulesQueueArn
+                  - Fn::ImportValue: !Ref ScheduleNotificationQueueArn
+              - Effect: Allow
+                Action:
+                  - sqs:SendMessage
+                Resource: 
+                  - Fn::ImportValue: !Ref OccurrenceMaintenanceManagerQueueArn
+                  - Fn::ImportValue: !Ref InquiryChassiUpdatedQueueArn
+              - Effect: Allow
+                Action:
+                  - sqs:ReceiveMessage
+                  - sqs:DeleteMessage
+                Resource: 
+                  - Fn::ImportValue: !Ref CallbackChassisUpdateQueueArn
+              
+  EcsClusterExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ecs-tasks.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      Policies:
+        - PolicyDocument:
+            Statement:
+              - Action:
+                  - ssm:DescribeParameters
+                Effect: Allow
+                Resource: '*'
+              - Action:
+                  - sns:'*'
+                Effect: Allow
+                Resource: '*'
+              - Action:
+                  - ssm:Get*
+                Effect: Allow
+                Resource: '*'
+          PolicyName: !Sub
+            - ${ServiceName}-ssm-policy
+            - ServiceName: !FindInMap [Config, Service, Name]
+
+  Service:
+    Type: AWS::ECS::Service
+    DependsOn:
+      - ServiceTaskDefinition
+      - ServiceTargetGroup
+      - LoadBalancerSecurityGroup
+    Properties:
+      Cluster: uptime-gateway-dev
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      DesiredCount: !Ref DesiredCount
+      HealthCheckGracePeriodSeconds: 240
+      LaunchType: FARGATE
+      PlatformVersion: 1.4.0
+      LoadBalancers:
+        - TargetGroupArn: !Ref ServiceTargetGroup
+          ContainerPort: !Ref ContainerPort
+          ContainerName: !FindInMap [Config, Service, Name]
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: DISABLED
+          SecurityGroups:
+            - !Ref LoadBalancerSecurityGroup
+          Subnets:
+            - !ImportValue PrivateSubnet1AID
+            - !ImportValue PrivateSubnet2AID
+            - !ImportValue PrivateSubnet3AID
+      ServiceName: !FindInMap [Config,Service,Name]
+      TaskDefinition: !Ref ServiceTaskDefinition
+  ServiceTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      ContainerDefinitions:
+        - Cpu: !FindInMap [Config,Service,Cpu]
+          DependsOn:
+            - Condition: START
+              ContainerName: datadog-agent
+          Secrets:
+            - Name: RIO_CMS_USERNAME
+              ValueFrom: !Ref RioCMSUsername
+            - Name: RIO_CMS_PASSWORD
+              ValueFrom: !Ref RioCMSPassword
+            - Name: RIO_ODP_CLIENT_ID
+              ValueFrom: !Ref RioODPClientId
+            - Name: RIO_ODP_CLIENT_SECRET
+              ValueFrom: !Ref RioODPClientSecret
+            - Name: RIO_ODP_HML_CLIENT_ID
+              ValueFrom: !Ref NonProdRioODPClientId
+            - Name: RIO_ODP_HML_CLIENT_SECRET
+              ValueFrom: !Ref NonProdRioODPClientSecret
+            - Name: RIO_IAM_CLIENT_ID
+              ValueFrom: !Ref RioIAMClientId
+            - Name: RIO_IAM_CLIENT_BASIC
+              ValueFrom: !Ref RioIAMClientBasic
+          Environment:
+            - Name: JDK_JAVA_OPTIONS
+              Value: '-XX:MaxRAMPercentage=50'
+            - Name: AWS_DEFAULT_REGION
+              Value: !Ref AWS::Region
+            - Name: CLOUD_AWS_REGION_STATIC
+              Value: !Ref AWS::Region
+            - Name: SPRING_APPLICATION_NAME
+              Value: !FindInMap [Config, Service, Name]
+            - Name: CLOUD_AWS_STACK_AUTO
+              Value: 'false'
+            - Name: MANAGEMENT_METRICS_TAGS_ACCOUNTID
+              Value: !Ref AWS::AccountId
+            - Name: DD_ENV
+              Value: prod
+            - Name: DB_HOST_READ
+              Value: !Ref DatabaseHostRead
+            - Name: DB_HOST_WRITE
+              Value: !Ref DatabaseHostWrite
+            - Name: DB_USERNAME
+              Value: !Ref DatabaseUsername
+            - Name: DB_DATABASE
+              Value: !Ref DatabaseName
+            - Name: DB_PASSWORD
+              Value: !Ref DatabasePassword
+            - Name: DB_HOST
+              Value: !Ref DatabaseHostWrite
+            - Name: DD_SERVICE_NAME
+              Value: !FindInMap [ Config, Service, Name ]
+            - Name: DD_VERSION
+              Value: !Ref Tag
+            - Name: DD_SERVICE_MAPPING
+              Value: !Sub
+                - java-aws-sdk:${ServiceName}-aws-sdk,kafka:${ServiceName}-kafka
+                - ServiceName: !FindInMap [ Config, Service, Name ]
+            - Name: DD_TRACE_GLOBAL_TAGS
+              Value: !Sub
+              - 'account_id:${AWS::AccountId},account_name:${AccountName},region:${AWS::Region},team:${TeamName}, env:prod'
+              - AccountName: !FindInMap [Config, Account, Name]
+            - Name: DD_TRACE_SAMPLE_RATE
+              Value: '1.0'
+            - Name: DD_TRACE_ANALYTICS_ENABLED
+              Value: !Ref EnableDataDog
+            - Name: DD_LOGS_INJECTION
+              Value: 'true'
+            - Name: SERVER_PORT
+              Value: !Ref ContainerPort
+            - Name: SERVER_SSL_ENABLED
+              Value: 'false'
+            - Name: SPRING_PROFILES_ACTIVE
+              Value: 'dev'  
+          Essential: true
+          DockerLabels:
+            'com.datadoghq.tags.env': prod
+            'com.datadoghq.tags.service': !FindInMap [Config, Service, Name]
+            'com.datadoghq.tags.version': !Ref Tag
+          Image: !Sub ${Repository}:${Tag}
+          Interactive: false
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref LogGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: !FindInMap [Config, Service, Name]
+          Memory: !FindInMap [Config,Service,Memory]
+          Name: !FindInMap [Config,Service,Name]
+          PortMappings:
+            - ContainerPort: !Ref ContainerPort
+              Protocol: tcp
+          Ulimits:
+            - Name: nofile
+              SoftLimit: 16384
+              HardLimit: 32768
+        - Name: datadog-agent
+          Image: public.ecr.aws/datadog/agent:7
+          Essential: false
+          Cpu: !FindInMap [ Config, DataDogAgent, Cpu ]
+          Memory: !FindInMap [ Config, DataDogAgent, Memory ]
+          PortMappings:
+            - ContainerPort: 8125
+              Protocol: udp
+            - ContainerPort: 8126
+              Protocol: tcp
+          Environment:
+            - Name: ECS_FARGATE
+              Value: 'true'
+            - Name: DD_API_KEY
+              Value: !Ref DataDogApiKey
+            - Name: DD_TAGS
+              Value: !Sub account_id:${AWS::AccountId}
+            - Name: DD_APM_ENABLED
+              Value: 'true'
+            - Name: DD_COLLECT_GCE_TAGS
+              Value: 'false'
+            - Name: DD_LOG_LEVEL
+              Value: WARN
+            - Name: DD_SITE
+              Value: datadoghq.eu
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref StatsdLogGroup
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: !FindInMap [Config, DataDogAgent, Name]
+      Cpu: !FindInMap [Config,ServiceTask,Cpu]
+      ExecutionRoleArn: !GetAtt EcsClusterExecutionRole.Arn
+      Family: !FindInMap [Config,Service,Name]
+      Memory: !FindInMap [Config,ServiceTask,Memory]
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      TaskRoleArn: !GetAtt ECSServiceRole.Arn
+  ServiceTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 5
+      HealthCheckPath: !Ref HealthCheckPath
+      HealthCheckTimeoutSeconds: 2
+      HealthyThresholdCount: 2
+      Matcher:
+        HttpCode: 200
+      Port: !Ref ContainerPort
+      Protocol: HTTP
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: 15
+      UnhealthyThresholdCount: 5
+      VpcId: !ImportValue DefaultVPCId
+      TargetType: ip
+      Tags:
+        - Key: Name
+          Value: !Sub ${AWS::StackName}-ALBTargetGroup
+        - Key: Application
+          Value: !FindInMap [Config, Service, Name]
+  ListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !ImportValue alb-gateway-uptime-gateway-latam-dev-listener
+      Priority: 4
+      Conditions:
+        - Field: path-pattern
+          Values:
+            - "*"
+      Actions:
+        - TargetGroupArn: !Ref ServiceTargetGroup
+          Type: forward
+  LoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Sub
+        - ${ServiceName}-task
+        - ServiceName: !FindInMap [Config, Service, Name]
+      VpcId: !ImportValue DefaultVPCId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: !Ref ContainerPort
+          ToPort: !Ref ContainerPort
+          SourceSecurityGroupId: !ImportValue alb-gateway-uptime-gateway-latam-dev-security-group
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !FindInMap [Config, Service, Name]
+      RetentionInDays: 1
+  StatsdLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !FindInMap [Config, DataDogAgent, Name]
+      RetentionInDays: 1
+  LambdaExecutionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !ImportValue custom-resource-datadog-logforwarder-function-arn
+      Principal: !Sub "logs.${AWS::Region}.amazonaws.com"
+      SourceArn: !GetAtt LogGroup.Arn
+  LogFilter:
+    Type: AWS::Logs::SubscriptionFilter
+    DependsOn: LambdaExecutionPermission
+    Properties:
+      DestinationArn: !ImportValue custom-resource-datadog-logforwarder-function-arn
+      FilterPattern: ""
+      LogGroupName: !Ref LogGroup
+  StatsdLambdaExecutionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !ImportValue custom-resource-datadog-logforwarder-function-arn
+      Principal: !Sub "logs.${AWS::Region}.amazonaws.com"
+      SourceArn: !GetAtt StatsdLogGroup.Arn
+  StatsdLogFilter:
+    Type: AWS::Logs::SubscriptionFilter
+    DependsOn: StatsdLambdaExecutionPermission
+    Properties:
+      DestinationArn: !ImportValue custom-resource-datadog-logforwarder-function-arn
+      FilterPattern: ""
+      LogGroupName: !Ref StatsdLogGroup
+    ### working on datadog
+  Datadog5xxMonitor:
+    Type: Custom::DatadogMonitor
+    Properties:
+      Version: 1.0.0
+      ServiceToken: arn:aws:lambda:eu-west-1:443370685172:function:custom-resource-datadog-monitor
+      ServiceName: !FindInMap [Config, Service, Name]
+      Monitor:
+        type: query alert
+        query: !Sub
+          - "sum(last_1h):sum:aws.applicationelb.httpcode_elb_5xx{application:${ApplicationName},account_name:${AccountName}}.as_count() >= 1"
+          - ApplicationName: !FindInMap [Config, Service, Name]
+            AccountName: !FindInMap [Config, Account, Name]
+        name: Service 5xx response(s) monitor
+        message: !Sub
+          - "{{#is_alert}}\nRecorded HTTP 5xx response(s) from ${ApplicationName} (ELB).\n\nCheck server logs.\n{{/is_alert}} \n\n{{#is_alert_recovery}}\n${ApplicationName} recovered from 5xx response(s).\n{{/is_alert_recovery}}  @opsgenie-${AccountName}"
+          - ApplicationName: !FindInMap [Config, Service, Name]
+            AccountName: !FindInMap [Config, Account, Name]
+        options:
+          notify_audit: false
+          locked: false
+          timeout_h: 1
+          silenced: {}
+          include_tags: false
+          new_host_delay: 300
+          require_full_window: false
+          notify_no_data: false
+          renotify_interval: 0
+          escalation_message: ""
+          thresholds:
+            critical: 1
+  DatadogCPUUtililizationMonitor:
+    Type: Custom::DatadogMonitor
+    Properties:
+      Version: 1.0.0
+      ServiceToken: arn:aws:lambda:eu-west-1:443370685172:function:custom-resource-datadog-monitor
+      ServiceName: !FindInMap [Config, Service, Name]
+      Monitor:
+        type: query alert
+        query: !Sub
+          - "avg(last_15m):sum:ecs.fargate.cpu.user{ecs_task_family:${TaskFamily}} / sum:ecs.fargate.cpu.limit{ecs_task_family:${TaskFamily}} / 10000 > 95"
+          - TaskFamily: !FindInMap [Config, Service, Name]
+        name: Service ECS Fargate CPU utilization monitor
+        message: !Sub
+          - "{{#is_alert}}\nECS Fargate CPU utilization is high.\n{{/is_alert}} \n\n{{#is_alert_recovery}}\nECS Fargate CPU utilization is back to normal.\n{{/is_alert_recovery}}  @opsgenie-${AccountName}"
+          - AccountName: !FindInMap [Config, Account, Name]
+        options:
+          notify_audit: false
+          locked: false
+          timeout_h: 0
+          silenced: {}
+          include_tags: false
+          new_host_delay: 300
+          require_full_window: false
+          notify_no_data: false
+          renotify_interval: 0
+          escalation_message: ""
+          thresholds:
+            critical: 95
+            warning: 90
+  DatadogMemoryUtililizationMonitor:
+    Type: Custom::DatadogMonitor
+    Properties:
+      Version: 1.0.0
+      ServiceToken: arn:aws:lambda:eu-west-1:443370685172:function:custom-resource-datadog-monitor
+      ServiceName: !FindInMap [Config, Service, Name]
+      Monitor:
+        type: query alert
+        query: !Sub
+          - "avg(last_1h):avg:aws.ecs.service.memory_utilization{servicename:${ServiceName}} > 95"
+          - ServiceName: !FindInMap [Config, Service, Name]
+        name: Service ECS Fargate Memory utilization monitor
+        message: !Sub
+          - "{{#is_alert}}\nECS Fargate Memory utilization is high.\n{{/is_alert}} \n\n{{#is_alert_recovery}}\nECS Fargate Memory utilization is back to normal.\n{{/is_alert_recovery}}  @opsgenie-${AccountName}"
+          - AccountName: !FindInMap [Config, Account, Name]
+        options:
+          notify_audit: false
+          locked: false
+          timeout_h: 0
+          silenced: {}
+          include_tags: false
+          new_host_delay: 300
+          require_full_window: false
+          notify_no_data: false
+          renotify_interval: 0
+          escalation_message: ""
+          thresholds:
+            critical: 95
+            warning: 90
+  DatadogServiceErrorMonitor:
+    Type: Custom::DatadogMonitor
+    Properties:
+      Version: 1.0.0
+      ServiceToken: arn:aws:lambda:eu-west-1:443370685172:function:custom-resource-datadog-monitor
+      ServiceName: !FindInMap [Config, Service, Name]
+      Monitor:
+        type: log alert
+        query: !Sub
+          - logs("@aws.awslogs.logGroup:${ServiceName} status:error").index("main").rollup("count").last("1h") > 1
+          - ServiceName: !FindInMap [Config, Service, Name]
+        name: Error in service
+        message: !Sub
+          - "{{#is_alert}}\nError logged in ${ServiceName} service.\n{{/is_alert}} \n\n{{#is_alert_recovery}}\nError is resolved.\n{{/is_alert_recovery}}  @opsgenie-${AccountName}"
+          - AccountName: !FindInMap [Config, Account, Name]
+            ServiceName: !FindInMap [Config, Service, Name]
+        options:
+          queryConfig:
+            queryString: !Sub
+              - "@aws.awslogs.logGroup:${ServiceName} status:error"
+              - ServiceName: !FindInMap [Config, Service, Name]
+          notify_audit: false
+          locked: false
+          timeout_h: 0
+          silenced: {}
+          include_tags: false
+          new_host_delay: 300
+          require_full_window: false
+          notify_no_data: false
+          renotify_interval: 0
+          escalation_message: ""
+          thresholds:
+            critical: 1
+  DatadogStatsdErrorMonitor:
+    Type: Custom::DatadogMonitor
+    Properties:
+      Version: 1.0.0
+      ServiceToken: arn:aws:lambda:eu-west-1:443370685172:function:custom-resource-datadog-monitor
+      ServiceName: !FindInMap [Config, Service, Name]
+      Monitor:
+        type: log alert
+        query: !Sub
+          - logs("@aws.awslogs.logGroup:${ServiceName} status:error").index("main").rollup("count").last("1h") > 1
+          - ServiceName: !FindInMap [Config, DataDogAgent, Name]
+        name: Error in service statsd
+        message: !Sub
+          - "{{#is_alert}}\nError logged in ${ServiceName} service.\n{{/is_alert}} \n\n{{#is_alert_recovery}}\nError is resolved.\n{{/is_alert_recovery}}  @opsgenie-${AccountName}"
+          - AccountName: !FindInMap [Config, Account, Name]
+            ServiceName: !FindInMap [Config, DataDogAgent, Name]
+        options:
+          queryConfig:
+            queryString: !Sub
+              - "@aws.awslogs.logGroup:${ServiceName} status:error"
+              - ServiceName: !FindInMap [Config, DataDogAgent, Name]
+          notify_audit: false
+          locked: false
+          timeout_h: 0
+          silenced: {}
+          include_tags: false
+          new_host_delay: 300
+          require_full_window: false
+          notify_no_data: false
+          renotify_interval: 0
+          escalation_message: ""
+          thresholds:
+            critical: 1
+Outputs:
+  AppSG:
+    Description: 'Application Security Group'
+    Value: !Ref LoadBalancerSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-sg"
+      

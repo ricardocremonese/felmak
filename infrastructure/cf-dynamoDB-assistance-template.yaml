@@ -1,0 +1,127 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'DynamoDB for activations used by the discount service'
+Parameters:
+  BillingMode:
+    Default: PAY_PER_REQUEST
+    Type: String
+
+  IdAttributeName:
+    Type: String
+    Default: id
+  IdAttributeType:
+    Type: String
+    Default: S
+
+  TAssetIdAttributeName:
+    Type: String
+    Default: tAssetId
+  TAssetIdAttributeType:
+    Type: String
+    Default: S
+
+  OccurTypeAttributeName:
+    Type: String
+    Default: occurType
+  OccurTypeAttributeType:
+    Type: String
+    Default: S
+    
+  ChassisAttributeName:
+    Type: String
+    Default: chassis
+  ChassisAttributeType:
+    Type: String
+    Default: S
+
+  StateAttributeName:
+    Type: String
+    Default: state
+  StateAttributeType:
+    Type: String
+    Default: S
+
+  StateAndCreatedDateAttributeName:
+    Type: String
+    Default: stateAndCreatedDate
+  StateAndCreatedDateAttributeType:
+    Type: String
+    Default: S
+    
+  CreatedAtAttributeName:
+    Type: String
+    Default: createdAt
+  CreatedAtAttributeType:
+    Type: String
+    Default: S
+
+Resources:
+  database:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      TableName: !Sub ${AWS::StackName}
+      BillingMode: !Ref 'BillingMode'
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      AttributeDefinitions:
+        - AttributeName: !Ref 'IdAttributeName'
+          AttributeType: !Ref 'IdAttributeType'
+        - AttributeName: !Ref 'TAssetIdAttributeName'
+          AttributeType: !Ref 'TAssetIdAttributeType'
+        - AttributeName: !Ref 'OccurTypeAttributeName'
+          AttributeType: !Ref 'OccurTypeAttributeType'
+        - AttributeName: !Ref 'ChassisAttributeName'
+          AttributeType: !Ref 'ChassisAttributeType'
+        - AttributeName: !Ref 'StateAttributeName'
+          AttributeType: !Ref 'StateAttributeType'
+        - AttributeName: !Ref 'StateAndCreatedDateAttributeName'
+          AttributeType: !Ref 'StateAndCreatedDateAttributeType'
+        - AttributeName: !Ref 'CreatedAtAttributeName'
+          AttributeType: !Ref 'CreatedAtAttributeType'
+      KeySchema:
+        - AttributeName: !Ref 'IdAttributeName'
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: assistance_chassis
+          KeySchema:
+            - AttributeName: !Ref 'ChassisAttributeName'
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: assistance_t_asset_id
+          KeySchema:
+            - AttributeName: !Ref 'TAssetIdAttributeName'
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+        - IndexName: assistance_state
+          KeySchema:
+            - AttributeName: !Ref 'StateAttributeName'
+              KeyType: HASH
+            - AttributeName: !Ref 'CreatedAtAttributeName'
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+        - IndexName: assistance_occur_type_created_date
+          KeySchema:
+            - AttributeName: !Ref 'OccurTypeAttributeName'
+              KeyType: HASH
+            - AttributeName: !Ref 'StateAndCreatedDateAttributeName'
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+      SSESpecification:
+        SSEEnabled: true
+
+Outputs:
+  TableName:
+    Value: !Ref database
+    Description: Table name of the newly created DynamoDB table
+    Export:
+      Name: !Sub ${AWS::StackName}-tableName
+  TableArn:
+    Value: !GetAtt database.Arn
+    Description: Arn of the newly created DynamoDB table
+    Export:
+      Name: !Sub ${AWS::StackName}-table-arn

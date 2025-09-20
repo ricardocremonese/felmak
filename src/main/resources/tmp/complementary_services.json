@@ -1,0 +1,389 @@
+[
+  {
+    "id": "1",
+    "name": "Diferencial",
+    "oil": true
+  },
+  {
+    "id": "2",
+    "name": "Caixa ZF Traxon",
+    "oil": true
+  },
+  {
+    "id": "3",
+    "name": "Regulagem de válvulas"
+  },
+  {
+    "id": "4",
+    "name": "Troca filtro secador"
+  },
+  {
+    "id": "5",
+    "name": "Substituição do filtro \"Blow By\" do motor"
+  },
+  {
+    "id": "6",
+    "name": "Troca liquido arrefecimento",
+    "oil": true
+  },
+  {
+    "id": "7",
+    "name": "Troca do filtro de ar da cabine"
+  },
+  {
+    "id": "8",
+    "name": "Troca do filtro de Arla 32"
+  },
+  {
+    "id": "9",
+    "name": "Inspeção e limpeza dos respiros dos diferenciais"
+  },
+  {
+    "id": "10",
+    "name": "Revisão do 3° eixo (veículo 6x2)"
+  },
+  {
+    "id": "11",
+    "name": "Cubos de rodas - 3° eixo (veículo 6x2)"
+  },
+  {
+    "id": "12",
+    "name": "Troca do óleo da caixa de mudanças manual (mineral)",
+    "oil": true
+  },
+  {
+    "id": "13",
+    "name": "Troca do óleo da caixa de mudanças automatizada",
+    "oil": true
+  },
+  {
+    "id": "14",
+    "name": "Troca do óleo do diferencial",
+    "oil": true
+  },
+  {
+    "id": "15",
+    "name": "Trocar fluido da embreagem (somente caixa de mudanças manual)",
+    "oil": true
+  },
+  {
+    "id": "16",
+    "name": "Troca do filtro de ar da cabine"
+  },
+  {
+    "id": "17",
+    "name": "Troca do filtro coalescente"
+  },
+  {
+    "id": "18",
+    "name": "Troca do liquido do sistema de arrefecimento"
+  },
+  {
+    "id": "19",
+    "name": "Troca da correia do motor e verificação do tensor"
+  },
+  {
+    "id": "20",
+    "name": "Troca do filtro de ar do motor"
+  },
+  {
+    "id": "21",
+    "name": "Troca do filtro secundário de ar do motor (se equipado)"
+  },
+  {
+    "id": "22",
+    "name": "Troca do filtro do pescador de ARLA 32 e lavagem do tanque de ARLA 32"
+  },
+  {
+    "id": "23",
+    "name": "Diferencial (exceto 32-360)",
+    "oil": true
+  },
+  {
+    "id": "24",
+    "name": "Diferencial (somente 32-360)",
+    "oil": true
+  },
+  {
+    "id": "25",
+    "name": "Caixa ZF 9S / Eaton",
+    "oil": true
+  },
+  {
+    "id": "26",
+    "name": "Caixa ZF 16S",
+    "oil": true
+  },
+  {
+    "id": "27",
+    "name": "Caixa ZF 6AS/12AS",
+    "oil": true
+  },
+  {
+    "id": "28",
+    "name": "Caixa ZF 12TX",
+    "oil": true
+  },
+  {
+    "id": "29",
+    "name": "Embreagem",
+    "oil": true
+  },
+  {
+    "id": "30",
+    "name": "Caixa EATON Automatizada",
+    "oil": true
+  },
+  {
+    "id": "31",
+    "name": "Sistema hidráulico 6AS",
+    "oil": true
+  },
+  {
+    "id": "32",
+    "name": "Regulagem de válvulas Cummins"
+  },
+  {
+    "id": "33",
+    "name": "Troca filtro de ar da cabine"
+  },
+  {
+    "id": "34",
+    "name": "Troca filtro coalescente"
+  },
+  {
+    "id": "35",
+    "name": "Caixa ZF 16AS",
+    "oil": true
+  },
+  {
+    "id": "36",
+    "name": "Diferencial + cubo de roda (Óleo sintético)",
+    "oil": true
+  },
+  {
+    "id": "37",
+    "name": "Caixa de mudanças",
+    "oil": true
+  },
+  {
+    "id": "38",
+    "name": "Embreagem/freio hidráulico",
+    "oil": true
+  },
+  {
+    "id": "39",
+    "name": "Troca da engrenagem e corrente de comando e da corrente do sistema de distribuição",
+    "oil": false
+  },
+  {
+    "id": "40",
+    "name": "Troca das sapatas, do tensor mecânico e do tensor hidráulico",
+    "oil": false
+  },
+  {
+    "id": "41",
+    "name": "Troca correia, da polia auxiliar e do tensor da correia",
+    "oil": false
+  },
+  {
+    "id": "42",
+    "name": "Troca da vela de incandescencia de pré-aquecimento",
+    "oil": false
+  },
+  {
+    "id": "43",
+    "name": "Inspeção visual do turbocompressor",
+    "oil": false
+  },
+  {
+    "id": "44",
+    "name": "Caixa de mudanças manual (mineral)",
+    "oil": true
+  },
+  {
+    "id": "45",
+    "name": "Embreagem (caixa de mudanças manual)",
+    "oil": true
+  },
+  {
+    "id": "46",
+    "name": "Caixa de mudanças automatizada (mineral)",
+    "oil": true
+  },
+  {
+    "id": "47",
+    "name": "Fluido do atuador da embreagem (caixa de mudanças automatizada)",
+    "oil": true
+  },
+  {
+    "id": "48",
+    "name": "Troca do líquido de arrefecimento",
+    "oil": true
+  },
+  {
+    "id": "49",
+    "name": "Regulagem de válvulas do motor",
+    "oil": false
+  },
+  {
+    "id": "50",
+    "name": "Embreagem - caixa mecânica",
+    "oil": true
+  },
+  {
+    "id": "51",
+    "name": "Fluido hidráulico cx automatizada",
+    "oil": true
+  },
+  {
+    "id": "52",
+    "name": "Troca da correia do motor e verificação do estado do tensor",
+    "oil": false
+  },
+  {
+    "id": "53",
+    "name": "Verificação de ruido e vibração do cubo com rolamento unitizado das rodas traseiras",
+    "oil": false
+  },
+  {
+    "id": "54",
+    "name": "Troca do líquido de arrefecimento do veículo",
+    "oil": true
+  },
+  {
+    "id": "55",
+    "name": "Troca do líquido de arrefecimento do pacote de baterias",
+    "oil": true
+  },
+  {
+    "id": "56",
+    "name": "Reaperto da caixa de direção",
+    "oil": false
+  },
+  {
+    "id": "57",
+    "name": "Verificação da folga da manga de eixo dianteira",
+    "oil": false
+  },
+  {
+    "id": "58",
+    "name": "Verificação da fixação da cruzeta da coluna de direção",
+    "oil": false
+  },
+  {
+    "id": "59",
+    "name": "Remoção e revisão do eixo came e ajustadores dos freios",
+    "oil": false
+  },
+  {
+    "id": "60",
+    "name": "Verificação da folga e desgaste da cruzeta da árvore de transmissão",
+    "oil": false
+  },
+  {
+    "id": "61",
+    "name": "Reaperto dos coxins do motor",
+    "oil": false
+  },
+  {
+    "id": "62",
+    "name": "Substituição do elemento do filtro coalescente",
+    "oil": false
+  },
+  {
+    "id": "63",
+    "name": "Lubrificação dos mancais dos rolamentos do motor de tração",
+    "oil": false
+  },
+  {
+    "id": "64",
+    "name": "Lubrificação dos mancais dos rolamentos do motor de tração",
+    "oil": false
+  },
+  {
+    "id": "65",
+    "name": "Substituição dos mancais dos rolamentos do motor do compressor do freio",
+    "oil": false
+  },
+  {
+    "id": "66",
+    "name": "Substituição da correia do ar condicionado",
+    "oil": false
+  },
+  {
+    "id": "67",
+    "name": "Substituição dos mancais dos rolamentos do motor do compressor do ar condicionado",
+    "oil": false
+  },
+  {
+    "id": "68",
+    "name": "Troca do óleo da caixa de mudanças automática (sintético classe 26D)",
+    "oil": false
+  },
+  {
+    "id": "69",
+    "name": "Troca do filtro separador de água do combustível",
+    "oil": false
+  },
+  {
+    "id": "70",
+    "name": "Caixa Eaton",
+    "oil": true
+  },
+  {
+    "id": "71",
+    "name": "Cubo da roda dianteira - rolamento unitizado",
+    "oil": false
+  },
+  {
+    "id": "72",
+    "name": "Filtro de ar do motor",
+    "oil": false
+  },
+  {
+    "id": "73",
+    "name": "Limpeza do intercooler",
+    "oil": false
+  },
+  {
+    "id": "74",
+    "name": "Troca do elemento do filtro separador de água no combustível",
+    "oil": false
+  },
+  {
+    "id": "75",
+    "name": "Cubo da roda traseira - rolamento unitizado",
+    "oil": false
+  },
+  {
+    "id": "76",
+    "name": "Caixa de mudanças automatizada",
+    "oil": true
+  },
+  {
+    "id": "77",
+    "name": "Troca do filtro de ARLA 32 e do conector da linha de entrada da unidade dosadora",
+    "oil": false
+  },
+  {
+    "id": "78",
+    "name": "Cubos de rodas dos eixos dianteiro e traseiros",
+    "oil": false
+  },
+  {
+    "id": "79",
+    "name": "Cubo de roda do 3° eixo (veículo 6x2)",
+    "oil": false
+  },
+  {
+    "id": "80",
+    "name": "Caixa de cambios",
+    "oil": false
+  },
+  {
+    "id": "81",
+    "name": "Cubos de rodas - do eixo traseiro (anterior\n  e posterior)",
+    "oil": false
+  }
+]
