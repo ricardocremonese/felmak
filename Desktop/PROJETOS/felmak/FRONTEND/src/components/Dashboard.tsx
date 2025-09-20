@@ -12,9 +12,22 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import type { Database } from '@/integrations/supabase/types';
-
-type OrdemServico = Database['public']['Tables']['ordens_servico']['Row'];
+// Tipo simplificado para ordens de serviço
+type OrdemServico = {
+  id: string;
+  numero_os: number | null;
+  cliente_nome: string;
+  cliente_telefone: string | null;
+  cliente_email: string | null;
+  equipamento_tipo: string;
+  equipamento_marca: string | null;
+  equipamento_modelo: string | null;
+  defeito_relatado: string;
+  status: string | null;
+  valor_total: number | null;
+  data_entrada: string | null;
+  created_at: string;
+};
 
 const Dashboard = () => {
   const [recentOrders, setRecentOrders] = useState<OrdemServico[]>([]);

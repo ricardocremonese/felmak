@@ -1,0 +1,14 @@
+{
+  "name": "felmak",
+  "version": "1.0.0",
+  "description": "Sistema Felmak - CRM com autenticação universal",
+  "scripts": {
+    "build": "cd FRONTEND && npm install && npm run build",
+    "dev": "cd FRONTEND && npm install && npm run dev",
+    "start": "cd FRONTEND && npm run preview"
+  },
+  "engines": {
+    "node": ">=18",
+    "npm": ">=9"
+  }
+}
