@@ -1,0 +1,129 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build outputs
+dist/
+dist-ssr/
+build/
+*/dist/
+*/build/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Test files
+test-*.js
+*-test.js
+check-*.js
+simple-*.js
+insert-*.js
+force-*.js
+apply-*.js
+recreate-*.sql
+minimal-*.sql
+ultra-*.sql
+
+# Personal files and directories
+Downloads/
+Documents/
+Desktop/
+Pictures/
+Movies/
+Music/
+Library/
+Applications/
+Public/
+
+# Project specific
+*.timestamp-*
+*.mjs
+.nvmrc
+
+# IDE and editor files
+.cursor/
+.vscode/
+.idea/
+*.code-workspace
+
+# Cache directories
+.cache/
+.npm/
+.pub-cache/
+.m2/
+.dart-tool/
+.expo/
+.flutter/
+.swiftpm/
+
+# SSH and credentials
+.ssh/
+.git-credentials
+.gitconfig
+
+# Other personal directories
+.anydesk/
+.cocoapods/
+.config/
+.docker/
+.local/
+.sonar/
+.sonarlint/
+.trae-aicc/
+.trae/
+.viminfo
+.zcompdump
+.zprofile*
+.zsh_history
+.zsh_sessions/
+.zshrc*
+
+# Project backups and old versions
+*-clean/
+*-old/
+*-backup/
+*_backup/
