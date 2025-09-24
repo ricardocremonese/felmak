@@ -1,0 +1,24 @@
+# Ignore submodules and unnecessary files
+.gitmodules
+.git
+node_modules
+*.log
+.DS_Store
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore other project files
+BACKEND/
+*.sql
+test-*.js
+check-*.js
+simple-*.js
+insert-*.js
+force-*.js
+apply-*.js
+recreate-*.sql
+minimal-*.sql
+ultra-*.sql

@@ -15,9 +15,9 @@
   "env": {
     "NODE_ENV": "production"
   },
-  "functions": {
-    "FRONTEND/src/**/*.tsx": {
-      "runtime": "nodejs18.x"
+  "build": {
+    "env": {
+      "NODE_VERSION": "18"
     }
   }
 }
