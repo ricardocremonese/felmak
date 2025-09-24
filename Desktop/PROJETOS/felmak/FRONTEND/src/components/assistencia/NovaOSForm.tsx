@@ -59,7 +59,7 @@ interface FormData {
 const NovaOSForm = () => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [pecas, setPecas] = useState<Array<{id: string, nome: string, quantidade: number, preco_unitario: number}>>([]);
+  const [pecas, setPecas] = useState<Array<{id: string, nome: string, fabricante: string, quantidade: number, preco_unitario: number}>>([]);
 
   // Estados para acompanha acessórios
   const [acompanhaAcessorios, setAcompanhaAcessorios] = useState<string>('');

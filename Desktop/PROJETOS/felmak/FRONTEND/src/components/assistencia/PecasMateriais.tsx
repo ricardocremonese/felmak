@@ -7,11 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Plus, Trash2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { formatCurrencyInput, parseCurrencyValue } from '@/utils/helpers';
+import { parseCurrencyValue } from '@/utils/helpers';
 
 interface Peca {
   id: string;
   nome: string;
+  fabricante: string;
   quantidade: number;
   preco_unitario: number;
 }
@@ -32,6 +33,7 @@ const PecasMateriais: React.FC<PecasMateriaisProps> = ({
   const { toast } = useToast();
   const [novaPeca, setNovaPeca] = useState({
     nome: '',
+    fabricante: '',
     quantidade: 1,
     preco_unitario: 0
   });
@@ -60,12 +62,13 @@ const PecasMateriais: React.FC<PecasMateriaisProps> = ({
     const peca: Peca = {
       id: Date.now().toString(),
       nome: novaPeca.nome,
+      fabricante: novaPeca.fabricante,
       quantidade: novaPeca.quantidade,
       preco_unitario: novaPeca.preco_unitario
     };
 
     setPecas(prev => [...prev, peca]);
-    setNovaPeca({ nome: '', quantidade: 1, preco_unitario: 0 });
+    setNovaPeca({ nome: '', fabricante: '', quantidade: 1, preco_unitario: 0 });
     setPrecoInput('');
     
     toast({
@@ -111,7 +114,7 @@ const PecasMateriais: React.FC<PecasMateriaisProps> = ({
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Adicionar Nova Peça */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-gray-50 rounded-lg">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 bg-gray-50 rounded-lg">
           <div>
             <Label htmlFor="nome_peca">Nome da Peça</Label>
             <Input
@@ -119,6 +122,16 @@ const PecasMateriais: React.FC<PecasMateriaisProps> = ({
               value={novaPeca.nome}
               onChange={(e) => setNovaPeca(prev => ({ ...prev, nome: e.target.value }))}
               placeholder="Digite o nome da peça"
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="fabricante_peca">Fabricante/Distribuidor</Label>
+            <Input
+              id="fabricante_peca"
+              value={novaPeca.fabricante}
+              onChange={(e) => setNovaPeca(prev => ({ ...prev, fabricante: e.target.value }))}
+              placeholder="Nome do fabricante"
             />
           </div>
           
@@ -163,6 +176,7 @@ const PecasMateriais: React.FC<PecasMateriaisProps> = ({
               <TableHeader>
                 <TableRow>
                   <TableHead>Peça</TableHead>
+                  <TableHead>Fabricante/Distribuidor</TableHead>
                   <TableHead>Qtd</TableHead>
                   <TableHead>Preço Unit.</TableHead>
                   <TableHead>Total</TableHead>
@@ -173,6 +187,7 @@ const PecasMateriais: React.FC<PecasMateriaisProps> = ({
                 {pecas.map((peca) => (
                   <TableRow key={peca.id}>
                     <TableCell>{peca.nome}</TableCell>
+                    <TableCell>{peca.fabricante || '-'}</TableCell>
                     <TableCell>{peca.quantidade}</TableCell>
                     <TableCell>R$ {peca.preco_unitario.toFixed(2).replace('.', ',')}</TableCell>
                     <TableCell>R$ {(peca.quantidade * peca.preco_unitario).toFixed(2).replace('.', ',')}</TableCell>
