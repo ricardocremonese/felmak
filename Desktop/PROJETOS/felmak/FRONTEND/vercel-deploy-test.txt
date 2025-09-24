@@ -1,8 +1,0 @@
-TESTE VERCEL DEPLOY - $(date)
-Este arquivo foi criado para testar se o Vercel está fazendo deploy corretamente.
-Se você está vendo este arquivo, o deploy está funcionando!
-
-Commit: b738f851
-Branch: main
-Data: $(date)
-Status: Campo fabricante/distribuidor adicionado na seção Peças e Materiais
