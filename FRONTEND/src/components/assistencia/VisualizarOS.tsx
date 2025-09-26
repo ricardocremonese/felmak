@@ -1,10 +1,8 @@
 import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { User, Phone, Mail, MapPin, Wrench, Calendar, DollarSign, FileText, Clock, Printer } from 'lucide-react';
+import { User, Wrench, DollarSign, FileText, Printer } from 'lucide-react';
 import { formatarTelefone } from '@/utils/helpers';
 import type { Database } from '@/integrations/supabase/types';
 
@@ -34,7 +32,8 @@ const VisualizarOS = ({
     'Aguardando autorização': 'bg-blue-100 text-blue-800',
     'Em conserto': 'bg-purple-100 text-purple-800',
     'Finalizado': 'bg-green-100 text-green-800',
-    'Entregue': 'bg-gray-100 text-gray-800'
+    'Entregue': 'bg-gray-100 text-gray-800',
+    'Devolução': 'bg-red-100 text-red-800'
   };
 
   const imprimirModal = () => {
@@ -159,9 +158,9 @@ const VisualizarOS = ({
             </div>
           </div>
           
-          {ordem.acessorios_entregues && (
+          {(ordem as any).acompanha_acessorios && (ordem as any).acessorios_descricao && (
             <div>
-              <span className="font-medium">Acessórios:</span> {ordem.acessorios_entregues}
+              <span className="font-medium">Acessórios:</span> {(ordem as any).acessorios_descricao}
             </div>
           )}
         </div>
@@ -179,13 +178,24 @@ const VisualizarOS = ({
       )}
 
       {/* OBSERVAÇÕES TÉCNICAS */}
-      {ordem.observacoes_tecnico && (
+      {((ordem as any).observacoes_tecnico_antes || (ordem as any).observacoes_tecnico_depois) && (
         <div className="bg-gray-50 p-3 rounded-lg border print:p-1 print:bg-white print:border print:mb-1">
           <h3 className="text-sm font-bold mb-2 flex items-center print:text-xs print:mb-1">
             <FileText className="w-3 h-3 mr-2 print:w-2 print:h-2" />
             OBSERVAÇÕES TÉCNICAS
           </h3>
-          <p className="text-xs leading-relaxed print:text-xs print:leading-tight">{ordem.observacoes_tecnico}</p>
+          {(ordem as any).observacoes_tecnico_antes && (
+            <div className="mb-2">
+              <span className="font-medium text-xs">Antes da Entrada:</span>
+              <p className="text-xs leading-relaxed print:text-xs print:leading-tight">{(ordem as any).observacoes_tecnico_antes}</p>
+            </div>
+          )}
+          {(ordem as any).observacoes_tecnico_depois && (
+            <div>
+              <span className="font-medium text-xs">Depois da Entrada:</span>
+              <p className="text-xs leading-relaxed print:text-xs print:leading-tight">{(ordem as any).observacoes_tecnico_depois}</p>
+            </div>
+          )}
         </div>
       )}
 
@@ -194,9 +204,49 @@ const VisualizarOS = ({
         <div className="bg-gray-50 p-3 rounded-lg border print:p-1 print:bg-white print:border print:mb-1">
           <h3 className="text-sm font-bold mb-2 flex items-center print:text-xs print:mb-1">
             <FileText className="w-3 h-3 mr-2 print:w-2 print:h-2" />
-            TESTES REALIZADOS
+            TESTES REALIZADOS DURANTE O ORÇAMENTO
           </h3>
           <p className="text-xs leading-relaxed print:text-xs print:leading-tight">{ordem.testes_realizados}</p>
+        </div>
+      )}
+
+      {/* INFORMAÇÕES ADICIONAIS DO DIAGNÓSTICO */}
+      {((ordem as any).equipamento_funciona_defeito !== null || (ordem as any).avaliacao_total || (ordem as any).aplicar_taxa_orcamento || (ordem as any).tem_valor_antecipado) && (
+        <div className="bg-gray-50 p-3 rounded-lg border print:p-1 print:bg-white print:border print:mb-1">
+          <h3 className="text-sm font-bold mb-2 flex items-center print:text-xs print:mb-1">
+            <FileText className="w-3 h-3 mr-2 print:w-2 print:h-2" />
+            INFORMAÇÕES ADICIONAIS
+          </h3>
+          <div className="space-y-1 text-xs print:text-xs print:space-y-0">
+            {(ordem as any).equipamento_funciona_defeito !== null && (
+              <div>
+                <span className="font-medium">Equipamento Funciona com o Defeito:</span> {(ordem as any).equipamento_funciona_defeito ? 'Sim' : 'Não'}
+              </div>
+            )}
+            
+            {(ordem as any).avaliacao_total && (
+              <div>
+                <span className="font-medium">Avaliação Total:</span> Sim
+                {(ordem as any).pecas_orcamento && (
+                  <div className="ml-4 mt-1">
+                    <span className="font-medium">Peças a Serem Orçadas:</span> {(ordem as any).pecas_orcamento}
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {(ordem as any).aplicar_taxa_orcamento && (ordem as any).valor_taxa_orcamento > 0 && (
+              <div>
+                <span className="font-medium">Taxa de Orçamento:</span> R$ {((ordem as any).valor_taxa_orcamento).toFixed(2).replace('.', ',')}
+              </div>
+            )}
+            
+            {(ordem as any).tem_valor_antecipado && (ordem as any).valor_antecipado > 0 && (
+              <div>
+                <span className="font-medium">Valor Antecipado:</span> R$ {((ordem as any).valor_antecipado).toFixed(2).replace('.', ',')}
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -208,13 +258,13 @@ const VisualizarOS = ({
         </h3>
         <div className="space-y-1 text-xs print:text-xs print:space-y-0">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-2 print:grid-cols-3 print:gap-1">
-            {ordem.valor_pecas && ordem.valor_pecas > 0 && (
+            {Boolean(ordem.valor_pecas && ordem.valor_pecas > 0) && (
               <div>
                 <span className="font-medium">Valor Peças:</span> R$ {ordem.valor_pecas.toFixed(2).replace('.', ',')}
               </div>
             )}
             
-            {ordem.valor_mao_obra && ordem.valor_mao_obra > 0 && (
+            {Boolean(ordem.valor_mao_obra && ordem.valor_mao_obra > 0) && (
               <div>
                 <span className="font-medium">Mão de Obra:</span> R$ {ordem.valor_mao_obra.toFixed(2).replace('.', ',')}
               </div>
@@ -259,7 +309,7 @@ const VisualizarOS = ({
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2 print:grid-cols-3 print:gap-1">
-          {ordem.prazo_garantia_dias && ordem.prazo_garantia_dias > 0 && (
+          {Boolean(ordem.prazo_garantia_dias && ordem.prazo_garantia_dias > 0) && (
             <div>
               <span className="font-medium">Garantia:</span> {ordem.prazo_garantia_dias} dias
             </div>
@@ -279,6 +329,12 @@ const VisualizarOS = ({
             </div>
           )}
         </div>
+
+        {(ordem as any).data_ultima_alteracao_status && (
+          <div className="mt-2">
+            <span className="font-medium">Última Alteração do Status:</span> {new Date((ordem as any).data_ultima_alteracao_status).toLocaleDateString('pt-BR')} às {new Date((ordem as any).data_ultima_alteracao_status).toLocaleTimeString('pt-BR')}
+          </div>
+        )}
       </div>
     </div>
   );

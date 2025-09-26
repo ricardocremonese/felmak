@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -6,10 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Camera, Save, FileText, MessageCircle, MapPin, Upload } from 'lucide-react';
+import { Camera, Save, FileText, MapPin, Upload } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { buscarCEP, formatarTelefone, formatarCPFCNPJ, formatCurrency, parseCurrencyValue, formatCurrencyInput } from '@/utils/helpers';
+import { buscarCEP, formatarTelefone, formatarCPFCNPJ, formatCurrency, parseCurrencyValue } from '@/utils/helpers';
 import PecasMateriais from './PecasMateriais';
 import type { Database } from '@/integrations/supabase/types';
 
@@ -35,24 +35,37 @@ interface FormData {
   equipamento_marca: string;
   equipamento_modelo: string;
   equipamento_serie: string;
-  equipamento_cor: string;
-  acessorios_entregues: string;
+  acompanha_acessorios: boolean;
+  acessorios_descricao: string;
   estado_fisico_entrega: string;
   
   // Diagnóstico
   defeito_relatado: string;
-  observacoes_tecnico: string;
+  observacoes_tecnico_antes: string;
+  observacoes_tecnico_depois: string;
   testes_realizados: string;
+  equipamento_funciona_defeito: boolean;
+  avaliacao_total: boolean;
+  pecas_orcamento: string;
+  aplicar_taxa_orcamento: boolean;
+  valor_taxa_orcamento: number;
   urgencia: boolean;
   
   // Valores
   valor_mao_obra: number;
+  tem_valor_antecipado: boolean;
+  valor_antecipado: number;
   
   // Status
   data_prevista: string;
   tecnico_responsavel: string;
   status: string;
   prazo_garantia_dias: number;
+  
+  // Outros
+  codigo_item: string;
+  assinatura_cliente: string;
+  aceita_clausulas: boolean;
 }
 
 const NovaOSForm = () => {
@@ -77,22 +90,32 @@ const NovaOSForm = () => {
     equipamento_marca: '',
     equipamento_modelo: '',
     equipamento_serie: '',
-    equipamento_cor: '',
-    acessorios_entregues: '',
+    acompanha_acessorios: false,
+    acessorios_descricao: '',
     estado_fisico_entrega: '',
     defeito_relatado: '',
-    observacoes_tecnico: '',
+    observacoes_tecnico_antes: '',
+    observacoes_tecnico_depois: '',
     testes_realizados: '',
+    equipamento_funciona_defeito: false,
+    avaliacao_total: false,
+    pecas_orcamento: '',
+    aplicar_taxa_orcamento: false,
+    valor_taxa_orcamento: 0,
     urgencia: false,
     valor_mao_obra: 0,
+    tem_valor_antecipado: false,
+    valor_antecipado: 0,
     data_prevista: '',
     tecnico_responsavel: '',
     status: 'Em análise',
-    prazo_garantia_dias: 90
+    prazo_garantia_dias: 90,
+    codigo_item: '',
+    assinatura_cliente: '',
+    aceita_clausulas: false
   });
 
   const equipamentoTipos = [
-    'Britadeira', 
     'Martelete', 
     'Furadeira', 
     'Esmerilhadeira', 
@@ -119,17 +142,14 @@ const NovaOSForm = () => {
     'Aguardando autorização', 
     'Em conserto', 
     'Finalizado', 
-    'Entregue'
+    'Entregue',
+    'Devolução'
   ];
 
   const handleInputChange = (field: keyof FormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleCurrencyInputChange = (field: keyof FormData, value: string) => {
-    const numericValue = parseCurrencyValue(value);
-    setFormData(prev => ({ ...prev, [field]: numericValue }));
-  };
 
   const buscarEnderecoPorCEP = async (cep: string) => {
     if (cep.length === 8) {
@@ -176,7 +196,6 @@ const NovaOSForm = () => {
         cliente_cep: formData.cliente_cep || null,
         cliente_endereco: formData.cliente_endereco || null,
         cliente_numero: formData.cliente_numero || null,
-        // cliente_complemento: formData.cliente_complemento, // Temporarily disabled until types updated
         cliente_bairro: formData.cliente_bairro || null,
         cliente_cidade: formData.cliente_cidade || null,
         cliente_estado: formData.cliente_estado || null,
@@ -185,20 +204,30 @@ const NovaOSForm = () => {
         equipamento_marca: formData.equipamento_marca,
         equipamento_modelo: formData.equipamento_modelo || null,
         equipamento_serie: formData.equipamento_serie || null,
-        equipamento_cor: formData.equipamento_cor || null,
-        acessorios_entregues: formData.acessorios_entregues || null,
+        acompanha_acessorios: formData.acompanha_acessorios,
+        acessorios_descricao: formData.acessorios_descricao || null,
         estado_fisico_entrega: formData.estado_fisico_entrega || null,
         defeito_relatado: formData.defeito_relatado,
-        observacoes_tecnico: formData.observacoes_tecnico || null,
+        observacoes_tecnico_antes: formData.observacoes_tecnico_antes || null,
+        observacoes_tecnico_depois: formData.observacoes_tecnico_depois || null,
         testes_realizados: formData.testes_realizados || null,
-        // urgencia: formData.urgencia, // Temporarily disabled until types updated
+        equipamento_funciona_defeito: formData.equipamento_funciona_defeito,
+        avaliacao_total: formData.avaliacao_total,
+        pecas_orcamento: formData.pecas_orcamento || null,
+        aplicar_taxa_orcamento: formData.aplicar_taxa_orcamento,
+        valor_taxa_orcamento: formData.valor_taxa_orcamento,
         valor_mao_obra: formData.valor_mao_obra,
         valor_pecas: valorPecas,
         valor_total: valorPecas + formData.valor_mao_obra,
+        tem_valor_antecipado: formData.tem_valor_antecipado,
+        valor_antecipado: formData.valor_antecipado,
         data_prevista: formData.data_prevista || null,
         tecnico_responsavel: formData.tecnico_responsavel || null,
         status: formData.status,
-        prazo_garantia_dias: formData.prazo_garantia_dias
+        prazo_garantia_dias: formData.prazo_garantia_dias,
+        codigo_item: formData.codigo_item || null,
+        assinatura_cliente: formData.assinatura_cliente || null,
+        aceita_clausulas: formData.aceita_clausulas
       };
 
       console.log('Dados sendo enviados para inserção:', osData);
@@ -266,18 +295,29 @@ const NovaOSForm = () => {
         equipamento_marca: '',
         equipamento_modelo: '',
         equipamento_serie: '',
-        equipamento_cor: '',
-        acessorios_entregues: '',
+        acompanha_acessorios: false,
+        acessorios_descricao: '',
         estado_fisico_entrega: '',
         defeito_relatado: '',
-        observacoes_tecnico: '',
+        observacoes_tecnico_antes: '',
+        observacoes_tecnico_depois: '',
         testes_realizados: '',
+        equipamento_funciona_defeito: false,
+        avaliacao_total: false,
+        pecas_orcamento: '',
+        aplicar_taxa_orcamento: false,
+        valor_taxa_orcamento: 0,
         urgencia: false,
         valor_mao_obra: 0,
+        tem_valor_antecipado: false,
+        valor_antecipado: 0,
         data_prevista: '',
         tecnico_responsavel: '',
         status: 'Em análise',
-        prazo_garantia_dias: 90
+        prazo_garantia_dias: 90,
+        codigo_item: '',
+        assinatura_cliente: '',
+        aceita_clausulas: false
       });
       setPecas([]);
 
@@ -479,11 +519,12 @@ const NovaOSForm = () => {
           </div>
 
           <div>
-            <Label htmlFor="equipamento_cor">Cor</Label>
+            <Label htmlFor="codigo_item">Código do Item</Label>
             <Input
-              id="equipamento_cor"
-              value={formData.equipamento_cor}
-              onChange={(e) => handleInputChange('equipamento_cor', e.target.value)}
+              id="codigo_item"
+              value={formData.codigo_item}
+              onChange={(e) => handleInputChange('codigo_item', e.target.value)}
+              placeholder="Código interno (não visível para cliente)"
             />
           </div>
 
@@ -502,13 +543,33 @@ const NovaOSForm = () => {
           </div>
 
           <div className="md:col-span-2">
-            <Label htmlFor="acessorios_entregues">Acessórios Entregues</Label>
-            <Textarea
-              id="acessorios_entregues"
-              value={formData.acessorios_entregues}
-              onChange={(e) => handleInputChange('acessorios_entregues', e.target.value)}
-              placeholder="Ex: Maleta, bateria, carregador, broca..."
-            />
+            <Label>Acompanha Acessórios</Label>
+            <div className="flex space-x-4 mb-2">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="acompanha_acessorios_sim"
+                  checked={formData.acompanha_acessorios}
+                  onCheckedChange={(checked) => handleInputChange('acompanha_acessorios', checked)}
+                />
+                <Label htmlFor="acompanha_acessorios_sim">Sim</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="acompanha_acessorios_nao"
+                  checked={!formData.acompanha_acessorios}
+                  onCheckedChange={(checked) => handleInputChange('acompanha_acessorios', !checked)}
+                />
+                <Label htmlFor="acompanha_acessorios_nao">Não</Label>
+              </div>
+            </div>
+            {formData.acompanha_acessorios && (
+              <Textarea
+                id="acessorios_descricao"
+                value={formData.acessorios_descricao}
+                onChange={(e) => handleInputChange('acessorios_descricao', e.target.value)}
+                placeholder="Descreva os acessórios que acompanham o equipamento..."
+              />
+            )}
           </div>
 
           <div>
@@ -544,24 +605,129 @@ const NovaOSForm = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="observacoes_tecnico">Observações do Técnico</Label>
+              <Label htmlFor="observacoes_tecnico_antes">Observações do Técnico (Antes da Entrada)</Label>
               <Textarea
-                id="observacoes_tecnico"
-                value={formData.observacoes_tecnico}
-                onChange={(e) => handleInputChange('observacoes_tecnico', e.target.value)}
-                placeholder="Observações técnicas..."
+                id="observacoes_tecnico_antes"
+                value={formData.observacoes_tecnico_antes}
+                onChange={(e) => handleInputChange('observacoes_tecnico_antes', e.target.value)}
+                placeholder="Observações técnicas antes da entrada da máquina..."
               />
             </div>
 
             <div>
-              <Label htmlFor="testes_realizados">Testes Realizados</Label>
+              <Label htmlFor="observacoes_tecnico_depois">Observações do Técnico (Depois da Entrada)</Label>
               <Textarea
-                id="testes_realizados"
-                value={formData.testes_realizados}
-                onChange={(e) => handleInputChange('testes_realizados', e.target.value)}
-                placeholder="Testes realizados na entrada..."
+                id="observacoes_tecnico_depois"
+                value={formData.observacoes_tecnico_depois}
+                onChange={(e) => handleInputChange('observacoes_tecnico_depois', e.target.value)}
+                placeholder="Observações técnicas depois da entrada da máquina..."
               />
             </div>
+          </div>
+
+          <div>
+            <Label htmlFor="testes_realizados">Testes Realizados Durante o Orçamento</Label>
+            <Textarea
+              id="testes_realizados"
+              value={formData.testes_realizados}
+              onChange={(e) => handleInputChange('testes_realizados', e.target.value)}
+              placeholder="Testes realizados durante o orçamento..."
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label>Equipamento Funciona com o Defeito</Label>
+              <div className="flex space-x-4 mt-2">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="equipamento_funciona_sim"
+                    checked={formData.equipamento_funciona_defeito}
+                    onCheckedChange={(checked) => handleInputChange('equipamento_funciona_defeito', checked)}
+                  />
+                  <Label htmlFor="equipamento_funciona_sim">Sim</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="equipamento_funciona_nao"
+                    checked={!formData.equipamento_funciona_defeito}
+                    onCheckedChange={(checked) => handleInputChange('equipamento_funciona_defeito', !checked)}
+                  />
+                  <Label htmlFor="equipamento_funciona_nao">Não</Label>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <Label>Avaliação Total</Label>
+              <div className="flex space-x-4 mt-2">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="avaliacao_total_sim"
+                    checked={formData.avaliacao_total}
+                    onCheckedChange={(checked) => handleInputChange('avaliacao_total', checked)}
+                  />
+                  <Label htmlFor="avaliacao_total_sim">Sim</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="avaliacao_total_nao"
+                    checked={!formData.avaliacao_total}
+                    onCheckedChange={(checked) => handleInputChange('avaliacao_total', !checked)}
+                  />
+                  <Label htmlFor="avaliacao_total_nao">Não</Label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {formData.avaliacao_total && (
+            <div>
+              <Label htmlFor="pecas_orcamento">Peças a Serem Orçadas</Label>
+              <Textarea
+                id="pecas_orcamento"
+                value={formData.pecas_orcamento}
+                onChange={(e) => handleInputChange('pecas_orcamento', e.target.value)}
+                placeholder="Liste as peças que serão orçadas na avaliação total..."
+              />
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label>Aplicar Taxa de Orçamento</Label>
+              <div className="flex space-x-4 mt-2">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="aplicar_taxa_sim"
+                    checked={formData.aplicar_taxa_orcamento}
+                    onCheckedChange={(checked) => handleInputChange('aplicar_taxa_orcamento', checked)}
+                  />
+                  <Label htmlFor="aplicar_taxa_sim">Sim</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="aplicar_taxa_nao"
+                    checked={!formData.aplicar_taxa_orcamento}
+                    onCheckedChange={(checked) => handleInputChange('aplicar_taxa_orcamento', !checked)}
+                  />
+                  <Label htmlFor="aplicar_taxa_nao">Não</Label>
+                </div>
+              </div>
+            </div>
+
+            {formData.aplicar_taxa_orcamento && (
+              <div>
+                <Label htmlFor="valor_taxa_orcamento">Valor da Taxa de Orçamento (R$)</Label>
+                <Input
+                  id="valor_taxa_orcamento"
+                  type="number"
+                  step="0.01"
+                  value={formData.valor_taxa_orcamento}
+                  onChange={(e) => handleInputChange('valor_taxa_orcamento', parseFloat(e.target.value) || 0)}
+                />
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -583,6 +749,43 @@ const NovaOSForm = () => {
                 onChange={(e) => handleInputChange('prazo_garantia_dias', parseInt(e.target.value) || 90)}
               />
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <Label>Valor Antecipado</Label>
+              <div className="flex space-x-4 mt-2">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="tem_valor_antecipado_sim"
+                    checked={formData.tem_valor_antecipado}
+                    onCheckedChange={(checked) => handleInputChange('tem_valor_antecipado', checked)}
+                  />
+                  <Label htmlFor="tem_valor_antecipado_sim">Sim</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    id="tem_valor_antecipado_nao"
+                    checked={!formData.tem_valor_antecipado}
+                    onCheckedChange={(checked) => handleInputChange('tem_valor_antecipado', !checked)}
+                  />
+                  <Label htmlFor="tem_valor_antecipado_nao">Não</Label>
+                </div>
+              </div>
+            </div>
+
+            {formData.tem_valor_antecipado && (
+              <div>
+                <Label htmlFor="valor_antecipado">Valor Antecipado (R$)</Label>
+                <Input
+                  id="valor_antecipado"
+                  type="number"
+                  step="0.01"
+                  value={formData.valor_antecipado}
+                  onChange={(e) => handleInputChange('valor_antecipado', parseFloat(e.target.value) || 0)}
+                />
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -646,6 +849,51 @@ const NovaOSForm = () => {
             <span className="text-2xl text-felmak-blue">
               {formatCurrency(calcularValorTotal())}
             </span>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Cláusulas Contratuais */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            📋 Cláusulas Contratuais
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="bg-gray-50 p-4 rounded-lg text-sm space-y-2">
+            <p><strong>Comunicação:</strong> Após a conclusão do serviço, o cliente será comunicado por telefone, e-mail ou aplicativo de mensagens, para retirada do equipamento.</p>
+            
+            <p><strong>Prazo de Retirada:</strong> Caso o cliente não retire o equipamento no prazo de 90 (noventa) dias corridos, contados da data da comunicação, o bem será considerado abandonado, nos termos do artigo 1.275, III do Código Civil.</p>
+            
+            <p><strong>Abandono:</strong> A partir desse prazo, poderão ser cobradas taxas de armazenamento e o prestador de serviço poderá, a seu critério, alienar (vender), doar ou descartar o equipamento para ressarcimento dos custos com o serviço, armazenagem e demais despesas decorrentes da permanência do bem no local, isentando-se de qualquer responsabilidade posterior.</p>
+            
+            <p><strong>Validade da Proposta:</strong> Proposta válida por 30 dias após o comunicado.</p>
+            
+            <p><strong>Desaprovação:</strong> Em caso de desaprovação da proposta, o prazo para retirada do equipamento é de 5 dias úteis após a comunicação de desacordo.</p>
+            
+            <p><strong>Garantia:</strong> A garantia aplica-se exclusivamente às peças substituídas e aos serviços efetivamente realizados.</p>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id="aceita_clausulas"
+              checked={formData.aceita_clausulas}
+              onCheckedChange={(checked) => handleInputChange('aceita_clausulas', checked)}
+            />
+            <Label htmlFor="aceita_clausulas" className="text-sm">
+              Declaro que li e aceito as cláusulas contratuais acima
+            </Label>
+          </div>
+
+          <div>
+            <Label htmlFor="assinatura_cliente">Assinatura do Cliente</Label>
+            <Input
+              id="assinatura_cliente"
+              value={formData.assinatura_cliente}
+              onChange={(e) => handleInputChange('assinatura_cliente', e.target.value)}
+              placeholder="Nome completo do cliente"
+            />
           </div>
         </CardContent>
       </Card>

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -39,13 +39,26 @@ const EditarOS = ({ ordem, onSuccess, children }: EditarOSProps) => {
     equipamento_modelo: ordem.equipamento_modelo || '',
     equipamento_serie: ordem.equipamento_serie || '',
     defeito_relatado: ordem.defeito_relatado || '',
-    observacoes_tecnico: ordem.observacoes_tecnico || '',
+    observacoes_tecnico_antes: (ordem as any).observacoes_tecnico_antes || '',
+    observacoes_tecnico_depois: (ordem as any).observacoes_tecnico_depois || '',
     status: ordem.status || 'Em análise',
     tecnico_responsavel: ordem.tecnico_responsavel || '',
     data_prevista: ordem.data_prevista ? new Date(ordem.data_prevista).toISOString().split('T')[0] : '',
     valor_pecas: ordem.valor_pecas?.toString() || '0',
     valor_mao_obra: ordem.valor_mao_obra?.toString() || '0',
-    prazo_garantia_dias: ordem.prazo_garantia_dias?.toString() || '90'
+    prazo_garantia_dias: ordem.prazo_garantia_dias?.toString() || '90',
+    codigo_item: (ordem as any).codigo_item || '',
+    acompanha_acessorios: (ordem as any).acompanha_acessorios || false,
+    acessorios_descricao: (ordem as any).acessorios_descricao || '',
+    equipamento_funciona_defeito: (ordem as any).equipamento_funciona_defeito || false,
+    avaliacao_total: (ordem as any).avaliacao_total || false,
+    pecas_orcamento: (ordem as any).pecas_orcamento || '',
+    aplicar_taxa_orcamento: (ordem as any).aplicar_taxa_orcamento || false,
+    valor_taxa_orcamento: (ordem as any).valor_taxa_orcamento?.toString() || '0',
+    tem_valor_antecipado: (ordem as any).tem_valor_antecipado || false,
+    valor_antecipado: (ordem as any).valor_antecipado?.toString() || '0',
+    assinatura_cliente: (ordem as any).assinatura_cliente || '',
+    aceita_clausulas: (ordem as any).aceita_clausulas || false
   });
 
   const statusOptions = [
@@ -54,7 +67,8 @@ const EditarOS = ({ ordem, onSuccess, children }: EditarOSProps) => {
     'Aguardando autorização', 
     'Em conserto', 
     'Finalizado', 
-    'Entregue'
+    'Entregue',
+    'Devolução'
   ];
 
   const handleInputChange = (campo: string, valor: string) => {
@@ -80,13 +94,26 @@ const EditarOS = ({ ordem, onSuccess, children }: EditarOSProps) => {
           equipamento_modelo: formData.equipamento_modelo || null,
           equipamento_serie: formData.equipamento_serie || null,
           defeito_relatado: formData.defeito_relatado,
-          observacoes_tecnico: formData.observacoes_tecnico || null,
+          observacoes_tecnico_antes: formData.observacoes_tecnico_antes || null,
+          observacoes_tecnico_depois: formData.observacoes_tecnico_depois || null,
           status: formData.status,
           tecnico_responsavel: formData.tecnico_responsavel || null,
           data_prevista: formData.data_prevista ? new Date(formData.data_prevista).toISOString() : null,
           valor_pecas: parseFloat(formData.valor_pecas) || 0,
           valor_mao_obra: parseFloat(formData.valor_mao_obra) || 0,
           prazo_garantia_dias: parseInt(formData.prazo_garantia_dias) || 90,
+          codigo_item: formData.codigo_item || null,
+          acompanha_acessorios: formData.acompanha_acessorios,
+          acessorios_descricao: formData.acessorios_descricao || null,
+          equipamento_funciona_defeito: formData.equipamento_funciona_defeito,
+          avaliacao_total: formData.avaliacao_total,
+          pecas_orcamento: formData.pecas_orcamento || null,
+          aplicar_taxa_orcamento: formData.aplicar_taxa_orcamento,
+          valor_taxa_orcamento: parseFloat(formData.valor_taxa_orcamento) || 0,
+          tem_valor_antecipado: formData.tem_valor_antecipado,
+          valor_antecipado: parseFloat(formData.valor_antecipado) || 0,
+          assinatura_cliente: formData.assinatura_cliente || null,
+          aceita_clausulas: formData.aceita_clausulas,
           updated_at: new Date().toISOString()
         })
         .eq('id', ordem.id);

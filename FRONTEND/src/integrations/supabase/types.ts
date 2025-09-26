@@ -17,7 +17,13 @@ export type Database = {
       ordens_servico: {
         Row: {
           acessorios_entregues: string | null
+          acompanha_acessorios: boolean | null
+          acessorios_descricao: string | null
+          aceita_clausulas: boolean | null
+          aplicar_taxa_orcamento: boolean | null
+          assinatura_cliente: string | null
           autorizacao_orcamento: boolean | null
+          avaliacao_total: boolean | null
           cliente_bairro: string | null
           cliente_cep: string | null
           cliente_cidade: string | null
@@ -28,14 +34,17 @@ export type Database = {
           cliente_nome: string
           cliente_numero: string | null
           cliente_telefone: string | null
+          codigo_item: string | null
           created_at: string
           data_conclusao: string | null
           data_entrada: string
           data_entrega: string | null
           data_previsao: string | null
           data_prevista: string | null
+          data_ultima_alteracao_status: string | null
           defeito_relatado: string
           equipamento_cor: string | null
+          equipamento_funciona_defeito: boolean | null
           equipamento_marca: string | null
           equipamento_modelo: string | null
           equipamento_serie: string | null
@@ -45,20 +54,32 @@ export type Database = {
           numero_os: number
           observacoes: string | null
           observacoes_tecnico: string | null
+          observacoes_tecnico_antes: string | null
+          observacoes_tecnico_depois: string | null
+          pecas_orcamento: string | null
           prazo_garantia_dias: number | null
           prioridade: string
           status: string
           tecnico_responsavel: string | null
+          tem_valor_antecipado: boolean | null
           testes_realizados: string | null
           updated_at: string
+          valor_antecipado: number | null
           valor_mao_obra: number | null
           valor_pecas: number | null
           valor_servico: number | null
+          valor_taxa_orcamento: number | null
           valor_total: number | null
         }
         Insert: {
           acessorios_entregues?: string | null
+          acompanha_acessorios?: boolean | null
+          acessorios_descricao?: string | null
+          aceita_clausulas?: boolean | null
+          aplicar_taxa_orcamento?: boolean | null
+          assinatura_cliente?: string | null
           autorizacao_orcamento?: boolean | null
+          avaliacao_total?: boolean | null
           cliente_bairro?: string | null
           cliente_cep?: string | null
           cliente_cidade?: string | null
@@ -69,14 +90,17 @@ export type Database = {
           cliente_nome: string
           cliente_numero?: string | null
           cliente_telefone?: string | null
+          codigo_item?: string | null
           created_at?: string
           data_conclusao?: string | null
           data_entrada?: string
           data_entrega?: string | null
           data_previsao?: string | null
           data_prevista?: string | null
+          data_ultima_alteracao_status?: string | null
           defeito_relatado: string
           equipamento_cor?: string | null
+          equipamento_funciona_defeito?: boolean | null
           equipamento_marca?: string | null
           equipamento_modelo?: string | null
           equipamento_serie?: string | null
@@ -86,20 +110,32 @@ export type Database = {
           numero_os?: number
           observacoes?: string | null
           observacoes_tecnico?: string | null
+          observacoes_tecnico_antes?: string | null
+          observacoes_tecnico_depois?: string | null
+          pecas_orcamento?: string | null
           prazo_garantia_dias?: number | null
           prioridade?: string
           status?: string
           tecnico_responsavel?: string | null
+          tem_valor_antecipado?: boolean | null
           testes_realizados?: string | null
           updated_at?: string
+          valor_antecipado?: number | null
           valor_mao_obra?: number | null
           valor_pecas?: number | null
           valor_servico?: number | null
+          valor_taxa_orcamento?: number | null
           valor_total?: number | null
         }
         Update: {
           acessorios_entregues?: string | null
+          acompanha_acessorios?: boolean | null
+          acessorios_descricao?: string | null
+          aceita_clausulas?: boolean | null
+          aplicar_taxa_orcamento?: boolean | null
+          assinatura_cliente?: string | null
           autorizacao_orcamento?: boolean | null
+          avaliacao_total?: boolean | null
           cliente_bairro?: string | null
           cliente_cep?: string | null
           cliente_cidade?: string | null
@@ -110,14 +146,17 @@ export type Database = {
           cliente_nome?: string
           cliente_numero?: string | null
           cliente_telefone?: string | null
+          codigo_item?: string | null
           created_at?: string
           data_conclusao?: string | null
           data_entrada?: string
           data_entrega?: string | null
           data_previsao?: string | null
           data_prevista?: string | null
+          data_ultima_alteracao_status?: string | null
           defeito_relatado?: string
           equipamento_cor?: string | null
+          equipamento_funciona_defeito?: boolean | null
           equipamento_marca?: string | null
           equipamento_modelo?: string | null
           equipamento_serie?: string | null
@@ -127,15 +166,21 @@ export type Database = {
           numero_os?: number
           observacoes?: string | null
           observacoes_tecnico?: string | null
+          observacoes_tecnico_antes?: string | null
+          observacoes_tecnico_depois?: string | null
+          pecas_orcamento?: string | null
           prazo_garantia_dias?: number | null
           prioridade?: string
           status?: string
           tecnico_responsavel?: string | null
+          tem_valor_antecipado?: boolean | null
           testes_realizados?: string | null
           updated_at?: string
+          valor_antecipado?: number | null
           valor_mao_obra?: number | null
           valor_pecas?: number | null
           valor_servico?: number | null
+          valor_taxa_orcamento?: number | null
           valor_total?: number | null
         }
         Relationships: []
